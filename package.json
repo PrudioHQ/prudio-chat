@@ -1,0 +1,35 @@
+{
+  "name": "slack-chat",
+  "version": "0.0.1",
+  "description": "Slack Instant Messaging widget",
+  "dependencies": {
+    "ejs": "latest",
+    "express": "latest",
+    "body-parser": "latest",
+    "node-xmpp": "latest",
+    "request": "latest",
+    "socket.io": "latest",
+    "mysql": "latest",
+    "async": "latest"
+  },
+  "author": "developer",
+  "main": "app.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "keywords": [
+    "slack",
+    "chat",
+    "software"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": ""
+  },
+  "homepage": ""
+}

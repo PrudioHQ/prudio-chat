@@ -1,0 +1,22 @@
+#_lb-container {
+    background: #555;
+    border-radius: 50%;
+    border: 2px solid #333;
+    width: 35px;
+    height: 35px;
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    cursor: hand;
+    box-shadow: 0 0 6px #666;
+}
+
+#_lb-chatbox {
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    width: 200px;
+    height: 400px;
+    background: #EEE;
+
+}

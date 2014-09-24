@@ -100,7 +100,6 @@ function main() {
 
         $.createButton();
 
-        $('#_lb-container').css('bottom', '60px');
 
         $('#_lb-container').click(function() {
 
@@ -114,17 +113,20 @@ function main() {
             var socket = io.connect("http:" + baseURL + '/chat');
 
             var domContent = [
-              '<div id="_lb-chatbox">',
-              '    <div id="conversation">',
-              '    </div>',
-              '    <div class="converse-chat-input">',
-              '        <input type="text" name="chat_text" placeholder="Type here and hit <enter> to chat">',
-              '    </div>',
-              '    <div id="converse-status"></div>',
-              '</div>',
+              '<nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-right" id="cbp-spmenu-s2">',
+        	  '<h3>Menu</h3>',
+        	'		<a href="#">Celery seakale</a>',
+        	'		<a href="#">Dulse daikon</a>',
+        	'		<a href="#">Zucchini garlic</a>',
+        	'		<a href="#">Catsear azuki bean</a>',
+        	'		<a href="#">Dandelion bunya</a>',
+        	'		<a href="#">Rutabaga</a>',
+        	'	</nav>',
               ].join('');
 
             $('body').append(domContent);
+
+			$('#cbp-spmenu-s2').toggleClass('cbp-spmenu-open' );
 
             $("#_lb-chatbox input").bind('keypress', function(e){
                 // if enter key

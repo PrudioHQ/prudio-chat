@@ -91,6 +91,11 @@ function main() {
             $("head").append(jsLink);
         }
 
+        $.scrollChat = function(to){
+            $(to).animate({
+                scrollTop: $(to).height()
+            }, 'slow');
+        }
 
         var settings = $.getSettings();
         console.log(settings);
@@ -113,30 +118,48 @@ function main() {
             var socket = io.connect("http:" + baseURL + '/chat');
 
             var domContent = [
-              '<nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-right" id="cbp-spmenu-s2">',
-        	  '<h3>Menu</h3>',
-        	'		<a href="#">Celery seakale</a>',
-        	'		<a href="#">Dulse daikon</a>',
-        	'		<a href="#">Zucchini garlic</a>',
-        	'		<a href="#">Catsear azuki bean</a>',
-        	'		<a href="#">Dandelion bunya</a>',
-        	'		<a href="#">Rutabaga</a>',
-        	'	</nav>',
-              ].join('');
+                '<nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-right" id="cbp-spmenu-s2">',
+                '       <h3>Chat</h3>',
+                '       <ul>',
+                '		     <li class="self">Celery seakale</li>',
+                '            <li class="self">Dulse daikon</li>',
+                '            <li class="other">Zucchini garlic</li>',
+                '            <li class="self">Catsear azuki bean</li>',
+                '            <li class="self">Dulse daikon</li>',
+                '            <li class="other">Zucchini garlic</li>',
+                '            <li class="self">Catsear azuki bean</li>',
+                '            <li class="self">Dulse daikon</li>',
+                '            <li class="other">Zucchini garlic</li>',
+                '            <li class="self">Catsear azuki bean</li>',
+                '            <li class="self">Dulse daikon</li>',
+                '            <li class="other">Zucchini garlic</li>',
+                '            <li class="self">Catsear azuki bean</li>',
+                '		     <li class="other">Dandelion bunya</li>',
+                '		     <li class="self" title="5m ago">Rutabaga</li>',
+                '       </ul>',
+                '       <input type="text" name="message">',
+        	    '	</nav>',
+                ].join('');
 
             $('body').append(domContent);
 
+            $.scrollChat('#cbp-spmenu-s2 ul');
+
 			$('#cbp-spmenu-s2').toggleClass('cbp-spmenu-open' );
 
-            $("#_lb-chatbox input").bind('keypress', function(e){
+            $('#cbp-spmenu-s2 input').bind('keypress', function(e){
                 // if enter key
-                if (e.keyCode == ENTER_KEY_CODE){
+                if (e.keyCode == ENTER_KEY_CODE && $(this).val() != "") {
                     var message = $(this).val();
-                    socket.emit('noncryptSend', {
+                    /*socket.emit('noncryptSend', {
                         message: message
-                    });
+                    });*/
+
 
                     console.log("SEND: " + message);
+                    $('#cbp-spmenu-s2 ul').append('<li class="me">' + message + '</li>');
+
+                    $.scrollChat('#cbp-spmenu-s2 ul');
 
                     $(this).val(''); // clear message field after sending
                 }

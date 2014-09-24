@@ -14,9 +14,19 @@
 
 /* General styles for all menus */
 .cbp-spmenu {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	background: #47a3da;
 	position: fixed;
     z-index: 999;
+    opacity: 0.95;
+}
+
+.cbp-spmenu input {
+	position: relative;
+    bottom: -15px;
+    left: 25px;
+    height: 35px;
+    border-radius: 17px;
 }
 
 .cbp-spmenu h3 {
@@ -28,18 +38,40 @@
 	background: #0d77b6;
 }
 
-.cbp-spmenu a {
-	display: block;
-	color: #fff;
-	font-size: 1.1em;
-	font-weight: 300;
+.cbp-spmenu ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	height: 75%;
+	border-bottom: 1px solid #0d77b6;
+	overflow: scroll;
 }
 
-.cbp-spmenu a:hover {
+.cbp-spmenu li {
+	border: 1px solid #afdefa;
+	border-radius: 8px;
+	padding: 10px 15px;
+	margin: 10px;
+	color: #fff;
+	font-size: 0.9em;
+}
+
+.cbp-spmenu li.other {
+	margin-left: 35px; 
+	margin-right: 10px; 
+}
+
+.cbp-spmenu li.self {
+	margin-left: 10px; 
+	margin-right: 35px; 
+	border-color: #0d77b6;
+}
+
+.cbp-spmenu li:hover {
 	background: #258ecd;
 }
 
-.cbp-spmenu a:active {
+.cbp-spmenu li:active {
 	background: #afdefa;
 	color: #47a3da;
 }
@@ -47,7 +79,7 @@
 /* Orientation-dependent styles for the content of the menu */
 
 .cbp-spmenu-vertical {
-	width: 240px;
+	width: 280px;
 	height: 100%;
 	top: 0;
 	z-index: 1000;
@@ -62,7 +94,7 @@
 
 
 .cbp-spmenu-right {
-	right: -240px;
+	right: -280px;
 }
 
 .cbp-spmenu-right.cbp-spmenu-open {

@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "description": "Slack Instant Messaging widget",
   "dependencies": {
-    "ejs": "latest",
     "express": "latest",
     "body-parser": "latest",
     "node-xmpp": "latest",

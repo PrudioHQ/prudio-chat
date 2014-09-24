@@ -8,11 +8,9 @@ var mysql   = require('mysql');
 var async   = require('async');
 
 // XMPP and Request
-var hipchat    = require('hipchatter');
 var request    = require('request'); // github.com/mikeal/request
 var bodyParser = require('body-parser')
 var xmpp       = require('node-xmpp');
-var sys        = require('sys');
 
 var app    = express();
 var server = http.createServer(app);
@@ -48,7 +46,7 @@ app.use('/img', express.static(__dirname + '/public/img'));
 
 console.log("Listening on port " + port);
 // linking
-require('./socket')(app, io, xmpp, hipchat); // socketIO logic
+require('./socket')(app, io, xmpp); // socketIO logic
 require('./routes')(app, io, db, request, async); // sets up endpoints
 
 // Catch errors

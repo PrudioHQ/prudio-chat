@@ -17,7 +17,7 @@ var messageNum = 1;
 var MAX_ALLOWED_CLIENTS = 1;
 
 
-module.exports = function(app, io, xmpp, hipchat)
+module.exports = function(app, io, xmpp)
 {
 	var jid = "helder@sto.xmpp.slack.com"
 	var password = "sto.OxppPSmAdr8nzxg631nH"

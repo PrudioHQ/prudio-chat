@@ -59,7 +59,7 @@ function main() {
                     return elems[i];
             }
 
-            throw "Could not find the script from oghma.";
+            throw "Could not find the script from Oghma.";
         }
 
         $.getSettings = function() {
@@ -82,12 +82,12 @@ function main() {
         }
 
         $.createButton = function() {
-            var button = $('<div id="_lb-container" title="Chat with us"></div>');
+            var button = $('<div id="oghma-button" title="Chat with us"></div>');
             $("body").append(button);
         }
 
         $.loadJS = function(href) {
-            var jsLink = $("<script src='"+href+"'></script>");
+            var jsLink = $("<script src='" + href + "'></script>");
             $("head").append(jsLink);
         }
 
@@ -106,8 +106,7 @@ function main() {
         $.createButton();
 
 
-        $('#_lb-container').click(function() {
-
+        $('#oghma-button').click(function() {
 
             var messages = [];
 

@@ -20,6 +20,7 @@ var server = http.createServer(app);
 io = io.listen(server, { log: false });
 server.listen(port);
 
+// DB Connection
 var db = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
@@ -36,24 +37,21 @@ db.connect(function(err) {
   console.log('MySQL conn id ' + db.threadId);
 });
 
-app.enable('trust proxy');
 
+app.enable('trust proxy');
 app.use(bodyParser.json());
 
-app.set('views',        __dirname + '/views');
-
 // allow access to /public directories
-app.use('/js',          express.static(__dirname + '/public/js'));
-app.use('/css',         express.static(__dirname + '/public/css'));
-app.use('/inc',         express.static(__dirname + '/public/inc'));
-app.use('/partials',    express.static(__dirname + '/public/partials'));
-app.use('/img',         express.static(__dirname + '/public/img'));
+app.use('/js',  express.static(__dirname + '/public/js'));
+app.use('/css', express.static(__dirname + '/public/css'));
+app.use('/img', express.static(__dirname + '/public/img'));
 
 console.log("Listening on port " + port);
 // linking
 require('./socket')(app, io, xmpp, hipchat); // socketIO logic
 require('./routes')(app, io, db, request, async); // sets up endpoints
 
+// Catch errors
 app.use(function(err, req, res, next){
   console.error(err.stack);
   res.status(500).send('Something broke!');

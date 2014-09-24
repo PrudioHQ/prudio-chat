@@ -52,14 +52,14 @@ function main() {
 
         $.findJS = function() {
             var elems = document.getElementsByTagName('script');
-            var re = /.*logbox\.js/;
+            var re = /.*oghma-chat\.js/;
 
             for(var i = 0; i < elems.length; i++) {
                 if(elems[i].src.match(re))
                     return elems[i];
             }
 
-            throw "Could not find the script from logbox.";
+            throw "Could not find the script from oghma.";
         }
 
         $.getSettings = function() {
@@ -100,7 +100,7 @@ function main() {
         var settings = $.getSettings();
         console.log(settings);
 
-        $.loadCSS(baseURL + "/css/lb-embeed.css");
+        $.loadCSS(baseURL + "/css/chat-styles.css");
         $.loadJS( baseURL + "/socket.io/socket.io.js");
 
         $.createButton();
@@ -157,7 +157,7 @@ function main() {
 
 
                     console.log("SEND: " + message);
-                    $('#cbp-spmenu-s2 ul').append('<li class="me">' + message + '</li>');
+                    $('#cbp-spmenu-s2 ul').append('<li class="self">' + message + '</li>');
 
                     $.scrollChat('#cbp-spmenu-s2 ul');
 

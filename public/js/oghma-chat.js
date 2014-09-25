@@ -91,22 +91,76 @@ function main() {
             $("head").append(jsLink);
         }
 
-        $.scrollChat = function(to){
+        $.scrollChat = function(to) {
             $(to).animate({
                 scrollTop: $(to).height()
             }, 'slow');
         }
 
-        var settings = $.getSettings();
-        console.log(settings);
+        /**
+        * Set cookie with name @var cookie with value @var value for @var days period.
+        */
+        $.setCookie = function(cookie, value, days) {
+            days = days || 730; // 2 years
+           
+            var date = new Date();
+            date.setTime(date.getTime() + (days*24*60*60*1000));
+
+            // Set Cookie
+            document.cookie = cookie + "=" + value + "; expires=" + date.toGMTString() + "; path=/";
+        }
+
+        /**
+        * Get a cookie named @var cookie
+        */
+        $.getCookie = function(cookie) {
+            var dc = document.cookie;
+            var prefix = cookie + "=";
+            var begin = dc.indexOf("; " + prefix);
+
+            if (begin == -1) {
+                begin = dc.indexOf(prefix);
+                if (begin != 0) {
+                    return null;
+                }
+                begin += 2;
+                var end = document.cookie.indexOf(";", begin);
+                if (end == -1) {
+                    end = dc.length;
+                }
+                    
+                return unescape(dc.substring(begin + prefix.length, end));
+            }
+        }
+
+        /**
+        * Gets the UUID for this user. If doesn't exist, creates a new UUID.
+        */
+        $.getUUID = function() {
+            var cookieName = "oghma-uuid";
+            if($.getCookie(cookieName) === null) {
+                // Does not exists; Lets create a UUID for this user
+                $.loadJS(baseURL + "/js/uuid.js");
+                var cuuid = uuid.v4();
+                $.setCookie(cookieName, cuuid);
+                
+                return cuuid;
+            }
+            return $.getCookie(cookieName);            
+        }
 
         $.loadCSS(baseURL + "/css/chat-styles.css");
         $.loadJS( baseURL + "/socket.io/socket.io.js");
 
         $.createButton();
 
-
         $('#oghma-button').click(function() {
+
+            var xuuid    = $.getUUID(); 
+            var settings = $.getSettings();
+
+            console.log("UUID: " + xuuid);
+            console.log("APPID: " + settings.appid);
 
             var messages = [];
 
@@ -114,61 +168,73 @@ function main() {
             var content = document.getElementById('conversation');
             var ENTER_KEY_CODE = 13;
 
-            var socket = io.connect("http:" + baseURL + '/chat');
+            $.ajax({
+                url: baseURL + "/chat/create",
+                method: 'POST',
+                data: {
+                    appid: settings.appid,
+                    uuid:  xuuid,
+                    // TODO: Name, E-mail
+                },
+                success: function(data) {
 
-            var domContent = [
-                '<nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-right" id="cbp-spmenu-s2">',
-                '       <h3>Chat</h3>',
-                '       <ul>',
-                '		     <li class="self">Celery seakale</li>',
-                '            <li class="self">Dulse daikon</li>',
-                '            <li class="other">Zucchini garlic</li>',
-                '            <li class="self">Catsear azuki bean</li>',
-                '            <li class="self">Dulse daikon</li>',
-                '            <li class="other">Zucchini garlic</li>',
-                '            <li class="self">Catsear azuki bean</li>',
-                '            <li class="self">Dulse daikon</li>',
-                '            <li class="other">Zucchini garlic</li>',
-                '            <li class="self">Catsear azuki bean</li>',
-                '            <li class="self">Dulse daikon</li>',
-                '            <li class="other">Zucchini garlic</li>',
-                '            <li class="self">Catsear azuki bean</li>',
-                '		     <li class="other">Dandelion bunya</li>',
-                '		     <li class="self" title="5m ago">Rutabaga</li>',
-                '       </ul>',
-                '       <input type="text" name="message">',
-        	    '	</nav>',
-                ].join('');
+                    var socket = io.connect("http:" + baseURL + '/chat');
 
-            $('body').append(domContent);
+                    var domContent = [
+                        '<nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-right" id="cbp-spmenu-s2">',
+                        '       <h3>Chat</h3>',
+                        '       <ul>',
+                        '            <li class="self">Celery seakale</li>',
+                        '            <li class="self">Dulse daikon</li>',
+                        '            <li class="other">Zucchini garlic</li>',
+                        '            <li class="self">Catsear azuki bean</li>',
+                        '            <li class="self">Dulse daikon</li>',
+                        '            <li class="other">Zucchini garlic</li>',
+                        '            <li class="self">Catsear azuki bean</li>',
+                        '            <li class="self">Dulse daikon</li>',
+                        '            <li class="other">Zucchini garlic</li>',
+                        '            <li class="self">Catsear azuki bean</li>',
+                        '            <li class="self">Dulse daikon</li>',
+                        '            <li class="other">Zucchini garlic</li>',
+                        '            <li class="self">Catsear azuki bean</li>',
+                        '            <li class="other">Dandelion bunya</li>',
+                        '            <li class="self" title="5m ago">Rutabaga</li>',
+                        '       </ul>',
+                        '       <input type="text" name="message">',
+                        '   </nav>',
+                        ].join('');
 
-            $.scrollChat('#cbp-spmenu-s2 ul');
-
-			$('#cbp-spmenu-s2').toggleClass('cbp-spmenu-open' );
-
-            $('#cbp-spmenu-s2 input').bind('keypress', function(e){
-                // if enter key
-                if (e.keyCode == ENTER_KEY_CODE && $(this).val() != "") {
-                    var message = $(this).val();
-                    /*socket.emit('noncryptSend', {
-                        message: message
-                    });*/
-
-
-                    console.log("SEND: " + message);
-                    $('#cbp-spmenu-s2 ul').append('<li class="self">' + message + '</li>');
+                    $('body').append(domContent);
 
                     $.scrollChat('#cbp-spmenu-s2 ul');
 
-                    $(this).val(''); // clear message field after sending
+                    $('#cbp-spmenu-s2').toggleClass('cbp-spmenu-open' );
+
+                    $('#cbp-spmenu-s2 input').bind('keypress', function(e){
+                        // if enter key
+                        if (e.keyCode == ENTER_KEY_CODE && $(this).val() != "") {
+                            var message = $(this).val();
+                            
+                            socket.emit('noncryptSend', {
+                                message: message
+                            });
+
+                            console.log("SEND: " + message);
+                            $('#cbp-spmenu-s2 ul').append('<li class="self">' + message + '</li>');
+
+                            $.scrollChat('#cbp-spmenu-s2 ul');
+
+                            $(this).val(''); // clear message field after sending
+                        }
+                    });
+
+                    socket.on('connect', function(){
+                        console.log("connected!");
+                        socket.emit('joinRoom', "sp-6");
+
+                    });
                 }
             });
-
-            socket.on('connect', function(){
-                console.log("connected!");
-                socket.emit('joinRoom', "sp-6");
-            });
-
 
             // Get Channel from LB API with token
             // If no users online (not possible right now in Slack) show form for e-mail message.

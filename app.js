@@ -10,6 +10,8 @@ var async   = require('async');
 // XMPP and Request
 var request    = require('request'); // github.com/mikeal/request
 var bodyParser = require('body-parser')
+var cookieParser = require('cookie-parser')
+var evercookie = require('evercookie');
 var xmpp       = require('node-xmpp');
 
 var app    = express();
@@ -37,17 +39,23 @@ db.connect(function(err) {
 
 
 app.enable('trust proxy');
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false}));
+app.use(cookieParser());
+app.use(evercookie.backend());
 
 // allow access to /public directories
 app.use('/js',  express.static(__dirname + '/public/js'));
 app.use('/css', express.static(__dirname + '/public/css'));
 app.use('/img', express.static(__dirname + '/public/img'));
 
+// client
+app.use('/client',  express.static(__dirname + '/client/index.html'));
+
+
 console.log("Listening on port " + port);
 // linking
 require('./socket')(app, io, xmpp); // socketIO logic
-require('./routes')(app, io, db, request, async); // sets up endpoints
+require('./routes')(app, io, db, request, async, cookieParser); // sets up endpoints
 
 // Catch errors
 app.use(function(err, req, res, next){

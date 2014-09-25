@@ -5,28 +5,28 @@
 	  - /chat/123456 		(specific chat room)
  */
 
-module.exports = function(app, io, db, request, async){
+module.exports = function(app, io, db, request, async, cookieParser) {
 
-	// specific chat room request
-	app.get('/chat/:id', function(req,res){
-		res.render('index.ejs');
+
+	app.get('/test', function(req,res) {
+
+		res.cookie("oghma", 1);
+
+		console.log("Cookies: ", req.cookies);
+
+		return res.status(200).end();
 	});
 
-	app.get('/about', function(req,res){
-		res.render('about.ejs');
-	});
 
-	// any other request -> redirect to new chat room
-	/**
-	app.get('/*', function(req, res){
-		// generate random chat room ID
-		var id = Math.round((Math.random() * 1000000));
-
-		res.redirect('chat/' + id);
-	});**/
 
 	app.post('/chat/create', function(req, res, next) {
-		var token = req.param('api');
+
+		console.log(req.body);
+
+		var appid = req.param('appid');
+		var uuid  = req.param('uuid');
+
+		console.log(appid);
 
 		var xmpp = {
 			host : "sto.xmpp.slack.com",
@@ -48,14 +48,12 @@ module.exports = function(app, io, db, request, async){
 			[
 				// Check if token is valid
 				function(callback) {
-					db.query('SELECT room_count FROM app WHERE ? FOR UPDATE; UPDATE app SET room_count = room_count + 1 WHERE ?;', [{ 'token': token }, { 'token': token }], function(err, rows) {
+					db.query('SELECT room_count FROM app WHERE ? FOR UPDATE; UPDATE app SET room_count = room_count + 1 WHERE ?;', [{ 'token': appid }, { 'token': appid }], function(err, rows) {
 						// connected! (unless `err` is set)
 						if(rows[0].affectedRows == 0 || rows[1].affectedRows == 0) {
 							return callback(1);
 						}
-
-						return callback(null, token, (rows[0][0].room_count + 1));
-
+						return callback(null, appid, (rows[0][0].room_count + 1));
 					});
 
 				},
@@ -81,7 +79,6 @@ module.exports = function(app, io, db, request, async){
 							return callback(null, new_channel);
 						}
 					});
-
 				},
 
 				// Set purpose of channel
@@ -110,5 +107,14 @@ module.exports = function(app, io, db, request, async){
 
 
 	});
+
+	// any other request -> redirect to new chat room
+	/**
+	app.get('/*', function(req, res){
+		// generate random chat room ID
+		var id = Math.round((Math.random() * 1000000));
+
+		res.redirect('chat/' + id);
+	});**/
 
 };

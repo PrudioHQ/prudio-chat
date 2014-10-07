@@ -11,6 +11,8 @@
     "mysql": "latest",
     "node-xmpp": "latest",
     "request": "latest",
+    "sequelize": "^2.0.0-rc1",
+    "sequelize-cli": "^0.3.3",
     "socket.io": "latest"
   },
   "author": "developer",

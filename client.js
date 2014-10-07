@@ -1,14 +1,24 @@
-/* This file is required by app.js.
- * It sets up the application endpoints/routes.
- * 2 routes possible:
-	  - / or or /foo		(redirect to random chat room)
-	  - /chat/123456 		(specific chat room)
- */
 
-module.exports = function(app, io, db, request, async, cookieParser) {
+module.exports = function(app, io, request, async, cookieParser) {
+
+	function isAuthorized(req, res, next) {
+	
+		var appid = req.param('appid');
+
+		// db.query('SELECT id FROM app WHERE ?', [{ 'appid': appid }], function(err, rows) {
+
+		// 	// connected! (unless `err` is set)
+		// 	if(rows.length === 1) 
+		// 		return next();
+
+		// 	console.log('Not authorized');
+		// 	// IF A USER ISN'T LOGGED IN, THEN 401
+		// 	res.status(401).json({ success: false, message: "Unauthorized" }).send();
+		// });
+	}
 
 
-	app.get('/test', function(req,res) {
+	app.get('/test', isAuthorized, function(req,res) {
 
 		res.cookie("oghma", 1);
 
@@ -19,9 +29,7 @@ module.exports = function(app, io, db, request, async, cookieParser) {
 
 
 
-	app.post('/chat/create', function(req, res, next) {
-
-		console.log(req.body);
+	app.post('/chat/create', isAuthorized, function(req, res, next) {
 
 		var appid = req.param('appid');
 		var uuid  = req.param('uuid');
@@ -93,9 +101,7 @@ module.exports = function(app, io, db, request, async, cookieParser) {
 
 			],
 			function(err, results) {
-				if(err == 1)
-					return res.status(404).json({ error: "Token is not valid!" }).end();
-				else if(err == 2)
+				if(err == 2)
 					return res.status(404).json({ error: "Error creating the channel" }).end();
 				else if(err)
 					return res.status(404).json({ error: "Other error!" }).end();

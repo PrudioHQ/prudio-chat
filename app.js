@@ -9,8 +9,8 @@ var async   = require('async');
 // XMPP and Request
 var request      = require('request'); // github.com/mikeal/request
 var bodyParser   = require('body-parser')
-var cookieParser = require('cookie-parser')
-var evercookie   = require('evercookie');
+// var cookieParser = require('cookie-parser')
+// var evercookie   = require('evercookie');
 var xmpp         = require('node-xmpp');
 
 // Sequalize
@@ -38,24 +38,25 @@ models.sequelize.sync().success(function () {
 });
 
 sequelize = new Sequelize('oghma', 'root', '', {
-  dialect: "mysql", // or 'sqlite', 'postgres', 'mariadb'
-  port:    3306, // or 5432 (for postgres)
+  dialect: "mysql",
+  port:    3306, 
 });
 
 sequelize
   .authenticate()
   .complete(function(err) {
     if (!!err) {
-      console.log('Unable to connect to the database:', err)
+      console.log('MySQL is on? Unable to connect to the database: ', err)
     } else {
       console.log('Connection has been established successfully.')
+      //require('./migrations/seed')(models); // SEED data
     }
   });
 
 app.enable('trust proxy');
 app.use(bodyParser.urlencoded({ extended: false}));
-app.use(cookieParser());
-app.use(evercookie.backend());
+// app.use(cookieParser());
+// app.use(evercookie.backend());
 
 // allow access to /public directories
 app.use('/js',  express.static(__dirname + '/public/js'));
@@ -66,9 +67,9 @@ app.use('/img', express.static(__dirname + '/public/img'));
 app.use('/client-html',  express.static(__dirname + '/client-html/index.html'));
 
 // linking
-//require('./socket')(app, io, xmpp); // socketIO logic
-require('./client')(app, io, request, async, cookieParser); // sets up endpoints
-require('./api')(app, io, request, async, cookieParser); // sets up endpoints
+require('./socket')(app, io, xmpp); // socketIO logic
+require('./client')(app, io, request, models); // sets up endpoints
+require('./api')   (app, io, request, models); // sets up endpoints
 
 // Catch errors
 app.use(function(err, req, res, next){

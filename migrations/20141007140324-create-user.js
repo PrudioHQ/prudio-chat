@@ -8,8 +8,10 @@ module.exports = {
         primaryKey: true,
         type: DataTypes.INTEGER
       },
-      accountId: {
-        type: DataTypes.INTEGER
+      account_id: {
+        type: DataTypes.INTEGER,
+        references: "Accounts",
+        referencesKey: "id"
       },
       fname: {
         type: DataTypes.STRING

@@ -1,24 +1,19 @@
 
-module.exports = function(app, io, request, async, cookieParser) {
+module.exports = function(app, io, request, models, cookieParser) {
 
 	function isAuthorized(req, res, next) {
 	
-		var appid = req.param('appid');
+		var token = req.param('token');
 
-		// db.query('SELECT id FROM app WHERE ?', [{ 'appid': appid }], function(err, rows) {
-
-		// 	// connected! (unless `err` is set)
-		// 	if(rows.length === 1) 
-		// 		return next();
-
-		// 	console.log('Not authorized');
-		// 	// IF A USER ISN'T LOGGED IN, THEN 401
-		// 	res.status(401).json({ success: false, message: "Unauthorized" }).send();
-		// });
+		models.App.find({ where: { token: token, active: true } }).success(function(app) {
+			if(app == null)
+				return res.status(401).json({ success: false, message: "Unauthorized" }).send();
+			return next();
+		});
 	}
 
 
-	app.get('/test', isAuthorized, function(req,res) {
+	app.get('/test', isAuthorized, function(req, res) {
 
 		res.cookie("oghma", 1);
 
@@ -52,7 +47,7 @@ module.exports = function(app, io, request, async, cookieParser) {
 
 		var channel = "sp-";
 
-		async.waterfall(
+		sequelize.waterfall(
 			[
 				// Check if token is valid
 				function(callback) {

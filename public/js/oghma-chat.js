@@ -64,7 +64,7 @@ function main() {
 
         $.getSettings = function() {
             var el = $.findJS();
-            var params = ['appid', 'client'];
+            var params = ['token'];
             var settings = new Object();
 
             for(var i = 0; i < params.length; i++) {
@@ -136,6 +136,7 @@ function main() {
         /**
         * Gets the UUID for this user. If doesn't exist, creates a new UUID.
         */
+
         $.getUUID = function() {
             var cookieName = "oghma-uuid";
             if($.getCookie(cookieName) === null) {
@@ -150,17 +151,15 @@ function main() {
         }
 
         $.loadCSS(baseURL + "/css/chat-styles.css");
-        $.loadJS( baseURL + "/socket.io/socket.io.js");
+        $.loadJS("http://" + baseURL + "/socket.io/socket.io.js");
 
         $.createButton();
 
         $('#oghma-button').click(function() {
 
-            var xuuid    = $.getUUID(); 
             var settings = $.getSettings();
 
-            console.log("UUID: " + xuuid);
-            console.log("APPID: " + settings.appid);
+            console.log("Token: " + settings.token);
 
             var messages = [];
 
@@ -172,9 +171,7 @@ function main() {
                 url: baseURL + "/chat/create",
                 method: 'POST',
                 data: {
-                    appid: settings.appid,
-                    uuid:  xuuid,
-                    // TODO: Name, E-mail
+                    token: settings.token
                 },
                 success: function(data) {
 

@@ -1,9 +1,9 @@
 
 // Set up DB, Express and SocketIO
-var http    = require('http');
 var express = require('express');
-var io      = require('socket.io');
-var mysql   = require('mysql');
+var app     = express();
+var server  = require('http').Server(app);
+var io      = require('socket.io')(server);
 var async   = require('async');
 
 // XMPP and Request
@@ -17,11 +17,6 @@ var xmpp         = require('node-xmpp');
 var Sequelize = require('sequelize')
 var models    = require('./models');
 
-var app    = express();
-var server = http.createServer(app);
-
-io = io.listen(server, { log: false });
-
 app.set('port', process.env.PORT || Number(8888));
 app.set('env',  'development');
 
@@ -32,8 +27,8 @@ if ('development' === app.get('env')) {
 }
 
 models.sequelize.sync().success(function () {
-  var server = app.listen(app.get('port'), function() {
-    console.log('Express server listening on port ' + server.address().port);
+  var listening = server.listen(app.get('port'), function() {
+    console.log('Express server listening on port ' + listening.address().port);
   });
 });
 
@@ -46,7 +41,7 @@ sequelize
   .authenticate()
   .complete(function(err) {
     if (!!err) {
-      console.log('MySQL is on? Unable to connect to the database: ', err)
+      console.log('Is MySQL on? Unable to connect to the database: ', err)
     } else {
       console.log('Connection has been established successfully.')
       //require('./migrations/seed')(models); // SEED data
@@ -63,12 +58,12 @@ app.use('/js',  express.static(__dirname + '/public/js'));
 app.use('/css', express.static(__dirname + '/public/css'));
 app.use('/img', express.static(__dirname + '/public/img'));
 
-// client
+// HTML client
 app.use('/client-html',  express.static(__dirname + '/client-html/index.html'));
 
 // linking
 require('./socket')(app, io, xmpp); // socketIO logic
-require('./client')(app, io, request, models); // sets up endpoints
+require('./client')(app, io, request, models, async); // sets up endpoints
 require('./api')   (app, io, request, models); // sets up endpoints
 
 // Catch errors
@@ -76,3 +71,9 @@ app.use(function(err, req, res, next){
   console.error(err.stack);
   res.status(500).send('Something broke!');
 });
+
+// CONST
+
+app.set('slack_channel_prefix', 'sp-');
+app.set('slack_api_url',        'https://slack.com/api');
+

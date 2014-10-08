@@ -18,9 +18,11 @@ module.exports = function(sequelize, DataTypes) {
     name: DataTypes.STRING,
     active: DataTypes.BOOLEAN,
     online: DataTypes.BOOLEAN,
-    xmpp_host: DataTypes.STRING,
-    xmpp_user: DataTypes.STRING,
-    xmpp_pass: DataTypes.STRING
+    slack_xmpp_host: DataTypes.STRING,
+    slack_xmpp_user: DataTypes.STRING,
+    slack_xmpp_pass: DataTypes.STRING,
+    slack_api_token: DataTypes.STRING,
+    slack_invite_user: DataTypes.STRING
   }, {
     classMethods: {
       associate: function(models) {

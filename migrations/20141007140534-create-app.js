@@ -33,13 +33,19 @@ module.exports = {
         type: DataTypes.BOOLEAN,
         defaultValue: true
       },
-      xmpp_host: {
+      slack_xmpp_host: {
         type: DataTypes.STRING
       },
-      xmpp_user: {
+      slack_xmpp_user: {
         type: DataTypes.STRING
       },
-      xmpp_pass: {
+      slack_xmpp_pass: {
+        type: DataTypes.STRING
+      },
+      slack_api_token: {
+        type: DataTypes.STRING
+      },
+      slack_invite_user: {
         type: DataTypes.STRING
       },
       createdAt: {
@@ -50,7 +56,7 @@ module.exports = {
         allowNull: false,
         type: DataTypes.DATE
       }
-    }).done(done);
+    });
 
     migration.addIndex(
       'Apps',

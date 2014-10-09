@@ -8,12 +8,10 @@ var async   = require('async');
 
 // XMPP and Request
 var request      = require('request'); // github.com/mikeal/request
-var bodyParser   = require('body-parser')
-// var cookieParser = require('cookie-parser')
-// var evercookie   = require('evercookie');
 var xmpp         = require('node-xmpp');
+var bodyParser   = require('body-parser')
 
-// Sequalize
+// Sequalize & Models
 var Sequelize = require('sequelize')
 var models    = require('./models');
 
@@ -32,7 +30,7 @@ models.sequelize.sync().success(function () {
   });
 });
 
-sequelize = new Sequelize('oghma', 'root', '', {
+var sequelize = new Sequelize('oghma', 'root', '', {
   dialect: "mysql",
   port:    3306, 
 });
@@ -62,7 +60,7 @@ app.use('/img', express.static(__dirname + '/public/img'));
 app.use('/client-html',  express.static(__dirname + '/client-html/index.html'));
 
 // linking
-require('./socket')(app, io, xmpp); // socketIO logic
+require('./socket')(app, io, xmpp, models); // socketIO logic
 require('./client')(app, io, request, models, async); // sets up endpoints
 require('./api')   (app, io, request, models); // sets up endpoints
 
@@ -72,8 +70,7 @@ app.use(function(err, req, res, next){
   res.status(500).send('Something broke!');
 });
 
-// CONST
-
+// Constants
 app.set('slack_channel_prefix', 'sp-');
 app.set('slack_api_url',        'https://slack.com/api');
 

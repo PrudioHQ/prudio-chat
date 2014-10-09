@@ -33,8 +33,6 @@ module.exports = function(app, io, request, models, async) {
 			if(application == null)
 				return res.status(404).json({ success: false, message: "Not found" }).send();
 
-			console.log("Enter waterfall")
-
 			async.waterfall(
 				[
 					// Check if token is valid
@@ -58,7 +56,7 @@ module.exports = function(app, io, request, models, async) {
 						request.post(app.get('slack_api_url') + '/channels.join', { json: true, form: { token: application.slack_api_token, name: channel }}, function (error, response, body) {
 							if (!error && response.statusCode == 200 && typeof body.channel !== "undefined") {
 								console.log('CH ID: ' + body.channel.id);
-								return callback(null, body.channel.id);
+								return callback(null, channel, body.channel.id);
 							}
 							return callback('Create Channel');
 						});
@@ -66,33 +64,37 @@ module.exports = function(app, io, request, models, async) {
 					},
 
 					// Invite user to channel
-					function(new_channel, callback) {
-						request.post(app.get('slack_api_url') + '/channels.invite', { json: true, form: { token: application.slack_api_token, channel: new_channel, user: application.slack_user_invite }}, function (error, response, body) {
+					function(channel, new_channel, callback) {
+						request.post(app.get('slack_api_url') + '/channels.invite', { json: true, form: { token: application.slack_api_token, channel: new_channel, user: application.slack_invite_user }}, function (error, response, body) {
 							if (!error && response.statusCode == 200) {
-								return callback(null, new_channel);
+								console.log("OK? ... " + body.error);
+								return callback(null, channel, new_channel);
 							}
 							return callback('Invite user to channel');
 						});
 					},
 
 					// Set purpose of channel
-					function(new_channel, callback) {
+					function(channel, new_channel, callback) {
 						request.post(app.get('slack_api_url') + '/channels.setPurpose', { json: true, form: { token: application.slack_api_token, channel: new_channel, purpose: "Help this guy out!" }}, function (error, response, body) {
 							if (!error && response.statusCode == 200) {
-								return callback(null, 'done');
+								return callback(null, channel);
 							}
 							return callback('Set purpose of channel');
 						});
 					},
 
 				],
-				function(err, results) {
+				function(err, channel) {
 					if(err) {
 						console.log(err);
 						return res.status(404).json({ error: "Error: " + err}).end();
 					}
 
-					return res.status(200).json({ success: true }).end();
+					var crypto = require('crypto');
+					var signature = crypto.createHmac('sha1', application.slack_api_token).update(channel).digest('hex');
+
+					return res.status(200).json({ success: true, channel: channel, signature: signature }).end();
 
 				}
 			);

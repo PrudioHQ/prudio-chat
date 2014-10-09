@@ -17,7 +17,7 @@ var messageNum = 1;
 var MAX_ALLOWED_CLIENTS = 1;
 
 
-module.exports = function(app, io, xmpp)
+module.exports = function(app, io, xmpp, models)
 {
 	var jid = "helder@sto.xmpp.slack.com"
 	var password = "sto.OxppPSmAdr8nzxg631nH"
@@ -35,9 +35,45 @@ module.exports = function(app, io, xmpp)
 	var chat = io.of('/chat').on('connection', function(clntSocket)
 	{
 	  // each client is put into a chat room restricted to max 2 clients
-	  clntSocket.on('joinRoom', function(room_id)
+	  clntSocket.on('joinRoom', function(token, channel, client_signature)
 	  {
-	  	var clients_in_room = roomCount(chat.adapter.rooms[room_id]);
+	  	models.App.find({ where: { token: token, active: true } }).success(function(application) {
+	
+
+
+			if(application == null) {
+				console.log('Wrong token.');
+				
+				clntSocket.emit('serverMessage', {
+					message: 'Wrong token.'
+				});
+
+				// force client to disconnect
+				clntSocket.disconnect();
+				return;
+			}
+
+			var crypto = require('crypto');
+			var signature = crypto.createHmac('sha1', application.slack_api_token).update(channel).digest('hex');
+
+			if(signature != client_signature) {
+				console.log('Wrong channel signature.');
+
+				clntSocket.emit('serverMessage', {
+					message: 'Wrong channel signature.'
+				});
+
+				// force client to disconnect
+				clntSocket.disconnect();
+				return;
+			}
+
+
+			console.log("Cool! " + application.name);
+
+		});
+
+	  	var clients_in_room = roomCount(chat.adapter.rooms[channel]);
 		// client may only join room only if it's not full
 		if (clients_in_room >= MAX_ALLOWED_CLIENTS)
 		{
@@ -49,17 +85,7 @@ module.exports = function(app, io, xmpp)
 		}
 		else
 		{
-			/*var hc = new hipchat('iS4ODj9ZG7wYh2PVhNSchriVoNkXzBmOHIN5j0wQ');
-
-			hc.create_room({name: 'SP-' + room_id}, function(err, room){
-				if(!err)
-					hc.invite_member({name: 'SP-' + room_id, user_email: 'cossou@gmail.com'}, 'Support Request', function(err, data){
-						console.log("D: " + data);
-						console.log("E: " + err);
-					})
-			});
-			*/
-
+			
 			console.log("Connected");
 			// Once connected, set available presence and join room
 			cl.on('online', function() {
@@ -71,13 +97,13 @@ module.exports = function(app, io, xmpp)
 				);
 
 				// join room (and request no chat history)
-				cl.send(new xmpp.Element('presence', { to: room_jid(room_id) + '/' + room_nick }).
+				cl.send(new xmpp.Element('presence', { to: room_jid(channel) + '/' + room_nick }).
 					c('x', { xmlns: 'http://jabber.org/protocol/muc' })
 				);
 
 				// Change Topic
-				//cl.send(new xmpp.Element('message', { to: room_jid(room_id) + '/' + room_nick, type: 'groupchat' }).
-				//	c('subject').t('Room ' + room_id)
+				//cl.send(new xmpp.Element('message', { to: room_jid(channel) + '/' + room_nick, type: 'groupchat' }).
+				//	c('subject').t('Room ' + channel)
 				//);
 
 				// send keepalive data or server will disconnect us after 150s of inactivity
@@ -90,9 +116,9 @@ module.exports = function(app, io, xmpp)
 			});
 
 			// client joins room specified in URL
-			clntSocket.join(room_id);
+			clntSocket.join(channel);
 
-			console.log("Room: " + room_id);
+			console.log("Room: " + channel);
 
 			clients_in_room++;
 
@@ -102,13 +128,13 @@ module.exports = function(app, io, xmpp)
 			});
 
 			// let other user know that client joined
-			clntSocket.broadcast.to(room_id).emit('serverMessage', {
+			clntSocket.broadcast.to(channel).emit('serverMessage', {
 				message: '<b>Other</b> has joined.'
 			});
 
 			if (clients_in_room == MAX_ALLOWED_CLIENTS){
 				// let everyone know that the max amount of users (2) has been reached
-				chat.in(room_id).emit('serverMessage', {
+				chat.in(channel).emit('serverMessage', {
 					message: 'This room is now full. There are <b>2</b> users present.'
 				});
 
@@ -118,7 +144,7 @@ module.exports = function(app, io, xmpp)
 		    /** sending encrypted
 			clntSocket.on('cryptSend', function (data) {
 				// all data sent by client is sent to room
-				clntSocket.broadcast.to(room_id).emit('cryptMessage', {
+				clntSocket.broadcast.to(channel).emit('cryptMessage', {
 					message: data.message,
 					hint: data.hint,
 					sender: 'Other',
@@ -141,7 +167,7 @@ module.exports = function(app, io, xmpp)
 
 
 				// all data sent by client is sent to room
-				clntSocket.broadcast.to(room_id).emit('noncryptMessage', {
+				clntSocket.broadcast.to(channel).emit('noncryptMessage', {
 					message: text.message,
 					sender: 'Other'
 				});
@@ -154,7 +180,7 @@ module.exports = function(app, io, xmpp)
 				console.log("M: " + text.message)
 
 				// send response
-				cl.send(new xmpp.Element('message', { to: room_jid(room_id) + '/' + room_nick, type: 'groupchat' }).
+				cl.send(new xmpp.Element('message', { to: room_jid(channel) + '/' + room_nick, type: 'groupchat' }).
 					c('body').t(text.message)
 				);
 
@@ -164,11 +190,11 @@ module.exports = function(app, io, xmpp)
 			/** notifying clients of decryption
 			clntSocket.on('confirmDecrypt', function(id) {
 				// let room know which particular message was decrypted
-				chat.in(room_id).emit('markDecryption', id);
+				chat.in(channel).emit('markDecryption', id);
 			});
 
 			clntSocket.on('confirmMessageDestroy', function(id) {
-				chat.in(room_id).emit('markMessageDestroy', id)
+				chat.in(channel).emit('markMessageDestroy', id)
 			});
 			**/
 
@@ -188,7 +214,7 @@ module.exports = function(app, io, xmpp)
 				}
 
 				// ignore messages we sent
-				if (stanza.attrs.from == room_jid(room_id) + '/' + room_nick) {
+				if (stanza.attrs.from == room_jid(channel) + '/' + room_nick) {
 					console.log("ignore messages we sent");
 					console.log(stanza);
 					return;
@@ -206,7 +232,7 @@ module.exports = function(app, io, xmpp)
 				console.log("M: " + message);
 
 
-				clntSocket.broadcast.to(room_id).emit('noncryptMessage', {
+				clntSocket.broadcast.to(channel).emit('noncryptMessage', {
 					message: message,
 					sender: 'Other'
 				});
@@ -217,7 +243,7 @@ module.exports = function(app, io, xmpp)
 		// notify others that somebody left the chat
 		clntSocket.on('disconnect', function() {
 			// let room know that this client has left
-			clntSocket.broadcast.to(room_id).emit('serverMessage', {
+			clntSocket.broadcast.to(channel).emit('serverMessage', {
 					message: '<b>Other</b> has left.'
 				});
 		});

@@ -151,7 +151,7 @@ function main() {
         }
 
         $.loadCSS(baseURL + "/css/chat-styles.css");
-        $.loadJS("http://" + baseURL + "/socket.io/socket.io.js");
+        $.loadJS( baseURL + "/socket.io/socket.io.js");
 
         $.createButton();
 
@@ -175,23 +175,14 @@ function main() {
                 },
                 success: function(data) {
 
+                    console.log(data);
+
                     var socket = io.connect("http:" + baseURL + '/chat');
 
                     var domContent = [
                         '<nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-right" id="cbp-spmenu-s2">',
                         '       <h3>Chat</h3>',
                         '       <ul>',
-                        '            <li class="self">Celery seakale</li>',
-                        '            <li class="self">Dulse daikon</li>',
-                        '            <li class="other">Zucchini garlic</li>',
-                        '            <li class="self">Catsear azuki bean</li>',
-                        '            <li class="self">Dulse daikon</li>',
-                        '            <li class="other">Zucchini garlic</li>',
-                        '            <li class="self">Catsear azuki bean</li>',
-                        '            <li class="self">Dulse daikon</li>',
-                        '            <li class="other">Zucchini garlic</li>',
-                        '            <li class="self">Catsear azuki bean</li>',
-                        '            <li class="self">Dulse daikon</li>',
                         '            <li class="other">Zucchini garlic</li>',
                         '            <li class="self">Catsear azuki bean</li>',
                         '            <li class="other">Dandelion bunya</li>',
@@ -226,9 +217,8 @@ function main() {
                     });
 
                     socket.on('connect', function(){
-                        console.log("connected!");
-                        socket.emit('joinRoom', "sp-6");
-
+                        console.log("Connected to " + data.channel);
+                        socket.emit('joinRoom', settings.token, data.channel, data.signature);
                     });
                 }
             });

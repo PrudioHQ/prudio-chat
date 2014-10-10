@@ -182,12 +182,7 @@ function main() {
                     var domContent = [
                         '<nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-right" id="cbp-spmenu-s2">',
                         '       <h3>Chat</h3>',
-                        '       <ul>',
-                        '            <li class="other">Zucchini garlic</li>',
-                        '            <li class="self">Catsear azuki bean</li>',
-                        '            <li class="other">Dandelion bunya</li>',
-                        '            <li class="self" title="5m ago">Rutabaga</li>',
-                        '       </ul>',
+                        '       <ul></ul>',
                         '       <input type="text" name="message">',
                         '   </nav>',
                         ].join('');
@@ -219,6 +214,19 @@ function main() {
                     socket.on('connect', function(){
                         console.log("Connected to " + data.channel);
                         socket.emit('joinRoom', settings.token, data.channel, data.signature);
+                    });
+
+                    // On message
+                    socket.on('noncryptMessage', function (data) {
+                        if(data.sender == "Other") {
+                            $('#cbp-spmenu-s2 ul').append('<li class="other">' + data.message + '</li>');
+                            $.scrollChat('#cbp-spmenu-s2 ul');
+                        }
+                    });
+
+                    socket.on('serverMessage', function (data) {
+                        $('#cbp-spmenu-s2 ul').append('<li><i>Server: ' + data.message + '</i></li>');
+                        $.scrollChat('#cbp-spmenu-s2 ul');
                     });
                 }
             });

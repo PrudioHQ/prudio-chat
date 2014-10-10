@@ -67,7 +67,6 @@ module.exports = function(app, io, request, models, async) {
 					function(channel, new_channel, callback) {
 						request.post(app.get('slack_api_url') + '/channels.invite', { json: true, form: { token: application.slack_api_token, channel: new_channel, user: application.slack_invite_user }}, function (error, response, body) {
 							if (!error && response.statusCode == 200) {
-								console.log("OK? ... " + body.error);
 								return callback(null, channel, new_channel);
 							}
 							return callback('Invite user to channel');

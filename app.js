@@ -16,13 +16,33 @@ var cors         = require('cors');
 var Sequelize = require('sequelize');
 var models    = require('./models');
 
-app.set('port', process.env.PORT || Number(8888));
+app.set('port', process.env.PORT     || Number(8888));
 app.set('env',  process.env.NODE_ENV || 'development');
 
 // Development only
 if ('development' === app.get('env')) {
   var errorhandler = require('errorhandler');
-  app.use(errorhandler())
+  app.use(errorhandler());
+
+  /*
+  var sequelize = new Sequelize('oghma', 'root', null, {
+    dialect:  'mysql',
+    host:     '127.0.0.1',
+    logging:  true, //false
+  });
+
+  sequelize
+    .authenticate()
+    .complete(function(err) {
+      if (!!err) {
+        console.log('Is DB on? Unable to connect to the database: ', err)
+      } else {
+        console.log('Connection has been established successfully.')
+        //require('./migrations/seed')(models); // SEED data
+      }
+    });
+  */
+  
 }
 
 models.sequelize.sync().success(function () {
@@ -30,27 +50,6 @@ models.sequelize.sync().success(function () {
     console.log('Express server listening on port ' + listening.address().port);
   });
 });
-
-/*
-var sequelize = new Sequelize('d31bbog576b0pc', 'nvkxeywaactgdp', 's-aPaGZtVmGTFoUH_htxfYKEEu', {
-  dialect:  'postgres',
-  protocol: 'postgres',
-  host:     'ec2-54-235-250-41.compute-1.amazonaws.com',
-  logging:  true, //false
-  port:     5432, 
-});
-
-sequelize
-  .authenticate()
-  .complete(function(err) {
-    if (!!err) {
-      console.log('Is DB on? Unable to connect to the database: ', err)
-    } else {
-      console.log('Connection has been established successfully.')
-      //require('./migrations/seed')(models); // SEED data
-    }
-  });
-*/
 
 app.enable('trust proxy');
 app.use(bodyParser.urlencoded({ extended: false}));

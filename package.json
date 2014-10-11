@@ -2,8 +2,10 @@
   "name": "slack-chat",
   "version": "0.0.1",
   "description": "Slack Instant Messaging widget",
+  "engines": {
+    "node": "0.10.x"
+  },
   "dependencies": {
-    "node": "0.10.32",
     "node-xmpp": "1.0.0-alpha2",
     "node-stringprep": "0.5.4",
     "node-uuid": "1.4.1",

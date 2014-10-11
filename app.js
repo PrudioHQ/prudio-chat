@@ -30,16 +30,19 @@ models.sequelize.sync().success(function () {
   });
 });
 
-var sequelize = new Sequelize('oghma', 'root', '', {
-  dialect: "mysql",
-  port:    3306, 
+var sequelize = new Sequelize('d31bbog576b0pc', 'nvkxeywaactgdp', 's-aPaGZtVmGTFoUH_htxfYKEEu', {
+  dialect:  'postgres',
+  protocol: 'postgres',
+  host:     'ec2-54-235-250-41.compute-1.amazonaws.com',
+  logging:  true //false
+  port:     5432, 
 });
 
 sequelize
   .authenticate()
   .complete(function(err) {
     if (!!err) {
-      console.log('Is MySQL on? Unable to connect to the database: ', err)
+      console.log('Is DB on? Unable to connect to the database: ', err)
     } else {
       console.log('Connection has been established successfully.')
       //require('./migrations/seed')(models); // SEED data

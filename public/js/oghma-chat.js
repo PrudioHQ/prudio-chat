@@ -2,7 +2,7 @@
 
 // Localize jQuery variable
 var jQuery
-var baseURL = "//localhost:8888";
+var baseURL = "//oghma.herokuapp.com";
 
 /******** Load jQuery if not present *********/
 if (window.jQuery === undefined || window.jQuery.fn.jquery !== '2.1.1') {

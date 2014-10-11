@@ -15,6 +15,8 @@ module.exports = function(models) {
         user_id: user.id,
         name: 'Le App',
         token: '77475a1d-d347-4514-b0b3-1f01c1a205ea',
+        active: true,
+        online: true,
         slack_xmpp_host: 'sto.xmpp.slack.com',
         slack_xmpp_user: 'helder',
         slack_xmpp_pass: 'sto.OxppPSmAdr8nzxg631nH',
@@ -23,7 +25,8 @@ module.exports = function(models) {
       }).success(function(app) {
         models.Room.create({
           account_id: account.id,
-          app_id: app.id
+          app_id: app.id,
+          count: 0
         });
       });
     });

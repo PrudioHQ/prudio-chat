@@ -17,7 +17,7 @@ var Sequelize = require('sequelize');
 var models    = require('./models');
 
 app.set('port', process.env.PORT || Number(8888));
-app.set('env',  process.env || 'development');
+app.set('env',  process.env.NODE_ENV || 'development');
 
 // Development only
 if ('development' === app.get('env')) {

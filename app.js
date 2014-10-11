@@ -34,7 +34,7 @@ var sequelize = new Sequelize('d31bbog576b0pc', 'nvkxeywaactgdp', 's-aPaGZtVmGTF
   dialect:  'postgres',
   protocol: 'postgres',
   host:     'ec2-54-235-250-41.compute-1.amazonaws.com',
-  logging:  true //false
+  logging:  true, //false
   port:     5432, 
 });
 

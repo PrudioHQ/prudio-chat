@@ -199,7 +199,7 @@ function main() {
                             var message = $(this).val();
                             
                             socket.emit('noncryptSend', {
-                                message: message
+                                message: message,
                             });
 
                             console.log("SEND: " + message);

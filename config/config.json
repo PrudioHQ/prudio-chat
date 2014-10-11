@@ -1,11 +1,10 @@
 {
   "development": {
-    "username": "nvkxeywaactgdp",
-    "password": "s-aPaGZtVmGTFoUH_htxfYKEEu",
-    "database": "d31bbog576b0pc",
-    "host": "ec2-54-235-250-41.compute-1.amazonaws.com",
-    "dialect": "postgres",
-    "protocol": "postgres"
+    "username": "root",
+    "password": null,
+    "database": "oghma",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
   },
   "test": {
     "username": "root",
@@ -15,10 +14,11 @@
     "dialect": "mysql"
   },
   "production": {
-    "username": "root",
-    "password": null,
-    "database": "oghma_production",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
+    "username": "nvkxeywaactgdp",
+    "password": "s-aPaGZtVmGTFoUH_htxfYKEEu",
+    "database": "d31bbog576b0pc",
+    "host": "ec2-54-235-250-41.compute-1.amazonaws.com",
+    "dialect": "postgres",
+    "protocol": "postgres"
   }
 }

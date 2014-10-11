@@ -11,12 +11,13 @@ var request      = require('request'); // github.com/mikeal/request
 var xmpp         = require('node-xmpp');
 var bodyParser   = require('body-parser');
 var cors         = require('cors');
+
 // Sequalize & Models
 var Sequelize = require('sequelize');
 var models    = require('./models');
 
 app.set('port', process.env.PORT || Number(8888));
-app.set('env',  'development');
+app.set('env',  process.env || 'development');
 
 // Development only
 if ('development' === app.get('env')) {
@@ -30,6 +31,7 @@ models.sequelize.sync().success(function () {
   });
 });
 
+/*
 var sequelize = new Sequelize('d31bbog576b0pc', 'nvkxeywaactgdp', 's-aPaGZtVmGTFoUH_htxfYKEEu', {
   dialect:  'postgres',
   protocol: 'postgres',
@@ -48,6 +50,7 @@ sequelize
       //require('./migrations/seed')(models); // SEED data
     }
   });
+*/
 
 app.enable('trust proxy');
 app.use(bodyParser.urlencoded({ extended: false}));

@@ -45,7 +45,7 @@ sequelize
       console.log('Is DB on? Unable to connect to the database: ', err)
     } else {
       console.log('Connection has been established successfully.')
-      //require('./migrations/seed')(models); // SEED data
+      require('./migrations/seed')(models); // SEED data
     }
   });
 

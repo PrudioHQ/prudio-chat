@@ -9,10 +9,10 @@ var async   = require('async');
 // XMPP and Request
 var request      = require('request'); // github.com/mikeal/request
 var xmpp         = require('node-xmpp');
-var bodyParser   = require('body-parser')
-
+var bodyParser   = require('body-parser');
+var cors         = require('cors');
 // Sequalize & Models
-var Sequelize = require('sequelize')
+var Sequelize = require('sequelize');
 var models    = require('./models');
 
 app.set('port', process.env.PORT || Number(8888));
@@ -20,7 +20,7 @@ app.set('env',  'development');
 
 // Development only
 if ('development' === app.get('env')) {
-  var errorhandler = require('errorhandler')
+  var errorhandler = require('errorhandler');
   app.use(errorhandler())
 }
 
@@ -51,6 +51,8 @@ sequelize
 
 app.enable('trust proxy');
 app.use(bodyParser.urlencoded({ extended: false}));
+app.use(cors());
+
 // app.use(cookieParser());
 // app.use(evercookie.backend());
 

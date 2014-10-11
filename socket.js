@@ -214,7 +214,8 @@ module.exports = function(app, io, xmpp, models)
 
 					console.log("FROM: " + stanza.attrs.from + " CH: " + channel + " M: " + message);
 
-					if(channel == (stanza.attrs.from).substring(0, 5) )
+					// sp-XXX@conference.HOST.xmpp.slack.com 
+					if(stanza.attrs.from.indexOf(room_jid(channel)) > -1)
 						clntSocket.emit('noncryptMessage', {
 							message: message,
 							sender: 'Other'

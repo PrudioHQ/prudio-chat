@@ -223,12 +223,18 @@ function main() {
                         socket.emit('joinRoom', settings.token, data.channel, data.signature);
                     });
 
-                    // On message
+                    // On Slack message
                     socket.on('noncryptMessage', function (data) {
                         if(data.sender == "Other") {
                             $('#cbp-spmenu-s2 ul').append('<li class="other">' + data.message + '</li>');
                             $.scrollChat('#cbp-spmenu-s2 ul');
                         }
+                    });
+
+                    socket.on('disconnect', function() {
+                        socket.emit('noncryptSend', {
+                            message: "User disconnected!",
+                        });
                     });
 
                     socket.on('serverMessage', function (data) {

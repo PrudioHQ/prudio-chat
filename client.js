@@ -41,28 +41,31 @@ module.exports = function(app, io, request, models, async) {
 				[
 					function(callback) {
 
-						// Verify if the user already has previous support (from cookie)
-						if(!channel || !channelSignature)
+						// Verify if the user already has previous support (from cookies)
+						if(channel != null && channelSignature != null)
 						{
-							// No channel or signature, get the next channel
-							models.Room.find({ where: { app_id: application.id }}).success(function(room) {
-								room.increment('count').success(function() {
-									var chname = "sp-" + room.count;
-									return callback(null, chname);
-								});
-							});
+							// Returning user with cookie
+							var verify = crypto.createHmac('sha1', application.slack_api_token).update(channel).digest('hex');
+							
+							// Verify signature else it will create a new one!
+							if(verify == channelSignature)
+								return callback(null, channel);
 						}
 
-						// Returning user with cookie
-						var verify = crypto.createHmac('sha1', application.slack_api_token).update(channel).digest('hex');
 						
-						if(verify == channelSignature)
-							return callback(null, channel);
+
+						// No channel or signature, or invalid signature/channel, get the next channel
+						models.Room.find({ where: { app_id: application.id }}).success(function(room) {
+							room.increment('count').success(function() {
+								var chname = "sp-" + room.count;
+								return callback(null, chname);
+							});
+						});
 
 						
 					},
 
-					// Create Channel
+					// Create channel
 					function(channel, callback) {
 
 

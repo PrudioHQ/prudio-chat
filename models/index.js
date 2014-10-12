@@ -8,9 +8,9 @@ var config    = require(__dirname + '/../config/config.json')[env];
 var sequelize = null;
 var db        = {};
 
-if (env == 'production' && process.env.HEROKU_POSTGRESQL_BRONZE_URL) {
+if (env == 'production' && process.env.HEROKU_POSTGRESQL_GREEN_URL) {
   // the application is executed on Heroku ... use the postgres database
-  var match = process.env.HEROKU_POSTGRESQL_BRONZE_URL.match(/postgres:\/\/([^:]+):([^@]+)@([^:]+):(\d+)\/(.+)/);
+  var match = process.env.HEROKU_POSTGRESQL_GREEN_URL.match(/postgres:\/\/([^:]+):([^@]+)@([^:]+):(\d+)\/(.+)/);
 
   sequelize = new Sequelize(match[5], match[1], match[2], {
     dialect:  config.dialect,

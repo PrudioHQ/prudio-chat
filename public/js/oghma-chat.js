@@ -231,11 +231,11 @@ function main() {
                         }
                     });
 
-                    socket.on('disconnect', function() {
-                        socket.emit('noncryptSend', {
-                            message: "User disconnected!",
-                        });
-                    });
+                    // socket.on('disconnect', function() {
+                    //     socket.emit('noncryptSend', {
+                    //         message: "User disconnected!",
+                    //     });
+                    // });
 
                     socket.on('serverMessage', function (data) {
                         $('#cbp-spmenu-s2 ul').append('<li><i>Server: ' + data.message + '</i></li>');

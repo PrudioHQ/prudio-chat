@@ -233,9 +233,15 @@ module.exports = function(app, io, xmpp, models)
 				// notify others that somebody left the chat
 				clntSocket.on('disconnect', function() {
 					// let room know that this client has left
-					clntSocket.broadcast.to(channel).emit('serverMessage', {
+					/*clntSocket.broadcast.to(channel).emit('serverMessage', {
 							message: '<b>Other</b> has left.'
-					});
+					});*/
+
+					// Send to slack!
+					xmpp_list[jid].send(new xmpp.Element('message', { to: room_jid(channel) + '/' + room_nick, type: 'groupchat' }).
+						c('body').t("User disconnected!")
+					);
+
 				});
 			}); 
 		}); // end joinRoom listener

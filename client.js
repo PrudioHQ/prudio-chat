@@ -26,7 +26,11 @@ module.exports = function(app, io, request, models, async) {
 
 	app.post('/chat/create', isAuthorized, function(req, res, next) {
 
-		var token = req.param('token');
+		var crypto = require('crypto');
+
+		var token            = req.param('token');
+		var channel          = req.param('channel');
+		var channelSignature = req.param('signature');
 
 		models.App.find({ where: { token: token, active: true } }).success(function(application) {
 	
@@ -35,21 +39,29 @@ module.exports = function(app, io, request, models, async) {
 
 			async.waterfall(
 				[
-					// Check if token is valid
 					function(callback) {
 
+						// Verify if the user already has previous support (from cookie)
+						if(!channel && !channelSignature)
+						{
+							var verify = crypto.createHmac('sha1', application.slack_api_token).update(channel).digest('hex');
+							
+							if(verify == channelSignature)
+								return callback(null, channel);
+						} 
+
+						// Get the next channel
 						models.Room.find({ where: { app_id: application.id }}).success(function(room) {
 							room.increment('count').success(function() {
-								console.log(room.count);
-								return callback(null, room.count);
+								var chname = "sp-" + room.count;
+								return callback(null, chname);
 							});
 						});
 					},
 
 					// Create Channel
-					function(channel_id, callback) {
+					function(channel, callback) {
 
-						var channel = "sp-" + channel_id;
 
 						console.log(channel);
 
@@ -90,7 +102,6 @@ module.exports = function(app, io, request, models, async) {
 						return res.status(404).json({ error: "Error: " + err}).end();
 					}
 
-					var crypto = require('crypto');
 					var signature = crypto.createHmac('sha1', application.slack_api_token).update(channel).digest('hex');
 
 					return res.status(200).json({ success: true, channel: channel, signature: signature }).end();

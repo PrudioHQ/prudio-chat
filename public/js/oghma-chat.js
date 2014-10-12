@@ -167,16 +167,22 @@ function main() {
             var content = document.getElementById('conversation');
             var ENTER_KEY_CODE = 13;
 
+            // If they exist.
+            var channel   = $.getCookie('oghma-channel');
+            var signature = $.getCookie('oghma-signature');
+
             $.ajax({
                 url: baseURL + "/chat/create",
                 method: 'POST',
                 data: {
-                    token: settings.token
+                    token:     settings.token,
+                    channel:   channel,
+                    signature: signature
                 },
                 success: function(data) {
 
                     console.log(data);
-                    
+
                     // Save connection to cookies
                     $.setCookie('oghma-channel',   data.channel);
                     $.setCookie('oghma-signature', data.signature);

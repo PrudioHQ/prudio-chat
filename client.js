@@ -93,6 +93,8 @@ module.exports = function(app, io, request, models, async) {
 					var crypto = require('crypto');
 					var signature = crypto.createHmac('sha1', application.slack_api_token).update(channel).digest('hex');
 
+					console.log("Cookies: ", req.cookies);
+
 					// Save channel and signature to cookie
 					res.cookie("oghma-channel",   channel);
 					res.cookie("oghma-signature", signature);

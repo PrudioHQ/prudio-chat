@@ -113,7 +113,7 @@ function main() {
         /**
         * Get a cookie named @var cookie
         */
-        $.getCookie(name) {
+        $.getCookie = function(name) {
             var value = " " + document.cookie;
             var start = value.indexOf(" " + name + "=");
             if (start == -1) {

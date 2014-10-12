@@ -176,6 +176,10 @@ function main() {
                 success: function(data) {
 
                     console.log(data);
+                    
+                    // Save connection to cookies
+                    $.setCookie('oghma-channel',   data.channel);
+                    $.setCookie('oghma-signature', data.signature);
 
                     var socket = io.connect("http:" + baseURL + '/chat');
 

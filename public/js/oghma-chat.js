@@ -113,24 +113,21 @@ function main() {
         /**
         * Get a cookie named @var cookie
         */
-        $.getCookie = function(cookie) {
-            var dc = document.cookie;
-            var prefix = cookie + "=";
-            var begin = dc.indexOf("; " + prefix);
-
-            if (begin == -1) {
-                begin = dc.indexOf(prefix);
-                if (begin != 0) {
-                    return null;
-                }
-                begin += 2;
-                var end = document.cookie.indexOf(";", begin);
-                if (end == -1) {
-                    end = dc.length;
-                }
-                    
-                return unescape(dc.substring(begin + prefix.length, end));
+        $.getCookie(name) {
+            var value = " " + document.cookie;
+            var start = value.indexOf(" " + name + "=");
+            if (start == -1) {
+                value = null;
             }
+            else {
+                start = value.indexOf("=", start) + 1;
+                var end = value.indexOf(";", start);
+                if (end == -1) {
+                    end = value.length;
+                }
+                value = unescape(value.substring(start,end));
+            }
+            return value;
         }
 
         /**

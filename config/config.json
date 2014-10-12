@@ -14,11 +14,8 @@
     "dialect": "mysql"
   },
   "production": {
-    "username": "nvkxeywaactgdp",
-    "password": "s-aPaGZtVmGTFoUH_htxfYKEEu",
-    "database": "d31bbog576b0pc",
-    "host": "ec2-54-235-250-41.compute-1.amazonaws.com",
     "dialect": "postgres",
-    "protocol": "postgres"
+    "protocol": "postgres",
+    "logging": true
   }
 }

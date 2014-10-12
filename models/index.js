@@ -5,8 +5,25 @@ var path      = require("path");
 var Sequelize = require("sequelize");
 var env       = process.env.NODE_ENV || "development";
 var config    = require(__dirname + '/../config/config.json')[env];
-var sequelize = new Sequelize(config.database, config.username, config.password, config);
+var sequelize = null;
 var db        = {};
+
+if (env == 'production' && process.env.HEROKU_POSTGRESQL_BRONZE_URL) {
+  // the application is executed on Heroku ... use the postgres database
+  var match = process.env.HEROKU_POSTGRESQL_BRONZE_URL.match(/postgres:\/\/([^:]+):([^@]+)@([^:]+):(\d+)\/(.+)/);
+
+  sequelize = new Sequelize(match[5], match[1], match[2], {
+    dialect:  config.dialect,
+    protocol: config.protocol,
+    port:     match[4],
+    host:     match[3],
+    logging:  config.logging
+  });
+
+} else {
+  // the application is executed on the local machine ... use mysql
+  sequelize = new Sequelize(config.database, config.username, config.password, config);
+}
 
 fs
   .readdirSync(__dirname)

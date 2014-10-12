@@ -26,7 +26,7 @@
     "sys": "0.0.1",
     "util": "0.10.3"
   },
-  "author": "developer",
+  "author": "Hélder Duarte",
   "main": "app.js",
   "devDependencies": {},
   "scripts": {

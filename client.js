@@ -5,24 +5,19 @@ module.exports = function(app, io, request, models, async) {
 	
 		var token = req.param('token');
 
-		models.App.find({ where: { token: token, active: true } }).success(function(app) {
+		models.App.find({ where: { token: token } }).success(function(app) {
 			if(app == null)
 				return res.status(401).json({ success: false, message: "Unauthorized" }).send();
+
+			if(app.online == false)
+				return res.status(200).json({ success: false, message: "Support offline" }).send();
+
+			if(app.active == false)
+				return res.status(200).json({ success: false, message: "Application offline" }).send();
+
 			return next();
 		});
 	}
-
-
-	app.get('/test', isAuthorized, function(req, res) {
-
-		res.cookie("oghma", 1);
-
-		console.log("Cookies: ", req.cookies);
-
-		return res.status(200).end();
-	});
-
-
 
 	app.post('/chat/create', isAuthorized, function(req, res, next) {
 

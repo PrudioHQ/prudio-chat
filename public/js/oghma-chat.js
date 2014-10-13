@@ -4,6 +4,8 @@
 var jQuery
 var baseURL = window.location.origin; 
 
+console.log("URL: " + baseURL);
+
 /******** Load jQuery if not present *********/
 if (window.jQuery === undefined || window.jQuery.fn.jquery !== '2.1.1') {
     var script_tag = document.createElement('script');

@@ -352,7 +352,7 @@ function main() {
                     $.setCookie('oghma-channel',   data.channel);
                     $.setCookie('oghma-signature', data.signature);
 
-                    var socket = io.connect("http:" + baseURL + '/chat');
+                    var socket = io.connect(baseURL + '/chat');
 
                     var domContent = [
                         '<nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-right" id="cbp-spmenu-s2">',

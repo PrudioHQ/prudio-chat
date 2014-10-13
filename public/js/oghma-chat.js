@@ -2,7 +2,7 @@
 
 // Localize jQuery variable
 var jQuery
-var baseURL = "//oghma.herokuapp.com";
+var baseURL = "http://localhost:8888"; //"//oghma.herokuapp.com"; 
 
 /******** Load jQuery if not present *********/
 if (window.jQuery === undefined || window.jQuery.fn.jquery !== '2.1.1') {
@@ -311,21 +311,14 @@ function main() {
             return info;
         }
 
-
-
-
         $.loadCSS(baseURL + "/css/chat-styles.css");
         $.loadJS( baseURL + "/socket.io/socket.io.js");
 
         $.createButton();
 
-        console.log($.getUserSystemInfo());
-
         $('#oghma-button').click(function() {
 
             var settings = $.getSettings();
-
-            console.log("Token: " + settings.token);
 
             var messages = [];
 
@@ -336,6 +329,7 @@ function main() {
             // If they exist.
             var channel   = $.getCookie('oghma-channel');
             var signature = $.getCookie('oghma-signature');
+            var userInfo  = $.getUserSystemInfo();
 
             $.ajax({
                 url: baseURL + "/chat/create",
@@ -343,7 +337,8 @@ function main() {
                 data: {
                     token:     settings.token,
                     channel:   channel,
-                    signature: signature
+                    signature: signature,
+                    userInfo:  userInfo
                 },
                 success: function(data) {
 
@@ -399,12 +394,6 @@ function main() {
                             $.scrollChat('#cbp-spmenu-s2 ul');
                         }
                     });
-
-                    // socket.on('disconnect', function() {
-                    //     socket.emit('noncryptSend', {
-                    //         message: "User disconnected!",
-                    //     });
-                    // });
 
                     socket.on('serverMessage', function (data) {
                         $('#cbp-spmenu-s2 ul').append('<li><i>Server: ' + data.message + '</i></li>');

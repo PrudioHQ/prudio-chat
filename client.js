@@ -10,10 +10,10 @@ module.exports = function(app, io, request, models, async) {
 				return res.status(401).json({ success: false, message: "Unauthorized" }).send();
 
 			if(app.online == false)
-				return res.status(200).json({ success: false, message: "Support offline" }).send();
+				return res.status(404).json({ success: false, message: "Support offline" }).send();
 
 			if(app.active == false)
-				return res.status(200).json({ success: false, message: "Application offline" }).send();
+				return res.status(404).json({ success: false, message: "Application offline" }).send();
 
 			return next();
 		});

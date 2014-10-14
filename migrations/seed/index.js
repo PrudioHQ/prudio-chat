@@ -20,7 +20,7 @@ module.exports = function(models) {
         slack_xmpp_host: 'sto.xmpp.slack.com',
         slack_xmpp_user: 'bot',
         slack_xmpp_pass: 'sto.7cB5LEpKdFGMrZZXBeXC',
-        slack_api_token: 'xoxp-2193712768-2193712770-2667038169-9743c9',
+        slack_api_token: 'xoxp-2193712768-2803840916-2803918718-a0388a',
         slack_invite_user: 'U025PLYNN'
       }).success(function(app) {
         models.Room.create({

@@ -9,7 +9,7 @@ module.exports = function(grunt) {
       },
       build: {
         src:  'public/js/oghma-chat.js',
-        dest: 'build/<%= pkg.name %>.min.js'
+        dest: 'build/<%= pkg.name %>.js'
       }
     },
     cssmin: {

@@ -56,7 +56,7 @@ function main() {
 
         $.findJS = function() {
             var elems = document.getElementsByTagName('script');
-            var re = /.*oghma-chat\.js/;
+            var re = /.*slack-chat\.js/;
 
             for(var i = 0; i < elems.length; i++) {
                 if(elems[i].src.match(re))
@@ -315,7 +315,7 @@ function main() {
             return info;
         }
 
-        $.loadCSS(baseURL + "/css/chat-styles.css");
+        $.loadCSS(baseURL + "/slack-chat.css");
         $.loadJS( baseURL + "/socket.io/socket.io.js");
 
         $.createButton();

@@ -58,10 +58,10 @@ app.use(cors());
 // app.use(cookieParser());
 // app.use(evercookie.backend());
 
-// allow access to /public directories
-app.use('/js',  express.static(__dirname + '/public/js'));
-app.use('/css', express.static(__dirname + '/public/css'));
-app.use('/img', express.static(__dirname + '/public/img'));
+// allow access to /build directories
+app.use('/',  express.static(__dirname + '/build'));
+//app.use('/css', express.static(__dirname + '/public/css'));
+//app.use('/img', express.static(__dirname + '/public/img'));
 
 // HTML client
 app.use('/client-html',  express.static(__dirname + '/client-html/index.html'));

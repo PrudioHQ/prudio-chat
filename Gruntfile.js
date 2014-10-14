@@ -8,7 +8,7 @@ module.exports = function(grunt) {
         banner: '/*! JS <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
       },
       build: {
-        src:  'public/js/oghma-chat.js',
+        src:  'src/js/oghma-chat.js',
         dest: 'build/<%= pkg.name %>.js'
       }
     },
@@ -18,7 +18,7 @@ module.exports = function(grunt) {
         banner: '/*! CSS <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
         },
         files: {
-          'build/<%= pkg.name %>.css': ['public/css/*.css']
+          'build/<%= pkg.name %>.css': ['src/css/*.css']
         }
       }
     }

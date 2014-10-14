@@ -21,10 +21,10 @@ module.exports = function(app, io, xmpp, models)
 {
 	var xmpp_list = [];
 
-	var chat = io.of('/chat').on('connection', function(clntSocket)
+	var chat = io.of('/chat').on('connection', function(clientSocket)
 	{
 		// each client is put into a chat room restricted to max 2 clients
-		clntSocket.on('joinRoom', function(token, channel, client_signature)
+		clientSocket.on('joinRoom', function(token, channel, client_signature)
 		{
 			console.log("Socket JOINROOM CH: " + channel);
 
@@ -33,12 +33,12 @@ module.exports = function(app, io, xmpp, models)
 				if(application == null) {
 					console.log('Wrong token.');
 					
-					clntSocket.emit('serverMessage', {
+					clientSocket.emit('serverMessage', {
 						message: 'Wrong token.'
 					});
 
 					// force client to disconnect
-					clntSocket.disconnect();
+					clientSocket.disconnect();
 					return;
 				}
 
@@ -48,12 +48,12 @@ module.exports = function(app, io, xmpp, models)
 				if(signature != client_signature) {
 					console.log('Wrong channel signature.');
 
-					clntSocket.emit('serverMessage', {
+					clientSocket.emit('serverMessage', {
 						message: 'Wrong channel signature.'
 					});
 
 					// force client to disconnect
-					clntSocket.disconnect();
+					clientSocket.disconnect();
 					return;
 				}
 
@@ -63,11 +63,11 @@ module.exports = function(app, io, xmpp, models)
 				{
 					console.log('This room is full.');
 
-					clntSocket.emit('serverMessage', {
+					clientSocket.emit('serverMessage', {
 						message: 'This room is full.'
 					});
 					// force client to disconnect
-					clntSocket.disconnect();
+					clientSocket.disconnect();
 					return;
 				}
 
@@ -127,17 +127,17 @@ module.exports = function(app, io, xmpp, models)
 				});
 
 				// client joins room specified in URL
-				clntSocket.join(channel);
+				clientSocket.join(channel);
 
 				clients_in_room++;
 
 				// welcome client on succesful connection
-				clntSocket.emit('serverMessage', {
+				clientSocket.emit('serverMessage', {
 					message: 'Welcome to the chat.'
 				});
 
 				// let other user know that client joined
-				clntSocket.broadcast.to(channel).emit('serverMessage', {
+				clientSocket.broadcast.to(channel).emit('serverMessage', {
 					message: '<b>Other</b> has joined.'
 				});
 
@@ -153,16 +153,16 @@ module.exports = function(app, io, xmpp, models)
 				*/
 
 				/** sending unencrypted **/
-				clntSocket.on('noncryptSend', function (text) {
+				clientSocket.on('noncryptSend', function (text) {
 
 
 					// all data sent by client is sent to room
-					clntSocket.broadcast.to(channel).emit('noncryptMessage', {
+					clientSocket.broadcast.to(channel).emit('noncryptMessage', {
 						message: text.message,
 						sender: 'Other'
 					});
 					// and then shown to client
-					clntSocket.emit('noncryptMessage', {
+					clientSocket.emit('noncryptMessage', {
 						message: text.message,
 						sender: 'Self'
 					});
@@ -216,7 +216,7 @@ module.exports = function(app, io, xmpp, models)
 
 					// sp-XXX@conference.HOST.xmpp.slack.com 
 					if(stanza.attrs.from.indexOf(room_jid(channel)) > -1)
-						clntSocket.emit('noncryptMessage', {
+						clientSocket.emit('noncryptMessage', {
 							message: message,
 							sender: 'Other'
 						});
@@ -231,15 +231,15 @@ module.exports = function(app, io, xmpp, models)
 
 				/** disconnect listener **/
 				// notify others that somebody left the chat
-				clntSocket.on('disconnect', function() {
+				clientSocket.on('disconnect', function() {
 					// let room know that this client has left
-					/*clntSocket.broadcast.to(channel).emit('serverMessage', {
+					/*clientSocket.broadcast.to(channel).emit('serverMessage', {
 							message: '<b>Other</b> has left.'
 					});*/
 
 					// Send to slack!
 					xmpp_list[jid].send(new xmpp.Element('message', { to: room_jid(channel) + '/' + room_nick, type: 'groupchat' }).
-						c('body').t("User disconnected!")
+						c('body').t("<i>User disconnected!</i>")
 					);
 
 				});

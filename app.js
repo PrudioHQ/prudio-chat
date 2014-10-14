@@ -59,7 +59,8 @@ app.use(cors());
 // app.use(evercookie.backend());
 
 // allow access to /build directories
-app.use('/',  express.static(__dirname + '/build'));
+app.use('/',    express.static(__dirname + '/build'));
+
 //app.use('/css', express.static(__dirname + '/public/css'));
 //app.use('/img', express.static(__dirname + '/public/img'));
 

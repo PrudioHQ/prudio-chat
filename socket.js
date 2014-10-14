@@ -214,6 +214,43 @@ module.exports = function(app, io, xmpp, models)
 
 					console.log("FROM: " + stanza.attrs.from + " CH: " + channel + " M: " + message);
 
+					
+					// Direct message
+					if(stanza.attrs.from.indexOf("@" + application.slack_xmpp_host) > -1) {
+						console.log("Direct message: " + message);
+
+						// If command
+						if(message.indexOf("!") == 0 && message.length > 1) {
+							var command = message.substring(1, message.length);
+
+							console.log("It's a command: " + command);
+
+							if(command === "time") {
+								var date = new Date();
+								xmpp_list[jid].send(new xmpp.Element('message', { to: stanza.attrs.from, type: 'chat' }).
+									c('body').t("_It's now: *" + date.toLocaleString() + "*._")
+								);
+							} else {
+								// Command not valid!
+								xmpp_list[jid].send(new xmpp.Element('message', { to: stanza.attrs.from, type: 'chat' }).
+									c('body').t("_Sorry! Couldn't reconize the command: *" + command + "*._")
+								);
+							}
+
+							
+
+						} else {
+							// Reply
+							xmpp_list[jid].send(new xmpp.Element('message', { to: stanza.attrs.from, type: 'chat' }).
+								c('body').t("You said: _" + message + "_")
+							);
+						}
+
+						
+
+					}
+
+
 					// sp-XXX@conference.HOST.xmpp.slack.com 
 					if(stanza.attrs.from.indexOf(room_jid(channel)) > -1)
 						clientSocket.emit('noncryptMessage', {

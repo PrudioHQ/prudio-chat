@@ -23,8 +23,10 @@
     "socket.io": "1.1",
     "bcrypt": "0.8.0",
     "errorhandler": "1.2.0",
-    "sys": "0.0.1",
-    "util": "0.10.3"
+    "grunt": "latest",
+    "grunt-cli": "latest",
+    "grunt-contrib-uglify": "latest",
+    "grunt-contrib-cssmin": "latest"
   },
   "author": "Hélder Duarte",
   "main": "app.js",

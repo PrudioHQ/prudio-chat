@@ -18,10 +18,10 @@ module.exports = function(models) {
         active: true,
         online: true,
         slack_xmpp_host: 'sto.xmpp.slack.com',
-        slack_xmpp_user: 'helder',
-        slack_xmpp_pass: 'sto.OxppPSmAdr8nzxg631nH',
+        slack_xmpp_user: 'bot',
+        slack_xmpp_pass: 'sto.7cB5LEpKdFGMrZZXBeXC',
         slack_api_token: 'xoxp-2193712768-2193712770-2667038169-9743c9',
-        slack_invite_user: 'U025PM5P0'
+        slack_invite_user: 'U025PLYNN'
       }).success(function(app) {
         models.Room.create({
           account_id: account.id,

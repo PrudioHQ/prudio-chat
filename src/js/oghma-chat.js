@@ -151,6 +151,9 @@ function main() {
             return $.getCookie(cookieName);            
         }
 
+        /**
+        * Get User Info
+        */
         $.getUserSystemInfo = function() {
             /**
             * JavaScript Client Detection
@@ -315,6 +318,38 @@ function main() {
             return info;
         }
 
+        /**
+        * Flash page title
+        */
+        $.flashTitle = function () {
+            var original = document.title;
+            var timeout;
+
+            window.flashTitle = function (newMsg, howManyTimes) {
+                function step() {
+                    document.title = (document.title == original) ? newMsg : original;
+
+                    if (--howManyTimes > 0) {
+                        timeout = setTimeout(step, 1000);
+                    };
+                };
+
+                howManyTimes = parseInt(howManyTimes);
+
+                if (isNaN(howManyTimes)) {
+                    howManyTimes = 5;
+                };
+
+                cancelFlashTitle(timeout);
+                step();
+            };
+
+            window.cancelFlashTitle = function () {
+                clearTimeout(timeout);
+                document.title = original;
+            };
+        };
+
         $.loadCSS(baseURL + "/slack-chat.css");
         $.loadJS( baseURL + "/socket.io/socket.io.js");
 
@@ -396,6 +431,7 @@ function main() {
                         if(data.sender == "Other") {
                             $('#cbp-spmenu-s2 ul').append('<li class="other">' + data.message + '</li>');
                             $.scrollChat('#cbp-spmenu-s2 ul');
+                            $.flashTitle("New message", 3);
                         }
                     });
 

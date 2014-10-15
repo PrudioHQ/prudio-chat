@@ -399,6 +399,11 @@ function main() {
                         }
                     });
 
+                    socket.on('disconnect', function () {
+                        $('#cbp-spmenu-s2 ul').append('<li><i>Server is now offline! :(</i></li>');
+                        $.scrollChat('#cbp-spmenu-s2 ul');
+                    });
+
                     socket.on('serverMessage', function (data) {
                         $('#cbp-spmenu-s2 ul').append('<li><i>Server: ' + data.message + '</i></li>');
                         $.scrollChat('#cbp-spmenu-s2 ul');

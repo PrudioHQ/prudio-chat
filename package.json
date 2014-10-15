@@ -6,7 +6,7 @@
     "node": "0.10.x"
   },
   "dependencies": {
-    "node-xmpp": "1.0.0-alpha2",
+    "node-xmpp-client": "1.0.0-alpha14",
     "node-stringprep": "0.5.4",
     "node-uuid": "1.4.1",
     "async": "latest",

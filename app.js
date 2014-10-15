@@ -7,14 +7,16 @@ var io      = require('socket.io')(server);
 var async   = require('async');
 
 // XMPP and Request
-var request      = require('request'); // github.com/mikeal/request
 var xmpp         = require('node-xmpp');
+var request      = require('request'); // github.com/mikeal/request
 var bodyParser   = require('body-parser');
 var cors         = require('cors');
 
 // Sequalize & Models
 var Sequelize = require('sequelize');
 var models    = require('./models');
+
+var xmppBots  = {};
 
 app.set('port', process.env.PORT     || Number(8888));
 app.set('env',  process.env.NODE_ENV || 'development');
@@ -65,18 +67,21 @@ app.use('/',    express.static(__dirname + '/build'));
 //app.use('/img', express.static(__dirname + '/public/img'));
 
 // HTML client
-app.use('/client-html',  express.static(__dirname + '/client-html/index.html'));
+app.use('/client-html',  express.static(__dirname + '/client-html'));
 
 // linking
-require('./socket')(app, io, xmpp, models); // socketIO logic
+
+require('./socket')(app, io, xmpp, xmppBots, models); // socketIO logic
 require('./client')(app, io, request, models, async); // sets up endpoints
 require('./api')   (app, io, request, models); // sets up endpoints
+
 
 // Catch errors
 app.use(function(err, req, res, next){
   console.error(err.stack);
   res.status(500).send('Something broke!');
 });
+
 
 // Constants
 app.set('slack_channel_prefix', 'sp-');

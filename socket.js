@@ -2,25 +2,16 @@
 // It handles all the server-side socketIO logic for CifraChat, interacting
 // with the client-side code in /public/js/chat.js.
 
-// discussion: https://github.com/Automattic/socket.io/issues/1450
-var roomCount = function(room)
+Object.size = function(obj) {
+    var size = 0, key;
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) size++;
+    }
+    return size;
+};
+
+module.exports = function(app, io, xmpp, xmppBots, models)
 {
-	var localCount = 0;
-	if (room)
-		for (var id in room)
-			localCount ++;
-	return localCount;
-}
-
-// messages must be numbered to notify each client when their message is decrypted
-var messageNum = 1;
-var MAX_ALLOWED_CLIENTS = 1;
-
-
-module.exports = function(app, io, xmpp, models)
-{
-	var xmpp_list = [];
-
 	var chat = io.of('/chat').on('connection', function(clientSocket)
 	{
 		// each client is put into a chat room restricted to max 2 clients
@@ -42,8 +33,10 @@ module.exports = function(app, io, xmpp, models)
 					return;
 				}
 
-				var crypto = require('crypto');
+				var crypto    = require('crypto');
 				var signature = crypto.createHmac('sha1', application.slack_api_token).update(channel).digest('hex');
+				var appid     = application.id;
+
 
 				if(signature != client_signature) {
 					console.log('Wrong channel signature.');
@@ -56,42 +49,32 @@ module.exports = function(app, io, xmpp, models)
 					clientSocket.disconnect();
 					return;
 				}
+				
 
-			  	var clients_in_room = roomCount(chat.adapter.rooms[channel]);
-				// client may only join room only if it's not full
-				if (clients_in_room >= MAX_ALLOWED_CLIENTS)
-				{
-					console.log('This room is full.');
-
-					clientSocket.emit('serverMessage', {
-						message: 'This room is full.'
-					});
-					// force client to disconnect
-					clientSocket.disconnect();
-					return;
-				}
-
-				var jid = application.slack_xmpp_user + "@" + application.slack_xmpp_host;
-				var password = application.slack_xmpp_pass; //"sto.OxppPSmAdr8nzxg631nH"
-				//var room_jid = "169186_test@conf.hipchat.com"
+				var jid       = application.slack_xmpp_user + "@" + application.slack_xmpp_host + '/' + application.slack_xmpp_user;
+				var password  = application.slack_xmpp_pass; //"sto.OxppPSmAdr8nzxg631nH"
 				var room_nick = application.slack_xmpp_user; // "helder"
+
 				var room_jid = function(name) {
 					return name + "@conference." + application.slack_xmpp_host; //sto.xmpp.slack.com";
 				}
 
-				if(typeof xmpp_list[jid] == 'undefined') {
+				if(typeof xmppBots[appid] === 'undefined') {
 					console.log("Undefined");
 					
-					xmpp_list[jid] = new xmpp.Client({
-					  jid: jid + '/bot',
-					  password: password
+					xmppBots[appid] = new xmpp.Client({
+					  jid:       jid,
+					  password:  password,
+					  reconnect: true
 					});
 
-					console.log("T: " + xmpp_list.length);
+					console.log("T: " + Object.size(xmppBots));
 				
+				} else if(xmppBots[appid].connection.connected == false) {
+					console.log("Defined but not connected!");
+					xmppBots[appid].connect();
 				} else {
-					console.log("Defined!!!");
-					console.log("T: " + xmpp_list.length);
+					console.log("Connected!");
 				}
 					
 				
@@ -99,37 +82,33 @@ module.exports = function(app, io, xmpp, models)
 				console.log("Connected");
 				
 				// Once connected, set available presence and join room
-				xmpp_list[jid].on('online', function() {
+				xmppBots[appid].on('online', function() {
 					console.log("We're online!");
 
 					// set ourselves as online
-					xmpp_list[jid].send(new xmpp.Element('presence', { type: 'available' }).
+					xmppBots[appid].send(new xmpp.Element('presence', { type: 'available' }).
 						c('show').t('chat')
 					);
 
 					// join room (and request no chat history)
-					xmpp_list[jid].send(new xmpp.Element('presence', { to: room_jid(channel) + '/' + room_nick }).
+					xmppBots[appid].send(new xmpp.Element('presence', { to: room_jid(channel) + '/' + room_nick }).
 						c('x', { xmlns: 'http://jabber.org/protocol/muc' })
 					);
 
 					// Change Topic
-					//xmpp_list[jid].send(new xmpp.Element('message', { to: room_jid(channel) + '/' + room_nick, type: 'groupchat' }).
+					//xmppBots[appid].send(new xmpp.Element('message', { to: room_jid(channel) + '/' + room_nick, type: 'groupchat' }).
 					//	c('subject').t('Room ' + channel)
 					//);
 
 					// send keepalive data or server will disconnect us after 150s of inactivity
 					setInterval(function() {
-						xmpp_list[jid].send(' ');
+						xmppBots[appid].send(' ');
 					}, 30000);
-
-					console.log("We're online!");
-
 				});
 
 				// client joins room specified in URL
 				clientSocket.join(channel);
 
-				clients_in_room++;
 
 				// welcome client on succesful connection
 				clientSocket.emit('serverMessage', {
@@ -155,6 +134,16 @@ module.exports = function(app, io, xmpp, models)
 				/** sending unencrypted **/
 				clientSocket.on('noncryptSend', function (text) {
 
+					console.log("Connected? " + xmppBots[appid].connection.connected);
+
+					if(xmppBots[appid].connection.connected == false) {
+						// Let the user know about the error?
+						clientSocket.emit('serverMessage', {
+							message: '<i>could not deliver the message: <br>' + text.message +  '</i>'
+						});
+
+						return;
+					}
 
 					// all data sent by client is sent to room
 					clientSocket.broadcast.to(channel).emit('noncryptMessage', {
@@ -170,7 +159,7 @@ module.exports = function(app, io, xmpp, models)
 					console.log("M: " + text.message)
 
 					// send response
-					xmpp_list[jid].send(new xmpp.Element('message', { to: room_jid(channel) + '/' + room_nick, type: 'groupchat' }).
+					xmppBots[appid].send(new xmpp.Element('message', { to: room_jid(channel) + '/' + room_nick, type: 'groupchat' }).
 						c('body').t(text.message)
 					);
 
@@ -178,27 +167,33 @@ module.exports = function(app, io, xmpp, models)
 				});
 
 				// XMPP Response
-				xmpp_list[jid].on('stanza', function(stanza) {
+				xmppBots[appid].on('stanza', function(stanza) {
 
-					console.log("T: " + xmpp_list.length);
+					console.log("Stanza type: " + stanza.attrs.type + " - " + stanza.attrs.from);
 
 
 					// always log error stanzas
 					if (stanza.attrs.type == 'error') {
 						console.log('[error] ' + stanza);
+
+						// Let the user know about the error?
+						clientSocket.emit('serverMessage', {
+							message: '<i>error sending message</i>'
+						});
+
 						return;
 					}
 
 					// ignore everything that isn't a room message
 					if (!stanza.is('message') || !stanza.attrs.type == 'groupchat') {
-						console.log("ignore everything that isn't a room message");
+						//console.log("ignore everything that isn't a room message");
 						//console.log(stanza);
 						return;
 					}
 
 					// ignore messages we sent
 					if (stanza.attrs.from == room_jid(channel) + '/' + room_nick) {
-						console.log("ignore messages we sent");
+						//console.log("ignore messages we sent");
 						//console.log(stanza);
 						return;
 					}
@@ -206,10 +201,11 @@ module.exports = function(app, io, xmpp, models)
 					var body = stanza.getChild('body');
 					// message without body is probably a topic change
 					if (!body) {
-						console.log("message without body is probably a topic change");
+						//console.log("message without body is probably a topic change");
 						//console.log(stanza);
 						return;
 					}
+
 					var message = body.getText();
 
 					console.log("FROM: " + stanza.attrs.from + " CH: " + channel + " M: " + message);
@@ -227,12 +223,12 @@ module.exports = function(app, io, xmpp, models)
 
 							if(command === "time") {
 								var date = new Date();
-								xmpp_list[jid].send(new xmpp.Element('message', { to: stanza.attrs.from, type: 'chat' }).
+								xmppBots[appid].send(new xmpp.Element('message', { to: stanza.attrs.from, type: 'chat' }).
 									c('body').t("_It's now: *" + date.toLocaleString() + "*._")
 								);
 							} else {
 								// Command not valid!
-								xmpp_list[jid].send(new xmpp.Element('message', { to: stanza.attrs.from, type: 'chat' }).
+								xmppBots[appid].send(new xmpp.Element('message', { to: stanza.attrs.from, type: 'chat' }).
 									c('body').t("_Sorry! Couldn't reconize the command: *" + command + "*._")
 								);
 							}
@@ -241,7 +237,7 @@ module.exports = function(app, io, xmpp, models)
 
 						} else {
 							// Reply
-							xmpp_list[jid].send(new xmpp.Element('message', { to: stanza.attrs.from, type: 'chat' }).
+							xmppBots[appid].send(new xmpp.Element('message', { to: stanza.attrs.from, type: 'chat' }).
 								c('body').t("You said: _" + message + "_")
 							);
 						}
@@ -259,12 +255,28 @@ module.exports = function(app, io, xmpp, models)
 						});
 				});
 
-				// Errror handler
-				xmpp_list[jid].on('error', function(err) {
+				// Error handler
+				xmppBots[appid].on('error', function(err) {
 					console.log("Error in XMPP");
 					console.log(err);
+
+					// Let the user know about the error?
+					clientSocket.emit('serverMessage', {
+						message: '<i>error connecting to support.</i>'
+					});
 				});
 			
+
+				// Disconnect handler
+				xmppBots[appid].on('disconnect', function(e) {
+					console.log("Disconnected XMPP");
+					console.log(e);
+					// Let the user know about the error?
+					clientSocket.emit('serverMessage', {
+						message: '<i>support is now offline.</i>'
+					});
+
+				});
 
 				/** disconnect listener **/
 				// notify others that somebody left the chat
@@ -275,8 +287,8 @@ module.exports = function(app, io, xmpp, models)
 					});*/
 
 					// Send to slack!
-					xmpp_list[jid].send(new xmpp.Element('message', { to: room_jid(channel) + '/' + room_nick, type: 'groupchat' }).
-						c('body').t("<i>User disconnected!</i>")
+					xmppBots[appid].send(new xmpp.Element('message', { to: room_jid(channel) + '/' + room_nick, type: 'groupchat' }).
+						c('body').t("_User disconnected!_")
 					);
 
 				});

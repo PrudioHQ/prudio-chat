@@ -30,3 +30,6 @@ node_modules
 express-angularjs-seed
 bower_components
 .npmignore
+
+# Builds from grunt
+build/*

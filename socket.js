@@ -51,12 +51,12 @@ module.exports = function(app, io, xmpp, xmppBots, models)
 				}
 				
 
-				var jid       = application.slack_xmpp_user + "@" + application.slack_xmpp_host + '/' + application.slack_xmpp_user;
-				var password  = application.slack_xmpp_pass; //"sto.OxppPSmAdr8nzxg631nH"
-				var room_nick = application.slack_xmpp_user; // "helder"
+				var jid       = application.slack_xmpp_user + "@" + application.slack_xmpp_host + '/bot'; // Use /bot to dont get channel history
+				var password  = application.slack_xmpp_pass; 
+				var room_nick = application.slack_xmpp_user; 
 
 				var room_jid = function(name) {
-					return name + "@conference." + application.slack_xmpp_host; //sto.xmpp.slack.com";
+					return name + "@conference." + application.slack_xmpp_host;
 				}
 
 				if(typeof xmppBots[appid] === 'undefined') {

@@ -443,98 +443,109 @@ function main() {
 
         $.createButton();
 
+        var open = false;
+
         $('#oghma-button').click(function() {
-            
-            var settings = $.getSettings();
 
-            var messages = [];
+            $('#cbp-spmenu-s2').toggleClass('cbp-spmenu-open');
 
-            var messageField = document.getElementById('messageField');
-            var content = document.getElementById('conversation');
-            var ENTER_KEY_CODE = 13;
+            if(open === false) {
 
-            // If they exist.
-            var channel   = $.getCookie('oghma-channel');
-            var signature = $.getCookie('oghma-signature');
-            var userInfo  = $.getUserSystemInfo();
+                var settings = $.getSettings();
 
-            $.ajax({
-                url: baseURL + "/chat/create",
-                method: 'POST',
-                data: {
-                    token:     settings.token,
-                    channel:   channel,
-                    signature: signature,
-                    userInfo:  userInfo
-                },
-                success: function(data) {
+                var messages = [];
 
-                    console.log(data);
+                var messageField = document.getElementById('messageField');
+                var content = document.getElementById('conversation');
+                var ENTER_KEY_CODE = 13;
 
-                    // Save connection to cookies
-                    $.setCookie('oghma-channel',   data.channel);
-                    $.setCookie('oghma-signature', data.signature);
+                // If they exist.
+                var channel   = $.getCookie('oghma-channel');
+                var signature = $.getCookie('oghma-signature');
+                var userInfo  = $.getUserSystemInfo();
 
-                    var socket = io.connect(baseURL + '/chat');
 
-                    var domContent = [
-                        '<nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-right" id="cbp-spmenu-s2">',
-                        '       <h3>Chat</h3>',
-                        '       <ul></ul>',
-                        '       <input type="text" name="message">',
-                        '   </nav>',
-                        ].join('');
+                $.ajax({
+                    url: baseURL + "/chat/create",
+                    method: 'POST',
+                    data: {
+                        token:     settings.token,
+                        channel:   channel,
+                        signature: signature,
+                        userInfo:  userInfo
+                    },
+                    success: function(data) {
 
-                    $('body').append(domContent);
+                        console.log(data);
 
-                    $.scrollChat('#cbp-spmenu-s2 ul');
+                        // Save connection to cookies
+                        $.setCookie('oghma-channel',   data.channel);
+                        $.setCookie('oghma-signature', data.signature);
 
-                    $('#cbp-spmenu-s2').toggleClass('cbp-spmenu-open' );
+                        var socket = io.connect(baseURL + '/chat');
 
-                    $('#cbp-spmenu-s2 input').bind('keypress', function(e){
-                        // if enter key
-                        if (e.keyCode == ENTER_KEY_CODE && $(this).val() != "") {
-                            var message = $(this).val();
-                            
-                            socket.emit('noncryptSend', {
-                                message: message,
-                            });
+                        var domContent = [
+                            '<nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-right" id="cbp-spmenu-s2">',
+                            '       <h3>Chat</h3>',
+                            '       <ul></ul>',
+                            '       <input type="text" name="message">',
+                            '   </nav>',
+                            ].join('');
 
-                            console.log("SEND: " + message);
-                            $('#cbp-spmenu-s2 ul').append('<li class="self">' + message + '</li>');
+                        $('body').append(domContent);
 
-                            $.scrollChat('#cbp-spmenu-s2 ul');
+                        $('#cbp-spmenu-s2').toggleClass('cbp-spmenu-open');
 
-                            $(this).val(''); // clear message field after sending
-                        }
-                    });
-
-                    socket.on('connect', function(){
-                        console.log("Connected to " + data.channel);
-                        socket.emit('joinRoom', settings.token, data.channel, data.signature);
-                    });
-
-                    // On Slack message
-                    socket.on('noncryptMessage', function (data) {
-                        if(data.sender == "Other") {
-                            $('#cbp-spmenu-s2 ul').append('<li class="other">' + data.message + '</li>');
-                            $.scrollChat('#cbp-spmenu-s2 ul');
-                            $.titleAlert("New message", { stopOnMouseMove:true, stopOnFocus:true, requireBlur: true});
-                            $.playSound();
-                        }
-                    });
-
-                    socket.on('disconnect', function () {
-                        $('#cbp-spmenu-s2 ul').append('<li><i>Server is now offline! :(</i></li>');
                         $.scrollChat('#cbp-spmenu-s2 ul');
-                    });
 
-                    socket.on('serverMessage', function (data) {
-                        $('#cbp-spmenu-s2 ul').append('<li><i>Server: ' + data.message + '</i></li>');
-                        $.scrollChat('#cbp-spmenu-s2 ul');
-                    });
-                }
-            });
+
+                        $('#cbp-spmenu-s2 input').bind('keypress', function(e){
+                            // if enter key
+                            if (e.keyCode == ENTER_KEY_CODE && $(this).val() != "") {
+                                var message = $(this).val();
+                                
+                                socket.emit('noncryptSend', {
+                                    message: message,
+                                });
+
+                                console.log("SEND: " + message);
+                                $('#cbp-spmenu-s2 ul').append('<li class="self">' + message + '</li>');
+
+                                $.scrollChat('#cbp-spmenu-s2 ul');
+
+                                $(this).val(''); // clear message field after sending
+                            }
+                        });
+
+                        socket.on('connect', function(){
+                            console.log("Connected to " + data.channel);
+                            socket.emit('joinRoom', settings.token, data.channel, data.signature);
+                        });
+
+                        // On Slack message
+                        socket.on('noncryptMessage', function (data) {
+                            if(data.sender == "Other") {
+                                $('#cbp-spmenu-s2 ul').append('<li class="other">' + data.message + '</li>');
+                                $.scrollChat('#cbp-spmenu-s2 ul');
+                                $.titleAlert("New message", { stopOnMouseMove:true, stopOnFocus:true, requireBlur: true});
+                                $.playSound();
+                            }
+                        });
+
+                        socket.on('disconnect', function () {
+                            $('#cbp-spmenu-s2 ul').append('<li><i>Server is now offline! :(</i></li>');
+                            $.scrollChat('#cbp-spmenu-s2 ul');
+                        });
+
+                        socket.on('serverMessage', function (data) {
+                            $('#cbp-spmenu-s2 ul').append('<li><i>Server: ' + data.message + '</i></li>');
+                            $.scrollChat('#cbp-spmenu-s2 ul');
+                        });
+                    }
+                });
+            }
+
+            open = true;
 
             // Get Channel from LB API with token
             // If no users online (not possible right now in Slack) show form for e-mail message.

@@ -48,6 +48,14 @@ if ('development' === app.get('env')) {
   
 }
 
+// Nodetime
+if(process.env.NODETIME_ACCOUNT_KEY) {
+  require('nodetime').profile({
+    accountKey: process.env.NODETIME_ACCOUNT_KEY,
+    appName: 'Oghma'
+  });
+}
+
 models.sequelize.sync().success(function () {
   var listening = server.listen(app.get('port'), function() {
     console.log('Express server listening on port ' + listening.address().port);

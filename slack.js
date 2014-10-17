@@ -83,6 +83,9 @@ var self = module.exports = {
 			if(command === "time") {
 				var date = new Date();
 				Bots[appid].say(from, "_It's now: *" + date.toLocaleString() + "*._");
+			} else if(command === "xtime") {
+				var date = new Date();
+				Bots[appid].say(from, "_It's now: *" + date.toLocaleString() + "*._");
 			} else {
 				// Command not valid!
 				Bots[appid].say(from, "_Sorry! Couldn't reconize the command: *" + command + "*._");

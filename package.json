@@ -25,7 +25,8 @@
     "grunt": "latest",
     "grunt-cli": "latest",
     "grunt-contrib-uglify": "latest",
-    "grunt-contrib-cssmin": "latest"
+    "grunt-contrib-cssmin": "latest",
+    "nodetime": "0.8.15"
   },
   "author": "Hélder Duarte",
   "main": "app.js",

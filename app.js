@@ -61,7 +61,7 @@ app.use(cors());
 // app.use(cookieParser());
 // app.use(evercookie.backend());
 
-// allow access to /build directories
+// allow access to /build directories and notification
 app.use('/',                 express.static(__dirname + '/build'));
 app.use('/notification.mp3', express.static(__dirname + '/src/sound/notification.mp3'));
 app.use('/notification.ogg', express.static(__dirname + '/src/sound/notification.ogg'));
@@ -73,6 +73,7 @@ app.use('/client-html',  express.static(__dirname + '/client-html'));
 // linking
 require('./socket')(app, io, slack, models); // socketIO logic
 require('./client')(app, io, request, models, async, slack); // sets up endpoints
+require('./bot')   (models, slack); // sets up bots
 //require('./api')   (app, io, request, models, slack); // sets up endpoints
 
 

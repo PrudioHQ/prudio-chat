@@ -37,7 +37,6 @@ module.exports = function(app, io, slack, models)
 				var signature = crypto.createHmac('sha1', application.slack_api_token).update(channel).digest('hex');
 				var appid     = application.id;
 
-
 				if(signature != client_signature) {
 					console.log('Wrong channel signature.');
 
@@ -52,14 +51,8 @@ module.exports = function(app, io, slack, models)
 				
 				var bot = slack.connect(appid, application.slack_xmpp_user, application.slack_xmpp_pass, application.slack_xmpp_host);
 				
-				// Once connected, set available presence and join room
-				bot.on('online', function() {
-					console.log("We're online!");
-				});
-
 				// client joins room specified in URL
 				clientSocket.join(channel);
-
 
 				// welcome client on succesful connection
 				clientSocket.emit('serverMessage', {
@@ -67,10 +60,12 @@ module.exports = function(app, io, slack, models)
 				});
 
 				// let other user know that client joined
+				/*
 				clientSocket.broadcast.to(channel).emit('serverMessage', {
 					message: '<b>Other</b> has joined.'
 				});
-
+				*/
+				
 				/*
 				if (clients_in_room == MAX_ALLOWED_CLIENTS){
 					// let everyone know that the max amount of users (2) has been reached

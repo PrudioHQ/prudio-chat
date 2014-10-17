@@ -33,7 +33,7 @@ var self = module.exports = {
 		
 		Bots[appid] = new irc.Client(host, user, { // 'sto.irc.slack.com', 'bot'
 			secure: true,
-			debug: true,
+			debug: false,
 			sasl: true, 
 			username: user, // bot
 			password: pass, // "sto.xt9rBQ3kmwcS4XlQ7Z0A",
@@ -68,6 +68,31 @@ var self = module.exports = {
 
 		console.log("error");
 		console.log(e);
+	});
+
+	// Direct message
+	Bots[appid].addListener('pm', function (from, message) {
+		console.log("Direct message: " + message);
+
+		// If command
+		if(message.indexOf("!") == 0 && message.length > 1) {
+			var command = message.substring(1, message.length);
+
+			console.log("It's a command: " + command);
+
+			if(command === "time") {
+				var date = new Date();
+				Bots[appid].say(from, "_It's now: *" + date.toLocaleString() + "*._");
+			} else {
+				// Command not valid!
+				Bots[appid].say(from, "_Sorry! Couldn't reconize the command: *" + command + "*._");
+			}
+
+		} else {
+			// Reply
+			Bots[appid].say(from, "You said: _" + message + "_");
+		}
+
 	});
 
 	return Bots[appid];

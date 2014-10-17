@@ -18,7 +18,15 @@ var models    = require('./models');
 // Slack IRC logic
 var slack = require('./slack');
 
+// Nodetime
+if(process.env.NODETIME_ACCOUNT_KEY) {
+  require('nodetime').profile({
+    accountKey: process.env.NODETIME_ACCOUNT_KEY,
+    appName: 'Oghma'
+  });
+}
 
+// App settings
 app.set('port', process.env.PORT     || Number(8888));
 app.set('env',  process.env.NODE_ENV || 'development');
 
@@ -46,14 +54,6 @@ if ('development' === app.get('env')) {
     });
   */
   
-}
-
-// Nodetime
-if(process.env.NODETIME_ACCOUNT_KEY) {
-  require('nodetime').profile({
-    accountKey: process.env.NODETIME_ACCOUNT_KEY,
-    appName: 'Oghma'
-  });
 }
 
 models.sequelize.sync().success(function () {

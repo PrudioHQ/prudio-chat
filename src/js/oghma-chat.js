@@ -504,7 +504,7 @@ function main() {
                             if (e.keyCode == ENTER_KEY_CODE && $(this).val() != "") {
                                 var message = $(this).val();
                                 
-                                socket.emit('noncryptSend', {
+                                socket.emit('sendMessage', {
                                     message: message,
                                 });
 
@@ -523,7 +523,7 @@ function main() {
                         });
 
                         // On Slack message
-                        socket.on('noncryptMessage', function (data) {
+                        socket.on('message', function (data) {
                             if(data.sender == "Other") {
                                 $('#cbp-spmenu-s2 ul').append('<li class="other">' + data.message + '</li>');
                                 $.scrollChat('#cbp-spmenu-s2 ul');

@@ -86,7 +86,7 @@ function main() {
         }
 
         $.createButton = function() {
-            var button = $('<div id="oghma-button" title="Chat with us"></div>');
+            var button = $('<div id="oghma-button" title="Chat with us"></div><div id="oghma-notification"></div>');
             $("body").append(button);
         }
 
@@ -430,6 +430,13 @@ function main() {
         * END titleAlert
         */
 
+        /*
+        * Play Notification
+        */
+        $.playSound = function() {
+            var filename = baseURL + "/notification";
+            $('#oghma-notification').html('<audio autoplay="autoplay"><source src="' + filename + '.mp3" type="audio/mpeg" /><source src="' + filename + '.ogg" type="audio/ogg" /><embed hidden="true" autostart="true" loop="false" src="' + filename +'.mp3" /></audio>');
+        }
 
         $.loadCSS(baseURL + "/slack-chat.css");
         $.loadJS( baseURL + "/socket.io/socket.io.js");
@@ -437,7 +444,7 @@ function main() {
         $.createButton();
 
         $('#oghma-button').click(function() {
-
+            
             var settings = $.getSettings();
 
             var messages = [];
@@ -513,6 +520,7 @@ function main() {
                             $('#cbp-spmenu-s2 ul').append('<li class="other">' + data.message + '</li>');
                             $.scrollChat('#cbp-spmenu-s2 ul');
                             $.titleAlert("New message", { stopOnMouseMove:true, stopOnFocus:true, requireBlur: true});
+                            $.playSound();
                         }
                     });
 

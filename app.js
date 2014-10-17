@@ -7,7 +7,6 @@ var io      = require('socket.io')(server);
 var async   = require('async');
 
 // IRC and Request
-//var xmpp         = require('node-xmpp');
 var request      = require('request'); // github.com/mikeal/request
 var bodyParser   = require('body-parser');
 var cors         = require('cors');
@@ -63,10 +62,10 @@ app.use(cors());
 // app.use(evercookie.backend());
 
 // allow access to /build directories
-app.use('/',    express.static(__dirname + '/build'));
+app.use('/',                 express.static(__dirname + '/build'));
+app.use('/notification.mp3', express.static(__dirname + '/src/sound/notification.mp3'));
+app.use('/notification.ogg', express.static(__dirname + '/src/sound/notification.ogg'));
 
-//app.use('/css', express.static(__dirname + '/public/css'));
-//app.use('/img', express.static(__dirname + '/public/img'));
 
 // HTML client
 app.use('/client-html',  express.static(__dirname + '/client-html'));
@@ -74,7 +73,7 @@ app.use('/client-html',  express.static(__dirname + '/client-html'));
 // linking
 require('./socket')(app, io, slack, models); // socketIO logic
 require('./client')(app, io, request, models, async, slack); // sets up endpoints
-//require('./api')   (app, io, request, models, xmpps); // sets up endpoints
+//require('./api')   (app, io, request, models, slack); // sets up endpoints
 
 
 // Catch errors

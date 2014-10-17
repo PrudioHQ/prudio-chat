@@ -73,6 +73,7 @@ var self = module.exports = {
 	// Direct message
 	Bots[appid].addListener('pm', function (from, message) {
 		console.log("Direct message: " + message);
+		console.log("T: "              + Object.size(Bots));
 
 		// If command
 		if(message.indexOf("!") == 0 && message.length > 1) {

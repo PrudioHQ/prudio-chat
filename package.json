@@ -6,6 +6,7 @@
     "node": "0.10.x"
   },
   "dependencies": {
+    "irc": "latest",
     "node-xmpp": "1.0.0-alpha2",
     "node-stringprep": "0.5.4",
     "node-uuid": "1.4.1",

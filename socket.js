@@ -10,7 +10,7 @@ Object.size = function(obj) {
     return size;
 };
 
-module.exports = function(app, io, xmpp, xmppBots, models)
+module.exports = function(app, io, slack, models)
 {
 	var chat = io.of('/chat').on('connection', function(clientSocket)
 	{
@@ -50,60 +50,11 @@ module.exports = function(app, io, xmpp, xmppBots, models)
 					return;
 				}
 				
-
-				var jid       = application.slack_xmpp_user + "@" + application.slack_xmpp_host + '/bot'; // Use /bot to dont get channel history
-				var password  = application.slack_xmpp_pass; 
-				var room_nick = application.slack_xmpp_user; 
-
-				var room_jid = function(name) {
-					return name + "@conference." + application.slack_xmpp_host;
-				}
-
-				if(typeof xmppBots[appid] === 'undefined') {
-					console.log("Undefined");
-					
-					xmppBots[appid] = new xmpp.Client({
-					  jid:       jid,
-					  password:  password,
-					  reconnect: true
-					});
-
-					console.log("T: " + Object.size(xmppBots));
-				
-				} else if(xmppBots[appid].connection.connected == false) {
-					console.log("Defined but not connected!");
-					xmppBots[appid].connect();
-				} else {
-					console.log("Connected!");
-				}
-					
-				
-				console.log("Cool! " + application.name);
-				console.log("Connected");
+				var bot = slack.connect(appid, application.slack_xmpp_user, application.slack_xmpp_pass, application.slack_xmpp_host);
 				
 				// Once connected, set available presence and join room
-				xmppBots[appid].on('online', function() {
+				bot.on('online', function() {
 					console.log("We're online!");
-
-					// set ourselves as online
-					xmppBots[appid].send(new xmpp.Element('presence', { type: 'available' }).
-						c('show').t('chat')
-					);
-
-					// join room (and request no chat history)
-					xmppBots[appid].send(new xmpp.Element('presence', { to: room_jid(channel) + '/' + room_nick }).
-						c('x', { xmlns: 'http://jabber.org/protocol/muc' })
-					);
-
-					// Change Topic
-					//xmppBots[appid].send(new xmpp.Element('message', { to: room_jid(channel) + '/' + room_nick, type: 'groupchat' }).
-					//	c('subject').t('Room ' + channel)
-					//);
-
-					// send keepalive data or server will disconnect us after 150s of inactivity
-					setInterval(function() {
-						xmppBots[appid].send(' ');
-					}, 30000);
 				});
 
 				// client joins room specified in URL
@@ -134,9 +85,9 @@ module.exports = function(app, io, xmpp, xmppBots, models)
 				/** sending unencrypted **/
 				clientSocket.on('noncryptSend', function (text) {
 
-					console.log("Connected? " + xmppBots[appid].connection.connected);
+					console.log("Connected? " + slack.isConnected(appid));
 
-					if(xmppBots[appid].connection.connected == false) {
+					if(slack.isConnected(appid) === false) {
 						// Let the user know about the error?
 						clientSocket.emit('serverMessage', {
 							message: '<i>could not deliver the message: <br>' + text.message +  '</i>'
@@ -159,15 +110,22 @@ module.exports = function(app, io, xmpp, xmppBots, models)
 					console.log("M: " + text.message)
 
 					// send response
-					xmppBots[appid].send(new xmpp.Element('message', { to: room_jid(channel) + '/' + room_nick, type: 'groupchat' }).
-						c('body').t(text.message)
-					);
-
-					// unencrypted messages don't increment messageNum because messageNum is only used to identify which message was decrypted
+					bot.say('#' + channel, text.message);
 				});
 
+				bot.addListener('message#' + channel, function (from, message) {
+				    console.log(from + ' => #yourchannel: ' + message);
+
+				    if(from !== application.slack_xmpp_user)
+						clientSocket.emit('noncryptMessage', {
+							message: message,
+							sender: 'Other'
+						});
+				});
+
+				/*
 				// XMPP Response
-				xmppBots[appid].on('stanza', function(stanza) {
+				bot.on('stanza', function(stanza) {
 
 					console.log("Stanza type: " + stanza.attrs.type + " - " + stanza.attrs.from);
 
@@ -223,12 +181,12 @@ module.exports = function(app, io, xmpp, xmppBots, models)
 
 							if(command === "time") {
 								var date = new Date();
-								xmppBots[appid].send(new xmpp.Element('message', { to: stanza.attrs.from, type: 'chat' }).
+								bot.send(new xmpp.Element('message', { to: stanza.attrs.from, type: 'chat' }).
 									c('body').t("_It's now: *" + date.toLocaleString() + "*._")
 								);
 							} else {
 								// Command not valid!
-								xmppBots[appid].send(new xmpp.Element('message', { to: stanza.attrs.from, type: 'chat' }).
+								bot.send(new xmpp.Element('message', { to: stanza.attrs.from, type: 'chat' }).
 									c('body').t("_Sorry! Couldn't reconize the command: *" + command + "*._")
 								);
 							}
@@ -237,7 +195,7 @@ module.exports = function(app, io, xmpp, xmppBots, models)
 
 						} else {
 							// Reply
-							xmppBots[appid].send(new xmpp.Element('message', { to: stanza.attrs.from, type: 'chat' }).
+							bot.send(new xmpp.Element('message', { to: stanza.attrs.from, type: 'chat' }).
 								c('body').t("You said: _" + message + "_")
 							);
 						}
@@ -254,12 +212,11 @@ module.exports = function(app, io, xmpp, xmppBots, models)
 							sender: 'Other'
 						});
 				});
+				*/
 
 				// Error handler
-				xmppBots[appid].on('error', function(err) {
-					console.log("Error in XMPP");
-					console.log(err);
-
+				bot.on('error', function(err) {
+					
 					// Let the user know about the error?
 					clientSocket.emit('serverMessage', {
 						message: '<i>error connecting to support.</i>'
@@ -268,9 +225,7 @@ module.exports = function(app, io, xmpp, xmppBots, models)
 			
 
 				// Disconnect handler
-				xmppBots[appid].on('disconnect', function(e) {
-					console.log("Disconnected XMPP");
-					console.log(e);
+				bot.on('disconnect', function(e) {
 					// Let the user know about the error?
 					clientSocket.emit('serverMessage', {
 						message: '<i>support is now offline.</i>'
@@ -281,16 +236,7 @@ module.exports = function(app, io, xmpp, xmppBots, models)
 				/** disconnect listener **/
 				// notify others that somebody left the chat
 				clientSocket.on('disconnect', function() {
-					// let room know that this client has left
-					/*clientSocket.broadcast.to(channel).emit('serverMessage', {
-							message: '<b>Other</b> has left.'
-					});*/
-
-					// Send to slack!
-					xmppBots[appid].send(new xmpp.Element('message', { to: room_jid(channel) + '/' + room_nick, type: 'groupchat' }).
-						c('body').t("_User disconnected!_")
-					);
-
+					bot.say('#' + channel, "_User disconnected!_");
 				});
 			}); 
 		}); // end joinRoom listener

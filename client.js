@@ -1,5 +1,7 @@
 
-module.exports = function(app, io, request, models, async) {
+module.exports = function(app, io, request, models, async, slack) {
+
+	var application = null;
 
 	function isAuthorized(req, res, next) {
 	
@@ -15,9 +17,58 @@ module.exports = function(app, io, request, models, async) {
 			if(app.active == false)
 				return res.status(404).json({ success: false, message: "Application offline" }).send();
 
+			application = app;
+
 			return next();
 		});
 	}
+
+	app.get('/bot/status', isAuthorized, function(req, res, next) {
+		
+		var token = req.param('token');	
+		var jid       = application.slack_xmpp_user + "@" + application.slack_xmpp_host + '/bot';
+		var password  = application.slack_xmpp_pass;
+		var message   = "connected";
+
+		if(typeof xmppBots[application.id] === 'undefined') {
+			message = "not connected";
+
+		} else if(xmppBots[application.id].connection.connected == false) {
+			message = "not connected";
+		} 
+
+		return res.status(200).json({ success: true, message: message }).send();
+	});
+
+	app.post('/bot/disconnect', isAuthorized, function(req, res, next) {
+		
+		if(typeof xmppBots[application.id] !== 'undefined') {
+			xmppBots[application.id].end();
+		} 
+
+		res.status(200).json({ success: true, message: "disconnected" }).send();
+		
+	});
+
+	app.post('/bot/connect', isAuthorized, function(req, res, next) {
+		
+		var jid       = application.slack_xmpp_user + "@" + application.slack_xmpp_host + '/bot';
+		var password  = application.slack_xmpp_pass;
+
+		if(typeof xmppBots[application.id] === 'undefined') {
+			xmppBots[application.id] = new xmpp.Client({
+			  jid:       jid,
+			  password:  password,
+			  reconnect: true
+			});
+
+		} else if(xmppBots[application.id].connection.connected == false) {
+			xmppBots[application.id].connection.connect();
+		} 
+
+		res.status(200).json({ success: true, message: "connected" }).send();
+		
+	});
 
 	app.post('/chat/create', isAuthorized, function(req, res, next) {
 

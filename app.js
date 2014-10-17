@@ -6,8 +6,8 @@ var server  = require('http').Server(app);
 var io      = require('socket.io')(server);
 var async   = require('async');
 
-// XMPP and Request
-var xmpp         = require('node-xmpp');
+// IRC and Request
+//var xmpp         = require('node-xmpp');
 var request      = require('request'); // github.com/mikeal/request
 var bodyParser   = require('body-parser');
 var cors         = require('cors');
@@ -16,7 +16,9 @@ var cors         = require('cors');
 var Sequelize = require('sequelize');
 var models    = require('./models');
 
-var xmppBots  = {};
+// Slack IRC logic
+var slack = require('./slack');
+
 
 app.set('port', process.env.PORT     || Number(8888));
 app.set('env',  process.env.NODE_ENV || 'development');
@@ -70,10 +72,9 @@ app.use('/',    express.static(__dirname + '/build'));
 app.use('/client-html',  express.static(__dirname + '/client-html'));
 
 // linking
-
-require('./socket')(app, io, xmpp, xmppBots, models); // socketIO logic
-require('./client')(app, io, request, models, async); // sets up endpoints
-require('./api')   (app, io, request, models); // sets up endpoints
+require('./socket')(app, io, slack, models); // socketIO logic
+require('./client')(app, io, request, models, async, slack); // sets up endpoints
+//require('./api')   (app, io, request, models, xmpps); // sets up endpoints
 
 
 // Catch errors

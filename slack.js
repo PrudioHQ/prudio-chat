@@ -88,8 +88,8 @@ var self = module.exports = {
 			if(command === "time") {
 				Bots[appid].say(from, "_It's now: *" + moment().utc().format() + "*._");
 			} else if(command === "uptime") {
-				Bots[appid].say(from, "_Started: *" + moment(Bots[appid].bootedAt, "X").utc().fromNow() + "*._");
-				Bots[appid].say(from, "_Time: *" + moment(Bots[appid].bootedAt, "X").utc().format() + "*._");
+				var time = moment(Bots[appid].bootedAt, "X").utc();
+				Bots[appid].say(from, "_Uptime: *" + time.fromNow() + "* @ *" + time.format() + "*._");
 			} else {
 				// Command not valid!
 				Bots[appid].say(from, "_Sorry! Couldn't reconize the command: *" + command + "*._");

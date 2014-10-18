@@ -31,7 +31,7 @@ module.exports = function(app, io, request, models, async, slack) {
 		var token            = req.param('token');
 		var channel          = req.param('channel');
 		var channelSignature = req.param('signature');
-		var userInfo         = req.param('userInfo');
+		var userInfo         = JSON.parse(req.param('userInfo'));
 
 		models.App.find({ where: { token: token, active: true } }).success(function(application) {
 	

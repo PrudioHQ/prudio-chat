@@ -33,6 +33,8 @@ module.exports = function(app, io, request, models, async, slack) {
 		var channelSignature = req.param('signature');
 		var userInfo         = req.param('userInfo');
 
+		console.log(userInfo);
+
 		models.App.find({ where: { token: token, active: true } }).success(function(application) {
 	
 			if(application == null)
@@ -91,7 +93,7 @@ module.exports = function(app, io, request, models, async, slack) {
 
 					// Set purpose of channel
 					function(channel, new_channel, callback) {
-						var purpose = "Help this user! \nSome info:\nURL: " + userInfo.url;
+						var purpose = "Help this user! \nSome info:\nURL: ";
 						request.post(app.get('slack_api_url') + '/channels.setPurpose', { json: true, form: { token: application.slack_api_token, channel: new_channel, purpose: purpose }}, function (error, response, body) {
 							if (!error && response.statusCode == 200) {
 								return callback(null, channel);

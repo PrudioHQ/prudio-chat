@@ -1,5 +1,6 @@
 var emitter = require('./emitter');
 var irc     = require('irc');
+var moment  = require('moment');
 
 // Private
 var Bots = {}; 
@@ -45,6 +46,8 @@ var self = module.exports = {
 
 		Bots[appid].isConnected = false;
 		Bots[appid].errors      = [];
+		Bots[appid].bootedAt    = moment().utc().unix();
+
 
 		console.log("Undefined");
 		console.log("T: " + Object.size(Bots));
@@ -83,11 +86,9 @@ var self = module.exports = {
 			console.log("It's a command: " + command);
 
 			if(command === "time") {
-				var date = new Date();
-				Bots[appid].say(from, "_It's now: *" + date.toLocaleString() + "*._");
-			} else if(command === "xtime") {
-				var date = new Date();
-				Bots[appid].say(from, "_It's now: *" + date.toLocaleString() + "*._");
+				Bots[appid].say(from, "_It's now: *" + moment().utc().format() + "*._");
+			} else if(command === "uptime") {
+				Bots[appid].say(from, "_Uptime: *" + moment(Bots[appid].bootedAt).fromNow() + "*._");
 			} else {
 				// Command not valid!
 				Bots[appid].say(from, "_Sorry! Couldn't reconize the command: *" + command + "*._");

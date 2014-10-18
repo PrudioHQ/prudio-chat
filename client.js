@@ -92,8 +92,16 @@ module.exports = function(app, io, request, models, async, slack) {
 					// Set purpose of channel
 					function(channel, new_channel, callback) {
 						var info = JSON.parse(userInfo);
-						var purpose = "Help this user! \nSome info:\nURL: " + info.url;
-						request.post(app.get('slack_api_url') + '/channels.setPurpose', { json: true, form: { token: application.slack_api_token, channel: new_channel, purpose: purpose }}, function (error, response, body) {
+
+						var topic = "Help this user! \n" +
+						"\nURL: " + info.url +
+						"\nIP: " + req.ip + 
+						"\nOS: " + info.os + " - " + info.osVersion
+						"\nBrowser: " + info.browser + " - " + info.browserVersion + 
+						"\nMobile: " + info.mobile +
+						"\nScreen resolution: " + info.screen;
+
+						request.post(app.get('slack_api_url') + '/channels.setPurpose', { json: true, form: { token: application.slack_api_token, channel: new_channel, purpose: topic }}, function (error, response, body) {
 							if (!error && response.statusCode == 200) {
 								return callback(null, channel);
 							}

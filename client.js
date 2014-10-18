@@ -94,6 +94,7 @@ module.exports = function(app, io, request, models, async, slack) {
 
 						console.log("PURPOSE");
 						console.log(userInfo);
+						console.log("END PURPOSE");
 
 
 						var purpose = "Help this user! \nSome info:\nURL: ";

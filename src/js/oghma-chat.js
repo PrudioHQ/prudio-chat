@@ -472,7 +472,7 @@ function main() {
                         token:     settings.token,
                         channel:   channel,
                         signature: signature,
-                        userInfo:  userInfo
+                        userInfo:  JSON.stringify(userInfo)
                     },
                     success: function(data) {
 

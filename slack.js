@@ -88,6 +88,7 @@ var self = module.exports = {
 			if(command === "time") {
 				Bots[appid].say(from, "_It's now: *" + moment().utc().format() + "*._");
 			} else if(command === "uptime") {
+				Bots[appid].say(from, "_bootedAt: *" + Bots[appid].bootedAt + "*._");
 				Bots[appid].say(from, "_Uptime: *" + moment(Bots[appid].bootedAt).fromNow() + "*._");
 			} else {
 				// Command not valid!

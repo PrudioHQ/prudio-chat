@@ -53,10 +53,9 @@ var self = module.exports = {
 	//	console.log("Defined but not connected!");
 	//	Bots[appid].connect();
 	} else {
-		// Remove all listeners
-		Bots[appid].removeAllListeners();
-		console.log("Connected!");
+		console.log("Already connected!");
 		console.log("T: " + Object.size(Bots));
+		return Bots[appid];
 	}
 
 	Bots[appid].addListener('connect', function () {

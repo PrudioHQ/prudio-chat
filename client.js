@@ -23,53 +23,7 @@ module.exports = function(app, io, request, models, async, slack) {
 		});
 	}
 
-	app.get('/bot/status', isAuthorized, function(req, res, next) {
-		
-		var token = req.param('token');	
-		var jid       = application.slack_xmpp_user + "@" + application.slack_xmpp_host + '/bot';
-		var password  = application.slack_xmpp_pass;
-		var message   = "connected";
-
-		if(typeof xmppBots[application.id] === 'undefined') {
-			message = "not connected";
-
-		} else if(xmppBots[application.id].connection.connected == false) {
-			message = "not connected";
-		} 
-
-		return res.status(200).json({ success: true, message: message }).send();
-	});
-
-	app.post('/bot/disconnect', isAuthorized, function(req, res, next) {
-		
-		if(typeof xmppBots[application.id] !== 'undefined') {
-			xmppBots[application.id].end();
-		} 
-
-		res.status(200).json({ success: true, message: "disconnected" }).send();
-		
-	});
-
-	app.post('/bot/connect', isAuthorized, function(req, res, next) {
-		
-		var jid       = application.slack_xmpp_user + "@" + application.slack_xmpp_host + '/bot';
-		var password  = application.slack_xmpp_pass;
-
-		if(typeof xmppBots[application.id] === 'undefined') {
-			xmppBots[application.id] = new xmpp.Client({
-			  jid:       jid,
-			  password:  password,
-			  reconnect: true
-			});
-
-		} else if(xmppBots[application.id].connection.connected == false) {
-			xmppBots[application.id].connection.connect();
-		} 
-
-		res.status(200).json({ success: true, message: "connected" }).send();
-		
-	});
-
+	
 	app.post('/chat/create', isAuthorized, function(req, res, next) {
 
 		var crypto = require('crypto');
@@ -77,6 +31,7 @@ module.exports = function(app, io, request, models, async, slack) {
 		var token            = req.param('token');
 		var channel          = req.param('channel');
 		var channelSignature = req.param('signature');
+		var userInfo         = req.param('userInfo');
 
 		models.App.find({ where: { token: token, active: true } }).success(function(application) {
 	
@@ -97,9 +52,6 @@ module.exports = function(app, io, request, models, async, slack) {
 							if(verify == channelSignature)
 								return callback(null, channel);
 						}
-
-						
-
 						// No channel or signature, or invalid signature/channel, get the next channel
 						models.Room.find({ where: { app_id: application.id }}).success(function(room) {
 							room.increment('count').success(function() {
@@ -139,7 +91,8 @@ module.exports = function(app, io, request, models, async, slack) {
 
 					// Set purpose of channel
 					function(channel, new_channel, callback) {
-						request.post(app.get('slack_api_url') + '/channels.setPurpose', { json: true, form: { token: application.slack_api_token, channel: new_channel, purpose: "Help this guy out!" }}, function (error, response, body) {
+						var purpose = "Help this user! \nSome info:\nURL: " + userInfo[url];
+						request.post(app.get('slack_api_url') + '/channels.setPurpose', { json: true, form: { token: application.slack_api_token, channel: new_channel, purpose: purpose }}, function (error, response, body) {
 							if (!error && response.statusCode == 200) {
 								return callback(null, channel);
 							}

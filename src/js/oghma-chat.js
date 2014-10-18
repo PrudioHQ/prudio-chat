@@ -177,6 +177,7 @@ function main() {
             var version = '' + parseFloat(navigator.appVersion);
             var majorVersion = parseInt(navigator.appVersion, 10);
             var nameOffset, verOffset, ix;
+            var url = document.URL;
 
             // Opera
             if ((verOffset = nAgt.indexOf('Opera')) != -1) {
@@ -313,6 +314,7 @@ function main() {
                 os: os,
                 osVersion: osVersion,
                 cookies: cookieEnabled,
+                url: url
             };
             
             return info;
@@ -452,8 +454,6 @@ function main() {
             if(open === false) {
 
                 var settings = $.getSettings();
-
-                var messages = [];
 
                 var messageField = document.getElementById('messageField');
                 var content = document.getElementById('conversation');

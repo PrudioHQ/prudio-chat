@@ -6,6 +6,9 @@ var server  = require('http').Server(app);
 var io      = require('socket.io')(server);
 var async   = require('async');
 
+// New Relic Monitor
+require('newrelic');
+
 // IRC and Request
 var request      = require('request'); // github.com/mikeal/request
 var bodyParser   = require('body-parser');
@@ -18,13 +21,6 @@ var models    = require('./models');
 // Slack IRC logic
 var slack = require('./slack');
 
-// Nodetime
-if(process.env.NODETIME_ACCOUNT_KEY) {
-  require('nodetime').profile({
-    accountKey: process.env.NODETIME_ACCOUNT_KEY,
-    appName: 'Oghma'
-  });
-}
 
 // App settings
 app.set('port', process.env.PORT     || Number(8888));

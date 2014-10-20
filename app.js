@@ -91,3 +91,10 @@ app.use(function(err, req, res, next){
 app.set('slack_channel_prefix', 'sp-');
 app.set('slack_api_url',        'https://slack.com/api');
 
+// Term app
+process.on('SIGTERM', function() {
+  console.log('Got a SIGTERM');
+  slack.disconnectAll();
+  server.close.bind(server);
+  process.exit(0);
+});

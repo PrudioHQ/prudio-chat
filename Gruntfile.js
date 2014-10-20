@@ -32,7 +32,7 @@ module.exports = function(grunt) {
     },
     watch: {
         scripts: {
-            files:  [ '*.js' ],
+            files:  [ ],
             tasks:  [ 'watch' ],
             options: {
                 spawn: false, // Without this option specified express won't be reloaded

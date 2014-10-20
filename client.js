@@ -23,6 +23,10 @@ module.exports = function(app, io, request, models, async, slack) {
 		});
 	}
 
+	app.get('/', function(req, res, next) {
+		return res.status(200).send("<p>Nothing here! Move along!</p>").end();
+	});
+
 	
 	app.post('/chat/create', isAuthorized, function(req, res, next) {
 

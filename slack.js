@@ -107,12 +107,22 @@ var self = module.exports = {
   },
   
   disconnect: function disconnect(appid) {
+
   	if(typeof Bots[appid] === 'undefined') {
   		return true;
 	}
 	
 	Bots[appid].disconnect();
   	Bots[appid] = undefined;
+
+  	return true;
+  },
+
+  disconnectAll: function disconnectAll() {
+  	
+  	for (var appid in Bots) {
+	    this.disconnect(appid);
+	}
 
   	return true;
   },

@@ -76,9 +76,9 @@ function main() {
                 settings[p] = $.urlParam(p, el.src);
             }
 
-            if (typeof window._LBSettings != 'undefined') {
-                for (var attrname in window._LBSettings) {
-                    settings[attrname] = window._LBSettings[attrname];
+            if (typeof window._SCSettings != 'undefined') {
+                for (var attrname in window._SCSettings) {
+                    settings[attrname] = window._SCSettings[attrname];
                 }
             }
 
@@ -453,7 +453,6 @@ function main() {
 
             if(open === false) {
 
-                var settings = $.getSettings();
 
                 var messageField = document.getElementById('messageField');
                 var content = document.getElementById('conversation');
@@ -463,6 +462,7 @@ function main() {
                 var channel   = $.getCookie('oghma-channel');
                 var signature = $.getCookie('oghma-signature');
                 var userInfo  = $.getUserSystemInfo();
+                var settings  = $.getSettings();
 
 
                 $.ajax({
@@ -472,6 +472,7 @@ function main() {
                         token:     settings.token,
                         channel:   channel,
                         signature: signature,
+                        settings:  JSON.stringify(settings),
                         userInfo:  JSON.stringify(userInfo)
                     },
                     success: function(data) {

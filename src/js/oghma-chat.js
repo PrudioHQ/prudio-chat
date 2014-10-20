@@ -45,7 +45,8 @@ function main() {
     jQuery(document).ready(function($)
     {
         $.urlParam = function(name, url) {
-            var results = new RegExp('[?|&|&amp;|#]' + name + '=' + '([^&;]+?)(&|&amp;|#|;|$)').exec(url);
+            var results = new RegExp('[?|&|#]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(url);
+            if (results == null) return;
             return results[1] || 0;
         }
 
@@ -68,7 +69,7 @@ function main() {
 
         $.getSettings = function() {
             var el = $.findJS();
-            var params = ['token'];
+            var params = ['token', 'name', 'email'];
             var settings = new Object();
 
             for(var i = 0; i < params.length; i++) {

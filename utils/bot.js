@@ -1,6 +1,5 @@
 
-
-module.exports = function(models, slack) {
+module.exports = function(slack, models) {
 
   	models.App.find({ where: { active: true } }).success(function(application) {
 

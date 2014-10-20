@@ -1,15 +1,13 @@
 // New Relic Monitor
-require('newrelic');
+require('./utils/newrelic');
 
 // Set up DB, Express and SocketIO
 var express = require('express');
 var app     = express();
 var server  = require('http').Server(app);
 var io      = require('socket.io')(server);
-var async   = require('async');
 
 // IRC and Request
-var request      = require('request'); // github.com/mikeal/request
 var bodyParser   = require('body-parser');
 var cors         = require('cors');
 
@@ -20,10 +18,13 @@ var models    = require('./models');
 // Slack IRC logic
 var slack = require('./slack');
 
-
 // App settings
 app.set('port', process.env.PORT     || Number(8888));
 app.set('env',  process.env.NODE_ENV || 'development');
+
+// Constants
+app.set('slack_channel_prefix', 'sp-');
+app.set('slack_api_url',        'https://slack.com/api');
 
 // Development only
 if ('development' === app.get('env')) {
@@ -75,9 +76,8 @@ app.use('/client-html',  express.static(__dirname + '/client-html'));
 
 // linking
 require('./socket')(app, io, slack, models); // socketIO logic
-require('./client')(app, io, request, models, async, slack); // sets up endpoints
-require('./bot')   (models, slack); // sets up bots
-//require('./api')   (app, io, request, models, slack); // sets up endpoints
+require('./client')(app, io, slack, models); // sets up endpoints
+require('./utils/bot')(slack, models); // Sets bots up
 
 
 // Catch errors
@@ -85,11 +85,6 @@ app.use(function(err, req, res, next){
   console.error(err.stack);
   res.status(500).send('Something broke!');
 });
-
-
-// Constants
-app.set('slack_channel_prefix', 'sp-');
-app.set('slack_api_url',        'https://slack.com/api');
 
 // Term app
 process.on('SIGTERM', function() {

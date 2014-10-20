@@ -1,8 +1,0 @@
-{
-	"dev": {
-		"driver": "mysql",
-		"user": "root",
-		"password": "",
-		"database": "oghma"
-	}
-}

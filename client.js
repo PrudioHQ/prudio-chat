@@ -1,5 +1,7 @@
+var async   = require('async');
+var request = require('request'); // github.com/mikeal/request
 
-module.exports = function(app, io, request, models, async, slack) {
+module.exports = function(app, io, slack, models) {
 
 	var application = null;
 

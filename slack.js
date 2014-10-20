@@ -1,4 +1,4 @@
-var emitter = require('./emitter');
+var emitter = require('./utils/emitter');
 var irc     = require('irc');
 var moment  = require('moment');
 
@@ -137,23 +137,3 @@ var self = module.exports = {
 emitter.on('emittedevent', function(x) {
 	console.log('We have got: ' + x);
 });
-/*
-(function () {
-
-    var xmppList = new EventEmitter();
-
-	var x = 1;
-
-	xmppList.emitMethod = function() {
-		this.
-	}
-
-	xmppList.on('emittedevent', function(x) {
-	  console.log('We have got: ' + x);
-	});
-
-
-	module.exports = xmppList;
-
-}());
-*/

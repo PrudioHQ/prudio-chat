@@ -26,7 +26,7 @@ module.exports = function(app, io, slack, models) {
 	}
 
 	app.get('/', function(req, res, next) {
-		return res.status(200).send("<p>Nothing here! Move along!</p>").end();
+		return res.status(200).send("<h2>Nothing here! Move along!</h2>").end();
 	});
 
 	

@@ -1,3 +1,5 @@
+// New Relic Monitor
+require('newrelic');
 
 // Set up DB, Express and SocketIO
 var express = require('express');
@@ -5,9 +7,6 @@ var app     = express();
 var server  = require('http').Server(app);
 var io      = require('socket.io')(server);
 var async   = require('async');
-
-// New Relic Monitor
-require('newrelic');
 
 // IRC and Request
 var request      = require('request'); // github.com/mikeal/request

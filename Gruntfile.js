@@ -21,14 +21,37 @@ module.exports = function(grunt) {
           'build/<%= pkg.name %>.css': ['src/css/*.css']
         }
       }
+    },
+    express: {
+        development: {
+            options: {
+                script: './app.js',
+                hostname: '0.0.0.0'
+            }
+        }
+    },
+    watch: {
+        scripts: {
+            files:  [ '*.js' ],
+            tasks:  [ 'watch' ],
+            options: {
+                spawn: false, // Without this option specified express won't be reloaded
+                livereload: true
+            }
+        }
     }
+
   });
 
   // Load the plugin that provides the "uglify" task.
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
+  grunt.loadNpmTasks('grunt-express-server');
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
   // Default task(s).
   grunt.registerTask('default', ['uglify', 'cssmin']);
+
+  grunt.registerTask('server', [ 'express:development', 'watch' ]);
 
 };

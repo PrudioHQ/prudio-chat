@@ -11,10 +11,10 @@ node app.js
 Exemplo `index.html`:
 
 ```html
-<script src="http://localhost:3000/slack-chat.js?token=fasdfasdfasdfasdfasf" async></script>
+<script src="http://localhost:3000/slack-chat.js?token=fasdfasdfasdfasdfasf?pref=123" async></script>
 <script>
 
-    window._slslsl = {
+    window._SCSettings = {
       app_id: 'hb7wi6ch',
       email: 'helder.duarte@sto.ad',
       user_id: 'fgtwfg1fg7esyihe8dq17vyrr',

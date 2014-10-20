@@ -101,7 +101,7 @@ module.exports = function(app, io, request, models, async, slack) {
 						"\nURL: " + info.url + " (" + req.ip + ")" +
 						"\nBrowser: " + info.browser + " - " + info.browserVersion + 
 						"\nOS: " + info.os + " - " + info.osVersion +
-						"\nMobile: " + info.mobile +"Screen resolution: " + info.screen;
+						"\nMobile: " + info.mobile +" - Screen resolution: " + info.screen;
 
 						request.post(app.get('slack_api_url') + '/channels.setPurpose', { json: true, form: { token: application.slack_api_token, channel: new_channel, purpose: topic }}, function (error, response, body) {
 							if (!error && response.statusCode == 200) {

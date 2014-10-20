@@ -45,7 +45,7 @@ function main() {
     jQuery(document).ready(function($)
     {
         $.urlParam = function(name, url) {
-            var results = new RegExp('[?|&|#]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(url);
+            var results = new RegExp('[?|&|&amp;|#]' + name + '=' + '([^&;]+?)(&|&amp;|#|;|$)').exec(url);
             return results[1] || 0;
         }
 

@@ -79,6 +79,7 @@ require('./socket')(app, io, slack, models); // socketIO logic
 require('./client')(app, io, slack, models); // sets up endpoints
 require('./utils/bot')(slack, models); // Sets bots up
 
+console.log("I'm running at " + process.env.DYNO);
 
 // Catch errors
 app.use(function(err, req, res, next){

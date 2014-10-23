@@ -1,4 +1,4 @@
-#oghma-button {
+#prudio-button {
     background: #555;
     border-radius: 50%;
     border: 2px solid #333;
@@ -13,79 +13,207 @@
 }
 
 /* General styles for all menus */
-.cbp-spmenu {
+.prudio-window {
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-	background: #47a3da;
+	background: #f9f9fa;
+	border-left: 1px solid #DADEE2;
 	position: fixed;
     z-index: 999;
-    opacity: 0.95;
+    opacity: 0.99;
 }
 
-.cbp-spmenu input {
-	position: relative;
-    bottom: -15px;
-    left: 25px;
-    height: 35px;
-    border-radius: 17px;
-}
-
-.cbp-spmenu h3 {
-	color: #afdefa;
-	font-size: 1.9em;
+.prudio-window h3 {
+	color: #455A64;
+	font-size: 1em;
 	padding: 20px;
 	margin: 0;
-	font-weight: 300;
-	background: #0d77b6;
+	font-weight: bold;
+	text-align: center;
+	background: #fff;
+	border-bottom: 1px solid #DADEE2;
 }
 
-.cbp-spmenu ul {
-	list-style-type: none;
-	margin: 0;
+.prudio-window h3 span.close {
+	font-size: 1.6em;
 	padding: 0;
-	height: 75%;
-	border-bottom: 1px solid #0d77b6;
-	overflow: scroll;
+	margin-top: -6px;
+	font-weight: lighter;
+	float: right;
+	cursor: pointer;
 }
 
-.cbp-spmenu li {
+.prudio-window div.messages {
+    height: 100%; 
+    overflow-y: scroll;
+}
+
+.prudio-window ul {
+	height: auto;
+	overflow: auto;
+	list-style-type: none;
+	padding: 0 0 160px 0;
+	margin: 0;
+}
+
+.prudio-window li {
+	position: relative;
 	border: 1px solid #afdefa;
-	border-radius: 8px;
+	border-radius: 4px;
 	padding: 10px 15px;
 	margin: 10px;
 	color: #fff;
 	font-size: 0.9em;
+    opacity: 0.9;
+    clear: both;
 }
 
-.cbp-spmenu li.other {
-	margin-left: 35px; 
-	margin-right: 10px; 
+.prudio-window li.server {
+	padding: 4px 15px;
+	text-align: center;
+	border: none;
+	color: #CCC; 
+	font-size: 0.7em;
+	font-weight: normal;
+	font-style: italic;
 }
 
-.cbp-spmenu li.self {
-	margin-left: 10px; 
+.prudio-window li.time {
+	margin: 0;
+	padding: 4px 15px;
+	text-align: right;
+	border: none;
+	color: #DDD; 
+	font-size: 0.6em;
+	font-weight: normal;
+}
+
+.prudio-window li.other {
 	margin-right: 35px; 
-	border-color: #0d77b6;
+	margin-left: 10px; 
+	border: 1px solid #DADEE2;
+	background: #FFFFFF;
+	color: #60686E; 
+	box-shadow: 1px 1px 1px 1px rgba(10, 10, 10, 0.02);
 }
 
-.cbp-spmenu li:hover {
-	background: #258ecd;
+.prudio-window li.other:after 
+{
+	content: '';
+	position: absolute;
+	border-style: solid;
+	border-width: 5px 5px 5px 0;
+	border-color: transparent #FFFFFF;
+	display: block;
+	width: 0;
+	z-index: 1;
+	margin-top: -5px;
+	left: -5px;
+	top: 50%;
 }
 
-.cbp-spmenu li:active {
-	background: #afdefa;
-	color: #47a3da;
+.prudio-window li.other:before 
+{
+	content: '';
+	position: absolute;
+	border-style: solid;
+	border-width: 5px 5px 5px 0;
+	border-color: transparent #DADEE2;
+	display: block;
+	width: 0;
+	z-index: 0;
+	margin-top: -5px;
+	left: -6px;
+	top: 50%;
+}
+
+.prudio-window li.self {
+	margin-right: 10px; 
+	margin-left: 35px; 
+	background-color: #0072B0;
+	border-color: #0072B0;
+	color: #fff;
+	box-shadow: 1px 1px 1px 1px rgba(10, 10, 10, 0.05);
+}
+
+.prudio-window li.self:after 
+{
+	content: '';
+	position: absolute;
+	border-style: solid;
+	border-width: 5px 0 5px 5px;
+	border-color: transparent #0072B0;
+	display: block;
+	width: 0;
+	z-index: 1;
+	margin-top: -5px;
+	right: -5px;
+	top: 50%;
+}
+
+.prudio-window li.self:before 
+{
+	content: '';
+	position: absolute;
+	border-style: solid;
+	border-width: 5px 0 5px 5px;
+	border-color: transparent #DADEE2;
+	display: block;
+	width: 0;
+	z-index: 0;
+	margin-top: -5px;
+	right: -6px;
+	top: 50%;
+}
+
+
+.prudio-window li.self:hover, .prudio-window li.other:hover {
+	box-shadow: 0px 0px 15px 5px rgba(10, 10, 10, .05);
+}
+
+.prudio-window li.self:active, .prudio-window li.other:active {
+	box-shadow: 0px 0px 15px 5px rgba(10, 10, 10, .15);
+}
+
+.prudio-window div.reply-container {
+	position: absolute;
+	height: 80px;
+	bottom: 0;
+}
+
+.prudio-window div.reply {
+	border: 1px solid #afdefa;
+	border-radius: 4px;
+	margin: 15px; 
+	padding: 6px 10px;
+	border: 1px solid #DADEE2;
+	background: #FFFFFF;
+	width: 315px;
+	clear: both;
+}
+
+.prudio-window div.reply input {
+	background-color: transparent;
+    border: 0px solid;
+    color: #60686E;
+    width: 100%;
+    font-size: 0.8em;
+    font-weight: normal;
+}
+
+.prudio-window div.reply input:focus {
+    outline: 0;
 }
 
 /* Orientation-dependent styles for the content of the menu */
 
-.cbp-spmenu-vertical {
-	width: 280px;
+.prudio-window-vertical {
+	width: 370px;
 	height: 100%;
 	top: 0;
 	z-index: 1000;
 }
 
-.cbp-spmenu-vertical a {
+.prudio-window-vertical a {
 	border-bottom: 1px solid #258ecd;
 	padding: 1em;
 }
@@ -93,30 +221,30 @@
 /* Vertical menu that slides from the left or right */
 
 
-.cbp-spmenu-right {
-	right: -280px;
+.prudio-window-right {
+	right: -370px;
 }
 
-.cbp-spmenu-right.cbp-spmenu-open {
+.prudio-window-right.prudio-window-open {
 	right: 0px;
 }
 
 /* Push classes applied to the body */
 
-.cbp-spmenu-push {
+.prudio-window-push {
 	overflow-x: hidden;
 	position: relative;
 	left: 0;
 }
 
-.cbp-spmenu-push-toleft {
-	left: -240px;
+.prudio-window-push-toleft {
+	left: -730px;
 }
 
 /* Transitions */
 
-.cbp-spmenu,
-.cbp-spmenu-push {
+.prudio-window,
+.prudio-window-push {
 	-webkit-transition: all 0.3s ease;
 	-moz-transition: all 0.3s ease;
 	transition: all 0.3s ease;
@@ -126,16 +254,16 @@
 
 @media screen and (max-width: 55.1875em){
 
-	.cbp-spmenu-horizontal {
+	.prudio-window-horizontal {
 		font-size: 75%;
 		height: 110px;
 	}
 
-	.cbp-spmenu-top {
+	.prudio-window-top {
 		top: -110px;
 	}
 
-	.cbp-spmenu-bottom {
+	.prudio-window-bottom {
 		bottom: -110px;
 	}
 
@@ -143,21 +271,21 @@
 
 @media screen and (max-height: 26.375em){
 
-	.cbp-spmenu-vertical {
+	.prudio-window-vertical {
 		font-size: 90%;
 		width: 190px;
 	}
 
-	.cbp-spmenu-left,
-	.cbp-spmenu-push-toleft {
+	.prudio-window-left,
+	.prudio-window-push-toleft {
 		left: -190px;
 	}
 
-	.cbp-spmenu-right {
+	.prudio-window-right {
 		right: -190px;
 	}
 
-	.cbp-spmenu-push-toright {
+	.prudio-window-push-toright {
 		left: 190px;
 	}
 }

@@ -87,7 +87,7 @@ function main() {
         }
 
         $.createButton = function() {
-            var button = $('<div id="oghma-button" title="Chat with us"></div><div id="oghma-notification"></div>');
+            var button = $('<div id="prudio-button" title="Chat with us"></div><div id="prudio-notification"></div>');
             $("body").append(button);
         }
 
@@ -98,7 +98,7 @@ function main() {
 
         $.scrollChat = function(to) {
             $(to).animate({
-                scrollTop: $(to).height()
+                scrollTop: $(to).prop("scrollHeight")
             }, 'slow');
         }
 
@@ -438,7 +438,7 @@ function main() {
         */
         $.playSound = function() {
             var filename = baseURL + "/notification";
-            $('#oghma-notification').html('<audio autoplay="autoplay"><source src="' + filename + '.mp3" type="audio/mpeg" /><source src="' + filename + '.ogg" type="audio/ogg" /><embed hidden="true" autostart="true" loop="false" src="' + filename +'.mp3" /></audio>');
+            $('#prudio-notification').html('<audio autoplay="autoplay"><source src="' + filename + '.mp3" type="audio/mpeg" /><source src="' + filename + '.ogg" type="audio/ogg" /><embed hidden="true" autostart="true" loop="false" src="' + filename +'.mp3" /></audio>');
         }
 
         $.loadCSS(baseURL + "/slack-chat.css");
@@ -448,12 +448,17 @@ function main() {
 
         var open = false;
 
-        $('#oghma-button').click(function() {
+        $('#prudio-window span.close').click(function() {
+            $('#prudio-window').toggleClass('prudio-window-open');
+            $('#prudio-button').fadeIn();
+        });
 
-            $('#cbp-spmenu-s2').toggleClass('cbp-spmenu-open');
+        $('#prudio-button').click(function() {
+
+            $('#prudio-window').toggleClass('prudio-window-open');
+            $('#prudio-button').fadeOut();
 
             if(open === false) {
-
 
                 var messageField = document.getElementById('messageField');
                 var content = document.getElementById('conversation');
@@ -480,6 +485,7 @@ function main() {
 
                         console.log(data);
 
+
                         // Save connection to cookies
                         $.setCookie('oghma-channel',   data.channel);
                         $.setCookie('oghma-signature', data.signature);
@@ -487,21 +493,28 @@ function main() {
                         var socket = io.connect(baseURL + '/chat');
 
                         var domContent = [
-                            '<nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-right" id="cbp-spmenu-s2">',
-                            '       <h3>Chat</h3>',
-                            '       <ul></ul>',
-                            '       <input type="text" name="message">',
+                            '<nav class="prudio-window prudio-window-vertical prudio-window-right" id="prudio-window">',
+                            '       <h3>Chat <span class="close">&times</span></h3>',
+                            '       <div class="messages">',
+                            '           <ul>',
+                            '           </ul>',
+                            '           <div class="reply-container">',
+                            '              <div class="reply">',
+                            '                  <input type="text" name="message" placeholder="Just write..." autofocus="autofocus">',
+                            '              </div>',
+                            '           </div>',
+                            '       </div>',
                             '   </nav>',
                             ].join('');
 
                         $('body').append(domContent);
 
-                        $('#cbp-spmenu-s2').toggleClass('cbp-spmenu-open');
+                        $('#prudio-window').toggleClass('prudio-window-open');
+                        
 
-                        $.scrollChat('#cbp-spmenu-s2 ul');
+                        $.scrollChat('#prudio-window div.messages');
 
-
-                        $('#cbp-spmenu-s2 input').bind('keypress', function(e){
+                        $('#prudio-window input').bind('keypress', function(e){
                             // if enter key
                             if (e.keyCode == ENTER_KEY_CODE && $(this).val() != "") {
                                 var message = $(this).val();
@@ -509,11 +522,11 @@ function main() {
                                 socket.emit('sendMessage', {
                                     message: message,
                                 });
-
+                                
                                 console.log("SEND: " + message);
-                                $('#cbp-spmenu-s2 ul').append('<li class="self">' + message + '</li>');
+                                $('#prudio-window ul').append('<li class="self">' + message + '</li>');
 
-                                $.scrollChat('#cbp-spmenu-s2 ul');
+                                $.scrollChat('#prudio-window div.messages');
 
                                 $(this).val(''); // clear message field after sending
                             }
@@ -527,21 +540,21 @@ function main() {
                         // On Slack message
                         socket.on('message', function (data) {
                             if(data.sender == "Other") {
-                                $('#cbp-spmenu-s2 ul').append('<li class="other">' + data.message + '</li>');
-                                $.scrollChat('#cbp-spmenu-s2 ul');
+                                $('#prudio-window ul').append('<li class="other">' + data.message + '</li>');
+                                $.scrollChat('#prudio-window div.messages');
                                 $.titleAlert("New message", { stopOnMouseMove:true, stopOnFocus:true, requireBlur: true});
                                 $.playSound();
                             }
                         });
 
                         socket.on('disconnect', function () {
-                            $('#cbp-spmenu-s2 ul').append('<li><i>Server is now offline! :(</i></li>');
-                            $.scrollChat('#cbp-spmenu-s2 ul');
+                            $('#prudio-window ul').append('<li class="server">Server is now offline! :(</li>');
+                            $.scrollChat('#prudio-window div.messages');
                         });
 
                         socket.on('serverMessage', function (data) {
-                            $('#cbp-spmenu-s2 ul').append('<li><i>Server: ' + data.message + '</i></li>');
-                            $.scrollChat('#cbp-spmenu-s2 ul');
+                            $('#prudio-window ul').append('<li class="server">Server: ' + data.message + '</li>');
+                            $.scrollChat('#prudio-window div.messages');
                         });
                     }
                 });

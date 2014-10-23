@@ -26,7 +26,35 @@ var self = module.exports = {
   		return false;
   	return Bots[appid].isConnected;
   },
+
+  listUsers: function listUsers(appid) {
+  	if(typeof Bots[appid] === 'undefined')
+  		return [];
+
+  	Bots[appid].send('NAMES');
+  },
   
+  joinChannel: function joinChannel(appid, channel) {
+  	if(typeof Bots[appid] === 'undefined')
+  		return false;
+
+  	return Bots[appid].join(channel);
+  },
+
+  inviteUser: function inviteUser(appid, user, channel) {
+  	if(typeof Bots[appid] === 'undefined')
+  		return false;
+
+  	Bots[appid].send('INVITE', user, channel);
+  },
+  
+  setTopic: function setTopic(appid, channel, topic) {
+  	if(typeof Bots[appid] === 'undefined')
+  		return false;
+
+  	Bots[appid].send('TOPIC', channel, topic);
+  },
+
   connect: function connect(appid, user, pass, host) {
     console.log("Connecting to " + appid);
 
@@ -130,8 +158,6 @@ var self = module.exports = {
   emitMethod: function emitMethod() {
   	emitter.emit('emittedevent', x++);
   }
-
-
 };
 
 emitter.on('emittedevent', function(x) {

@@ -55,6 +55,8 @@ if ('development' === app.get('env')) {
 models.sequelize.sync().success(function () {
   var listening = server.listen(app.get('port'), function() {
     console.log('Express server listening on port ' + listening.address().port);
+    if(process.env.DYNO)
+      console.log('I\'m running at ' + process.env.DYNO);
   });
 });
 
@@ -79,7 +81,12 @@ require('./socket')(app, io, slack, models); // socketIO logic
 require('./client')(app, io, slack, models); // sets up endpoints
 require('./utils/bot')(slack, models); // Sets bots up
 
-console.log("I'm running at " + process.env.DYNO);
+
+// setTimeout(function() {
+//   console.log("List...");
+//   slack.listUsers(1);
+// }, 8000);
+
 
 // Catch errors
 app.use(function(err, req, res, next){

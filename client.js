@@ -75,24 +75,34 @@ module.exports = function(app, io, slack, models) {
 
 						console.log(channel);
 
-						request.post(app.get('slack_api_url') + '/channels.join', { json: true, form: { token: application.slack_api_token, name: channel }}, function (error, response, body) {
+						/*request.post(app.get('slack_api_url') + '/channels.join', { json: true, form: { token: application.slack_api_token, name: channel }}, function (error, response, body) {
 							if (!error && response.statusCode == 200 && typeof body.channel !== "undefined") {
 								console.log('CH ID: ' + body.channel.id);
 								return callback(null, channel, body.channel.id);
 							}
 							return callback('Create Channel');
-						});
+						});*/
+
+						slack.joinChannel(application.id, channel);
+
+						return callback(null, channel, '');
 
 					},
 
 					// Invite user to channel
 					function(channel, new_channel, callback) {
+						
+						/*
 						request.post(app.get('slack_api_url') + '/channels.invite', { json: true, form: { token: application.slack_api_token, channel: new_channel, user: application.slack_invite_user }}, function (error, response, body) {
 							if (!error && response.statusCode == 200) {
 								return callback(null, channel, new_channel);
 							}
 							return callback('Invite user to channel');
-						});
+						});*/
+
+						slack.inviteUser(application.id, 'helder', channel);
+						return callback(null, channel, '');
+
 					},
 
 					// Set purpose of channel
@@ -100,17 +110,23 @@ module.exports = function(app, io, slack, models) {
 						var info = JSON.parse(userInfo);
 
 						var topic = "Help this user!" +
-						"\nURL: " + info.url + " (" + req.ip + ")" +
-						"\nBrowser: " + info.browser + " - " + info.browserVersion + 
-						"\nOS: " + info.os + " - " + info.osVersion +
-						"\nMobile: " + info.mobile +" - Screen resolution: " + info.screen;
+						" | URL: " + info.url + " (" + req.ip + ")" +
+						" | Browser: " + info.browser + " - " + info.browserVersion + 
+						" | OS: " + info.os + " - " + info.osVersion +
+						" | Mobile: " + info.mobile +" - Screen resolution: " + info.screen;
 
+						/*
 						request.post(app.get('slack_api_url') + '/channels.setPurpose', { json: true, form: { token: application.slack_api_token, channel: new_channel, purpose: topic }}, function (error, response, body) {
 							if (!error && response.statusCode == 200) {
 								return callback(null, channel);
 							}
 							return callback('Set purpose of channel');
 						});
+						*/
+
+						slack.setTopic(application.id, channel, topic);
+
+						return callback(null, channel);
 					},
 
 				],
@@ -130,14 +146,5 @@ module.exports = function(app, io, slack, models) {
 
 
 	});
-
-	// any other request -> redirect to new chat room
-	/**
-	app.get('/*', function(req, res){
-		// generate random chat room ID
-		var id = Math.round((Math.random() * 1000000));
-
-		res.redirect('chat/' + id);
-	});**/
 
 };

@@ -1,7 +1,7 @@
 #prudio-button {
-    background: #555;
+    background: #0072B0;
     border-radius: 50%;
-    border: 2px solid #333;
+    border: 1px solid #455A64;
     width: 35px;
     height: 35px;
     position: fixed;
@@ -9,7 +9,9 @@
     right: 15px;
     cursor: hand;
     box-shadow: 0 0 6px #666;
+    color: white;
     z-index: 9999;
+    content: 'i'
 }
 
 /* General styles for all menus */

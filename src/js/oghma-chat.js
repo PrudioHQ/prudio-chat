@@ -524,7 +524,7 @@ function main() {
                                 });
                                 
                                 console.log("SEND: " + message);
-                                $('#prudio-window ul').append($('li.self').text(message).html());
+                                $('<li class="self"></li>').text(message).appendTo($('#prudio-window ul'));
 
                                 $.scrollChat('#prudio-window div.messages');
 
@@ -540,7 +540,7 @@ function main() {
                         // On Slack message
                         socket.on('message', function (data) {
                             if(data.sender == "Other") {
-                                $('#prudio-window ul').append($('li.other').text(data.message).html());
+                                $('<li class="other"></li>').text(data.message).appendTo($('#prudio-window ul'));
                                 $.scrollChat('#prudio-window div.messages');
                                 $.titleAlert("New message", { stopOnMouseMove:true, stopOnFocus:true, requireBlur: true});
                                 $.playSound();
@@ -548,12 +548,12 @@ function main() {
                         });
 
                         socket.on('disconnect', function () {
-                            $('#prudio-window ul').append($('li.server').text("Server is now offline! :(").html());
+                            $('<li class="server"></li>').text("Server is now offline! :(").appendTo($('#prudio-window ul'));
                             $.scrollChat('#prudio-window div.messages');
                         });
 
                         socket.on('serverMessage', function (data) {
-                            $('#prudio-window ul').append($('li.server').text(data.message).html());
+                            $('<li class="server"></li>').text(data.message).appendTo($('#prudio-window ul'));
                             $.scrollChat('#prudio-window div.messages');
                             $.playSound();
                         });

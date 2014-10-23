@@ -448,12 +448,12 @@ function main() {
 
         var open = false;
 
-        $('#prudio-window span.close').click(function() {
+        $(document).on('click', '#prudio-window span.close', function() {
             $('#prudio-window').toggleClass('prudio-window-open');
             $('#prudio-button').fadeIn();
         });
 
-        $('#prudio-button').click(function() {
+        $(document).on('click', '#prudio-button', function() {
 
             $('#prudio-window').toggleClass('prudio-window-open');
             $('#prudio-button').fadeOut();
@@ -494,7 +494,7 @@ function main() {
 
                         var domContent = [
                             '<nav class="prudio-window prudio-window-vertical prudio-window-right" id="prudio-window">',
-                            '       <h3>Chat <span class="close">&times</span></h3>',
+                            '       <h3>Chat <span class="close" title="Close">&times</span></h3>',
                             '       <div class="messages">',
                             '           <ul>',
                             '           </ul>',

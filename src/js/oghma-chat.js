@@ -548,13 +548,15 @@ function main() {
                         });
 
                         socket.on('disconnect', function () {
-                            $('<li class="server"></li>').text("Server is now offline! :(").appendTo($('#prudio-window ul'));
+                            $('<li class="error"></li>').text("Server is now offline!").appendTo($('#prudio-window ul'));
                             $.scrollChat('#prudio-window div.messages');
+                            $('#prudio-window input').prop('disabled', true);
                         });
 
                         socket.on('serverMessage', function (data) {
                             $('<li class="server"></li>').text(data.message).appendTo($('#prudio-window ul'));
                             $.scrollChat('#prudio-window div.messages');
+                            $('#prudio-window input').prop('disabled', false);
                             $.playSound();
                         });
                     }

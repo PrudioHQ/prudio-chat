@@ -1,6 +1,7 @@
-var emitter = require('./utils/emitter');
-var irc     = require('irc');
-var moment  = require('moment');
+var emitter   = require('./utils/emitter');
+var irc       = require('irc');
+var moment    = require('moment');
+var WebSocket = require('ws');
 
 // Private
 var Bots = {}; 
@@ -55,27 +56,15 @@ var self = module.exports = {
   	Bots[appid].send('TOPIC', channel, topic);
   },
 
-  connect: function connect(appid, user, pass, host) {
+  connect: function connect(appid, wss) {
     console.log("Connecting to " + appid);
 
 	if(typeof Bots[appid] === 'undefined') {
 		
-		Bots[appid] = new irc.Client(host, user, { // 'sto.irc.slack.com', 'bot'
-			secure: true,
-			debug: false,
-			sasl: true, 
-			username: user, // bot
-			password: pass, // "sto.xt9rBQ3kmwcS4XlQ7Z0A",
-			showErrors: true,
-			retryDelay: 1000,
-            retryCount: 3,
-			channels: [],
-		});
-
+		Bots[appid] = new WebSocket(wss);
 		Bots[appid].isConnected = false;
 		Bots[appid].errors      = [];
 		Bots[appid].bootedAt    = moment().utc().unix();
-
 
 		console.log("Undefined");
 		console.log("T: " + Object.size(Bots));
@@ -89,9 +78,14 @@ var self = module.exports = {
 		return Bots[appid];
 	}
 
-	Bots[appid].addListener('connect', function () {
+	Bots[appid].addListener('open', function () {
 		Bots[appid].isConnected = true;
 		console.log(appid + " is online");
+
+		setTimeout(function() {
+			console.log("Try to send message");
+			Bots[appid].send(JSON.stringify({"type":"message","channel":"D02PMQQT2","user":"U02PMQQSY","text":"I am onnnnn","ts": Date.now() + ".000000","team":"T025PLYNL"}));
+		}, 8000);
 	});
 
 	Bots[appid].addListener('error', function (e) {
@@ -129,6 +123,11 @@ var self = module.exports = {
 		}
 
 	});
+
+	Bots[appid].addListener('message', function (message) {
+		console.log("raw dataaaaa " + message);
+	});
+
 
 	return Bots[appid];
 

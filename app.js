@@ -79,7 +79,7 @@ app.use('/client-html',  express.static(__dirname + '/client-html'));
 // linking
 require('./socket')(app, io, slack, models); // socketIO logic
 require('./client')(app, io, slack, models); // sets up endpoints
-require('./utils/bot')(slack, models); // Sets bots up
+require('./utils/bot')(app, slack, models); // Sets bots up
 
 
 // setTimeout(function() {

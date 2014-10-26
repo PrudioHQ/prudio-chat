@@ -38,7 +38,7 @@ module.exports = function(app, io, slack, models)
 					return;
 				}
 				
-				var bot = slack.connect(appid, application.slack_xmpp_user, application.slack_xmpp_pass, application.slack_xmpp_host);
+				var bot = slack.connectApp(application);
 				
 				// client joins room specified in URL
 				clientSocket.join(channel);
@@ -72,14 +72,21 @@ module.exports = function(app, io, slack, models)
 					});
 
 					// send response to slack
-					bot.say('#' + channel, text.message);
+					slack.say(appid, channel, text.message);
 				});
 
 				// On Slack message, redirect to socket
-				bot.addListener('message#' + channel, function (from, message) {
-				    console.log(from + ' => #yourchannel: ' + message);
+				bot.on('message', function (message) {
+				    console.log('Message from the socket: %j', message);
+
+				    if(message.channel == bot.channels["#" + channel])
+				    	clientSocket.emit('message', {
+							message: message.text,
+							sender: 'Other'
+						});
 
 				    // If the message is not from the bot
+				    /*
 				    if(from !== application.slack_xmpp_user) {
 				    	if(message.indexOf("!") == 0 && message.length > 1) {
 							console.log('Command message: ' + message);	
@@ -95,6 +102,14 @@ module.exports = function(app, io, slack, models)
 							});
 						}
 					}
+					*/
+				});
+
+				bot.on('user_typing', function (message) {
+				    console.log('User typing from the socket: %j', message);
+
+				    if(message.channel == bot.channels["#" + channel])
+				    	clientSocket.emit('typingMessage');
 				});
 
 				// Error handler
@@ -116,7 +131,7 @@ module.exports = function(app, io, slack, models)
 
 				// Socket disconnect listener, notify Slack that user left the chat
 				clientSocket.on('disconnect', function() {
-					bot.say('#' + channel, "_User disconnected!_");
+					slack.say(appid, channel, "_User disconnected!_");
 				});
 
 			}); 

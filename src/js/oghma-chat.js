@@ -540,6 +540,7 @@ function main() {
                         // On Slack message
                         socket.on('message', function (data) {
                             if(data.sender == "Other") {
+                                $('#prudio-window ul li.typing').remove();
                                 $('<li class="other"></li>').text(data.message).appendTo($('#prudio-window ul'));
                                 $.scrollChat('#prudio-window div.messages');
                                 $.titleAlert("New message", { stopOnMouseMove:true, stopOnFocus:true, requireBlur: true});
@@ -558,6 +559,12 @@ function main() {
                             $.scrollChat('#prudio-window div.messages');
                             $('#prudio-window input').prop('disabled', false);
                             $.playSound();
+                        });
+
+                        socket.on('typingMessage', function (data) {
+                            $('#prudio-window ul li.typing').remove();
+                            $('<li class="typing"></li>').text('User is typing').appendTo($('#prudio-window ul')).show().delay(5000).fadeOut();
+                            $.scrollChat('#prudio-window div.messages');
                         });
                     }
                 });

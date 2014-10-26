@@ -38,7 +38,7 @@ module.exports = function(app, io, slack, models)
 					return;
 				}
 				
-				var bot = slack.connectApp(application);
+				var bot = slack.connect(application);
 				
 				// client joins room specified in URL
 				clientSocket.join(channel);

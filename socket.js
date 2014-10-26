@@ -22,9 +22,10 @@ module.exports = function(app, io, slack, models)
 					return;
 				}
 
-				var crypto    = require('crypto');
-				var signature = crypto.createHmac('sha1', application.slack_api_token).update(channel).digest('hex');
-				var appid     = application.id;
+				var crypto      = require('crypto');
+				var signature   = crypto.createHmac('sha1', application.slack_api_token).update(channel).digest('hex');
+				var appid       = application.id;
+				var channelCode = slack.getChannelCode(appid, channel);
 
 				if(signature != client_signature) {
 					console.log('Wrong channel signature.');
@@ -72,7 +73,7 @@ module.exports = function(app, io, slack, models)
 					});
 
 					// send response to slack
-					slack.say(appid, channel, text.message);
+					slack.say(appid, channelCode, text.message);
 				});
 
 				// On Slack message, redirect to socket
@@ -131,7 +132,7 @@ module.exports = function(app, io, slack, models)
 
 				// Socket disconnect listener, notify Slack that user left the chat
 				clientSocket.on('disconnect', function() {
-					slack.say(appid, channel, "_User disconnected!_");
+					slack.say(appid, channelCode, "_User disconnected!_");
 				});
 
 			}); 

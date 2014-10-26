@@ -15,6 +15,16 @@ Object.size = function(obj) {
     return size;
 };
 
+Object.getKeyByValue = function( obj, value ) {
+    for( var prop in obj ) {
+        if( obj.hasOwnProperty( prop ) ) {
+        	console.log("PROP " + prop)
+             if( obj[ prop ] === value )
+                 return prop;
+        }
+    }
+};
+
 // Public
 var self = module.exports = {
 
@@ -29,6 +39,13 @@ var self = module.exports = {
 		Bots[appid].channels["#" + name] = code;
 
 		return Bots[appid].channels;
+	},
+
+	getChannelCode: function getChannelCode(appid, name) {
+		if(typeof Bots[appid] === 'undefined')
+			return false;
+
+		return Bots[appid].channels["#" + name];
 	},
 
 	isConnected: function isConnected(appid) {
@@ -107,6 +124,10 @@ var self = module.exports = {
 						console.log(appid + " said hello");
 					});
 
+					Bots[appid].addListener('error', function (e) {
+						console.log(appid + " had an error");
+					});
+
 					// Direct message
 					Bots[appid].addListener('direct_message', function (message) {
 						console.log("Direct message: %j", message);
@@ -115,23 +136,22 @@ var self = module.exports = {
 						// If command
 						if(message.text.indexOf("!") == 0 && message.text.length > 1) {
 							var command = message.text.substring(1, message.text.length);
-							var from = message.user;
 
 							console.log("It's a command: " + command);
 
 							if(command === "time") {
-								self.say(appid, from, "_It's now: *" + moment().utc().format() + "*._");
+								self.say(appid, message.channel, "_It's now: *" + moment().utc().format() + "*._");
 							} else if(command === "uptime") {
 								var time = moment(Bots[appid].bootedAt, "X").utc();
-								self.say(appid, from, "_Uptime: *" + time.fromNow() + "* @ *" + time.format() + "*._");
+								self.say(appid, message.channel, "_Uptime: *" + time.fromNow() + "* @ *" + time.format() + "*._");
 							} else {
 								// Command not valid!
-								self.say(appid, from, "_Sorry! Couldn't reconize the command: *" + command + "*._");
+								self.say(appid, message.channel, "_Sorry! Couldn't reconize the command: *" + command + "*._");
 							}
 
 						} else {
 							// Reply
-							//self.say(appid, from, "You said: _" + message.text + "_");
+							self.say(appid, message.channel, "You said: _" + message.text + "_");
 						}
 
 					});
@@ -157,7 +177,7 @@ var self = module.exports = {
 
 		var data = {
 			"type":    "message",
-			"channel": Bots[appid].channels["#" + channel],
+			"channel": channel, //D... or C....
 			"user":    Bots[appid].nick,
 			"text":    message,
 			"ts":      Date.now() + ".000000",

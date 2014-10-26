@@ -1,7 +1,6 @@
-var emitter   = require('./utils/emitter');
-var irc       = require('irc');
-var moment    = require('moment');
 var WebSocket = require('ws');
+var emitter   = require('./utils/emitter');
+var moment    = require('moment');
 var request   = require('request'); // github.com/mikeal/request
 
 // Private

@@ -1,6 +1,8 @@
-var emitter = require('./utils/emitter');
-var irc     = require('irc');
-var moment  = require('moment');
+var emitter   = require('./utils/emitter');
+var irc       = require('irc');
+var moment    = require('moment');
+var WebSocket = require('ws');
+var request   = require('request'); // github.com/mikeal/request
 
 // Private
 var Bots = {}; 
@@ -17,149 +19,177 @@ Object.size = function(obj) {
 // Public
 var self = module.exports = {
 
-  size: function size() {
-  	return Object.size(Bots);
-  },
+	size: function size() {
+		return Object.size(Bots);
+	},
 
-  isConnected: function isConnected(appid) {
-  	if(typeof Bots[appid] === 'undefined')
-  		return false;
-  	return Bots[appid].isConnected;
-  },
+	addChannel: function addChannel(appid, code, name) {
+		if(typeof Bots[appid] === 'undefined')
+			return false;
 
-  listUsers: function listUsers(appid) {
-  	if(typeof Bots[appid] === 'undefined')
-  		return [];
+		Bots[appid].channels["#" + name] = code;
 
-  	Bots[appid].send('NAMES');
-  },
-  
-  joinChannel: function joinChannel(appid, channel) {
-  	if(typeof Bots[appid] === 'undefined')
-  		return false;
+		return Bots[appid].channels;
+	},
 
-  	return Bots[appid].join(channel);
-  },
+	isConnected: function isConnected(appid) {
+		if(typeof Bots[appid] === 'undefined')
+			return false;
+		return Bots[appid].isConnected;
+	},
 
-  inviteUser: function inviteUser(appid, user, channel) {
-  	if(typeof Bots[appid] === 'undefined')
-  		return false;
+	connect: function connect(application) {
 
-  	Bots[appid].send('INVITE', user, channel);
-  },
-  
-  setTopic: function setTopic(appid, channel, topic) {
-  	if(typeof Bots[appid] === 'undefined')
-  		return false;
+		var appid = application.id;
 
-  	Bots[appid].send('TOPIC', channel, topic);
-  },
+		console.log("Connecting to " + appid);
 
-  connect: function connect(appid, user, pass, host) {
-    console.log("Connecting to " + appid);
+		if(typeof Bots[appid] === 'undefined') {
 
-	if(typeof Bots[appid] === 'undefined') {
-		
-		Bots[appid] = new irc.Client(host, user, { // 'sto.irc.slack.com', 'bot'
-			secure: true,
-			debug: false,
-			sasl: true, 
-			username: user, // bot
-			password: pass, // "sto.xt9rBQ3kmwcS4XlQ7Z0A",
-			showErrors: true,
-			retryDelay: 1000,
-            retryCount: 3,
-			channels: [],
-		});
+			request.post('https://slack.com/api/rtm.start', { json: true, form: { token: application.slack_api_token, t: Date.now() }}, function (error, response, connection) {
+				if (!error && response.statusCode == 200 && typeof connection.ok !== "undefined" && connection.ok == true) {
+								
+					Bots[appid]             = emitter;
+					Bots[appid].websocket   = new WebSocket(connection.url);
+					Bots[appid].isConnected = false;
+					Bots[appid].nick        = connection.self.id;
+					Bots[appid].team        = connection.team.id;
+					Bots[appid].teamDomain  = connection.team.domain;
+					Bots[appid].bootedAt    = moment().utc().unix();
+					Bots[appid].channels    = [];
+					Bots[appid].errors      = [];
 
-		Bots[appid].isConnected = false;
-		Bots[appid].errors      = [];
-		Bots[appid].bootedAt    = moment().utc().unix();
+					console.log("Undefined");
+					console.log("T: " + Object.size(Bots));
 
+					// Read Channels 
+					for (var channel in connection.channels) {
+						self.addChannel(appid, connection.channels[channel].id, connection.channels[channel].name);
+					}
 
-		console.log("Undefined");
-		console.log("T: " + Object.size(Bots));
-	
-	//} else if(Bots[appid].connection.connected == false) {
-	//	console.log("Defined but not connected!");
-	//	Bots[appid].connect();
-	} else {
-		console.log("Already connected!");
-		console.log("T: " + Object.size(Bots));
-		return Bots[appid];
-	}
+					// Socket Listner
+					Bots[appid].websocket.addListener('open', function () {
+						Bots[appid].isConnected = true;
+						console.log(appid + " is online");
+					});
 
-	Bots[appid].addListener('connect', function () {
-		Bots[appid].isConnected = true;
-		console.log(appid + " is online");
-	});
+					Bots[appid].websocket.addListener('close', function () {
+						Bots[appid].isConnected = false;
+						console.log("conn closed");
+					});
 
-	Bots[appid].addListener('error', function (e) {
-		Bots[appid].isConnected = false;
-		Bots[appid].erros.push(e);
+					// Websocket Events 
+					Bots[appid].websocket.addListener('message', function (data) {
+						var message = JSON.parse(data);
 
-		console.log("error");
-		console.log(e);
-	});
+						if(message.type == 'message' && message.channel.indexOf("C") == 0) {
 
-	// Direct message
-	Bots[appid].addListener('pm', function (from, message) {
-		console.log("Direct message: " + message);
-		console.log("T: "              + Object.size(Bots));
+							console.log("Channel message %j", message);
+							Bots[appid].emit('message', message);
+						
+						} else if(message.type == 'message' && message.channel.indexOf("D") == 0) {
+						
+							console.log("Direct message %j", message);
+							Bots[appid].emit('direct_message', message);
+						
+						} else if(typeof message.type !== 'undefined') {
+						
+							console.log("Other message %s %j", message.type, message);
+							Bots[appid].emit(message.type, message);
 
-		// If command
-		if(message.indexOf("!") == 0 && message.length > 1) {
-			var command = message.substring(1, message.length);
+						} else {
+						
+							console.log("Undefined message %j", message);
 
-			console.log("It's a command: " + command);
+						}
+					});
 
-			if(command === "time") {
-				Bots[appid].say(from, "_It's now: *" + moment().utc().format() + "*._");
-			} else if(command === "uptime") {
-				var time = moment(Bots[appid].bootedAt, "X").utc();
-				Bots[appid].say(from, "_Uptime: *" + time.fromNow() + "* @ *" + time.format() + "*._");
-			} else {
-				// Command not valid!
-				Bots[appid].say(from, "_Sorry! Couldn't reconize the command: *" + command + "*._");
-			}
+					Bots[appid].addListener('hello', function () {
+						console.log(appid + " said hello");
+					});
+
+					// Direct message
+					Bots[appid].addListener('direct_message', function (message) {
+						console.log("Direct message: %j", message);
+						console.log("T: " + Object.size(Bots));
+
+						// If command
+						if(message.text.indexOf("!") == 0 && message.text.length > 1) {
+							var command = message.text.substring(1, message.text.length);
+							var from = message.user;
+
+							console.log("It's a command: " + command);
+
+							if(command === "time") {
+								self.say(appid, from, "_It's now: *" + moment().utc().format() + "*._");
+							} else if(command === "uptime") {
+								var time = moment(Bots[appid].bootedAt, "X").utc();
+								self.say(appid, from, "_Uptime: *" + time.fromNow() + "* @ *" + time.format() + "*._");
+							} else {
+								// Command not valid!
+								self.say(appid, from, "_Sorry! Couldn't reconize the command: *" + command + "*._");
+							}
+
+						} else {
+							// Reply
+							//self.say(appid, from, "You said: _" + message.text + "_");
+						}
+
+					});
+
+					return Bots[appid];
+				} 
+			});
 
 		} else {
-			// Reply
-			Bots[appid].say(from, "You said: _" + message + "_");
+			console.log("Already connected!");
+			console.log("T: " + Object.size(Bots));
+
+			return Bots[appid];
 		}
 
-	});
 
-	return Bots[appid];
+	},
 
-  },
-  
-  disconnect: function disconnect(appid) {
+	say: function say(appid, channel, message) {
+		if(typeof Bots[appid] === 'undefined') {
+			return true;
+		}
 
-  	if(typeof Bots[appid] === 'undefined') {
-  		return true;
+		var data = {
+			"type":    "message",
+			"channel": Bots[appid].channels["#" + channel],
+			"user":    Bots[appid].nick,
+			"text":    message,
+			"ts":      Date.now() + ".000000",
+			"team":    Bots[appid].team
+		};
+
+		Bots[appid].websocket.send(JSON.stringify(data), function(error) {
+			console.log("Error sending data to socket!");
+		});
+	},
+
+	// Disconect one websocket
+	disconnect: function disconnect(appid) {
+
+		if(typeof Bots[appid] === 'undefined') {
+			return true;
+		}
+
+		Bots[appid].websocket.close();
+		Bots[appid] = undefined;
+
+		return true;
+	},
+
+	// Disconect all webockets
+	disconnectAll: function disconnectAll() {
+		
+		for (var appid in Bots) {
+			this.disconnect(appid);
+		}
+
+		return true;
 	}
-	
-	Bots[appid].disconnect();
-  	Bots[appid] = undefined;
-
-  	return true;
-  },
-
-  disconnectAll: function disconnectAll() {
-  	
-  	for (var appid in Bots) {
-	    this.disconnect(appid);
-	}
-
-  	return true;
-  },
-  
-  emitMethod: function emitMethod() {
-  	emitter.emit('emittedevent', x++);
-  }
 };
-
-emitter.on('emittedevent', function(x) {
-	console.log('We have got: ' + x);
-});

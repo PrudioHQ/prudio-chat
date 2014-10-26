@@ -1,9 +1,12 @@
+var request = require('request'); // github.com/mikeal/request
 
-module.exports = function(slack, models) {
+//var ws = new WebSocket(wss);
+
+module.exports = function(app, slack, models) {
 
   	models.App.find({ where: { active: true } }).success(function(application) {
 
-		slack.connect(application.id, application.slack_xmpp_user, application.slack_xmpp_pass, application.slack_xmpp_host);
+		slack.connect(application);
 
 	});
 };

@@ -6,6 +6,7 @@
     "node": "0.10.x"
   },
   "dependencies": {
+    "ws": "0.4.x",
     "async": "latest",
     "bcrypt": "0.8.0",
     "body-parser": "latest",
@@ -18,7 +19,6 @@
     "grunt-cli": "latest",
     "grunt-contrib-cssmin": "latest",
     "grunt-contrib-uglify": "latest",
-    "irc": "latest",
     "moment": "^2.8.3",
     "mysql": "2.5.1",
     "newrelic": "^1.12.1",

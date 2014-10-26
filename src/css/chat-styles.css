@@ -79,6 +79,16 @@
 	font-style: italic;
 }
 
+.prudio-window li.typing {
+	padding: 4px 15px;
+	text-align: center;
+	border: none;
+	color: #CCC; 
+	font-size: 0.7em;
+	font-weight: normal;
+	font-style: italic;
+}
+
 .prudio-window li.error {
 	padding: 4px 15px;
 	text-align: center;

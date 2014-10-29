@@ -85,6 +85,7 @@ var self = module.exports = {
 					Bots[appid].websocket   = new WebSocket(connection.url);
 					Bots[appid].application = application;
 					Bots[appid].isConnected = false;
+					Bots[appid].msgCount    = 0;
 					Bots[appid].nick        = connection.self.id;
 					Bots[appid].team        = connection.team.id;
 					Bots[appid].teamDomain  = connection.team.domain;
@@ -116,6 +117,11 @@ var self = module.exports = {
 					// Websocket Events 
 					Bots[appid].websocket.addListener('message', function (data) {
 						var message = JSON.parse(data);
+
+						// Gambiarra
+						Bots[appid].msgCount++
+						// Ignore first 2 messages: hello, last message
+						if(Bots[appid].msgCount <= 2) return;
 
 						if(message.type == 'message' && message.channel.indexOf("C") == 0) {
 
@@ -149,8 +155,6 @@ var self = module.exports = {
 
 					// Direct message
 					Bots[appid].addListener('direct_message', function (message) {
-						console.log("Direct message: %j", message);
-						console.log("T: " + Object.size(Bots));
 
 						// If command
 						if(message.text.indexOf("!") == 0 && message.text.length > 1) {

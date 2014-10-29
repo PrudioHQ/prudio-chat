@@ -30,6 +30,10 @@ module.exports = function(app, io, slack, models) {
 		});
 	}
 
+	app.get('/', function(req, res, next) {
+		return res.status(200).json({ success: true, message: "Welcome, nothing here" }).send();
+	});
+
 	app.post('/app/connect', isAuthorized, function(req, res, next) {
 		var token            = req.param('token');
 		models.app.find({ where: { token: token, active: true } }).success(function(application) {

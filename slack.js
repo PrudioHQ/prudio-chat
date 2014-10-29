@@ -109,6 +109,7 @@ var self = module.exports = {
 
 					Bots[appid].websocket.addListener('close', function () {
 						Bots[appid].isConnected = false;
+						Bots[appid].removeAllListeners();
 						console.log("conn closed");
 					});
 
@@ -214,8 +215,9 @@ var self = module.exports = {
 			return true;
 		}
 
-		if(Bots[appid].isConnected == true)
+		if(Bots[appid].isConnected == true) {
 			Bots[appid].websocket.close();
+		}
 		
 		return true;
 	},

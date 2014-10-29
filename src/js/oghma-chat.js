@@ -3,7 +3,7 @@
 // Localize jQuery variable
 var jQuery
 
-var baseURL = "http://oghma.herokuapp.com"; 
+var baseURL = "http://chat.prud.io"; 
 
 if(window.location.hostname == "localhost")
     baseURL = "http://localhost:8888";
@@ -481,10 +481,29 @@ function main() {
                         settings:  JSON.stringify(settings),
                         userInfo:  JSON.stringify(userInfo)
                     },
+                    error : function(xhr, ajaxOptions, thrownError){
+                        var domContent = [
+                            '<nav class="prudio-window prudio-window-vertical prudio-window-right" id="prudio-window">',
+                            '       <h3>Chat <span class="close" title="Close">&times</span></h3>',
+                            '       <div class="messages">',
+                            '           <ul>',
+                            '               <li class="server">Sorry, support is currently offline.</li>',
+                            '           </ul>',
+                            '       </div>',
+                            '   </nav>',
+                            ].join('');
+
+                        $('body').append(domContent);
+
+                        $('#prudio-window').toggleClass('prudio-window-open');
+
+                        console.log(xhr);
+                        console.log(ajaxOptions);
+                        console.log(thrownError);
+                    },
                     success: function(data) {
 
                         console.log(data);
-
 
                         // Save connection to cookies
                         $.setCookie('oghma-channel',   data.channel);

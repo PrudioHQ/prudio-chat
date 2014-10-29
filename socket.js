@@ -55,7 +55,7 @@ module.exports = function(app, io, slack, models)
 					if(slack.isConnected(appid) === false) {
 						// Let the user know about the error?
 						clientSocket.emit('serverMessage', {
-							message: '<i>could not deliver the message: <br>' + text.message +  '</i>'
+							message: 'Could not deliver the message: ' + text.message
 						});
 
 						return;
@@ -75,6 +75,8 @@ module.exports = function(app, io, slack, models)
 					// send response to slack
 					slack.say(appid, channelCode, text.message);
 				});
+
+				console.log("Type: " + typeof bot);
 
 				// On Slack message, redirect to socket
 				bot.on('message', function (message) {

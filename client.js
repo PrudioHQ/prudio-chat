@@ -1,20 +1,25 @@
 var async   = require('async');
 var request = require('request'); // github.com/mikeal/request
+var passport = require('passport');
+var SlackStrategy = require('passport-slack').Strategy;
 
 module.exports = function(app, io, slack, models) {
 
 	var application = null;
 
 	function isAuthorized(req, res, next) {
-	
+
 		var token = req.param('token');
+
+		if(token == null)
+			return res.status(401).json({ success: false, message: "Unauthorized" }).send();
 
 		models.App.find({ where: { token: token } }).success(function(app) {
 			if(app == null)
 				return res.status(401).json({ success: false, message: "Unauthorized" }).send();
 
 			if(app.online == false)
-				return res.status(404).json({ success: false, message: "Support offline" }).send();
+				return res.status(503).json({ success: false, message: "Support offline" }).send();
 
 			if(app.active == false)
 				return res.status(404).json({ success: false, message: "Application offline" }).send();
@@ -25,10 +30,23 @@ module.exports = function(app, io, slack, models) {
 		});
 	}
 
-	app.get('/', function(req, res, next) {
-		return res.status(200).send("<h2>Nothing here! Move along!</h2>").end();
+	app.post('/app/connect', isAuthorized, function(req, res, next) {
+		var token            = req.param('token');
+		models.App.find({ where: { token: token, active: true } }).success(function(application) {
+			slack.connect(application);
+
+			return res.status(200).json({ success: true, message: "Initializing" }).send();
+		});
 	});
 
+	app.post('/app/disconnect', isAuthorized, function(req, res, next) {
+		var token            = req.param('token');
+		models.App.find({ where: { token: token, active: true } }).success(function(application) {
+			slack.disconnect(application.id);
+
+			return res.status(200).json({ success: true, message: "Disconnecting" }).send();
+		});
+	});
 	
 	app.post('/chat/create', isAuthorized, function(req, res, next) {
 
@@ -43,6 +61,7 @@ module.exports = function(app, io, slack, models) {
 	
 			if(application == null)
 				return res.status(404).json({ success: false, message: "Not found" }).send();
+
 
 			async.waterfall(
 				[

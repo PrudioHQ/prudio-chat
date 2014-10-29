@@ -3,7 +3,7 @@
 var uuid = require('node-uuid');
 
 module.exports = function(sequelize, DataTypes) {
-  var App = sequelize.define("App", {
+  var App = sequelize.define("app", {
     account_id: DataTypes.INTEGER,
     user_id: DataTypes.INTEGER,
     token: {
@@ -18,9 +18,6 @@ module.exports = function(sequelize, DataTypes) {
     name: DataTypes.STRING,
     active: DataTypes.BOOLEAN,
     online: DataTypes.BOOLEAN,
-    slack_xmpp_host: DataTypes.STRING,
-    slack_xmpp_user: DataTypes.STRING,
-    slack_xmpp_pass: DataTypes.STRING,
     slack_api_token: DataTypes.STRING,
     slack_invite_user: DataTypes.STRING
   }, {

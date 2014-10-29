@@ -1,0 +1,11 @@
+<h1>Sign up</h1>
+<hr/>
+{{ error }}
+<form action="/signup" method="POST">
+	<input type="hidden" name="_csrf" value="{{csrfToken}}">
+	<input type="text" name="name" placeholder="Name..." /> 
+	<input type="email" name="email" placeholder="E-mail..."  /> 
+	<input type="password" name="password" placeholder="Password..."  /> 
+
+	<input type="submit">
+</form>

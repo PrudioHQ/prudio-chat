@@ -33,15 +33,6 @@ module.exports = {
         type: DataTypes.BOOLEAN,
         defaultValue: true
       },
-      slack_xmpp_host: {
-        type: DataTypes.STRING
-      },
-      slack_xmpp_user: {
-        type: DataTypes.STRING
-      },
-      slack_xmpp_pass: {
-        type: DataTypes.STRING
-      },
       slack_api_token: {
         type: DataTypes.STRING
       },

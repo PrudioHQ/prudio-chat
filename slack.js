@@ -32,6 +32,22 @@ var self = module.exports = {
 		return Object.size(Bots);
 	},
 
+	onlineUsers: function onlineUsers(appid) {
+
+		if(typeof Bots[appid] === 'undefined')
+			return false;
+
+		var application = Bots[appid].application;
+
+		request.post('https://slack.com/api/users.list', { json: true, form: { token: application.slack_api_token }}, function (error, response, body) {
+			if (!error && response.statusCode == 200 && typeof body.ok !== "undefined" && body.ok == true) {
+				return body.members;
+			} else {
+				return error;
+			}
+		});
+	},
+
 	addChannel: function addChannel(appid, code, name) {
 		if(typeof Bots[appid] === 'undefined')
 			return false;
@@ -60,13 +76,14 @@ var self = module.exports = {
 
 		console.log("Connecting to " + appid);
 
-		if(typeof Bots[appid] === 'undefined') {
+		if(typeof Bots[appid] === 'undefined' || Bots[appid].isConnected == false) {
 
 			request.post('https://slack.com/api/rtm.start', { json: true, form: { token: application.slack_api_token, t: Date.now() }}, function (error, response, connection) {
 				if (!error && response.statusCode == 200 && typeof connection.ok !== "undefined" && connection.ok == true) {
 								
 					Bots[appid]             = emitter;
 					Bots[appid].websocket   = new WebSocket(connection.url);
+					Bots[appid].application = application;
 					Bots[appid].isConnected = false;
 					Bots[appid].nick        = connection.self.id;
 					Bots[appid].team        = connection.team.id;
@@ -74,6 +91,7 @@ var self = module.exports = {
 					Bots[appid].bootedAt    = moment().utc().unix();
 					Bots[appid].channels    = [];
 					Bots[appid].errors      = [];
+
 
 					console.log("Undefined");
 					console.log("T: " + Object.size(Bots));
@@ -196,9 +214,9 @@ var self = module.exports = {
 			return true;
 		}
 
-		Bots[appid].websocket.close();
-		Bots[appid] = undefined;
-
+		if(Bots[appid].isConnected == true)
+			Bots[appid].websocket.close();
+		
 		return true;
 	},
 

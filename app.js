@@ -9,6 +9,7 @@ var io      = require('socket.io')(server);
 
 // IRC and Request
 var bodyParser   = require('body-parser');
+var session      = require('express-session')
 var cors         = require('cors');
 
 // Sequalize & Models
@@ -25,6 +26,7 @@ app.set('env',  process.env.NODE_ENV || 'development');
 // Constants
 app.set('slack_channel_prefix', 'sp-');
 app.set('slack_api_url',        'https://slack.com/api');
+
 
 // Development only
 if ('development' === app.get('env')) {
@@ -72,9 +74,12 @@ app.use('/',                 express.static(__dirname + '/build'));
 app.use('/notification.mp3', express.static(__dirname + '/src/sound/notification.mp3'));
 app.use('/notification.ogg', express.static(__dirname + '/src/sound/notification.ogg'));
 
+if ('development' === app.get('env')) {
 
-// HTML client
-app.use('/client-html',  express.static(__dirname + '/client-html'));
+  // HTML client
+  app.use('/client-html',  express.static(__dirname + '/client-html'));
+}
+
 
 // linking
 require('./socket')(app, io, slack, models); // socketIO logic
@@ -82,14 +87,8 @@ require('./client')(app, io, slack, models); // sets up endpoints
 require('./utils/bot')(app, slack, models); // Sets bots up
 
 
-// setTimeout(function() {
-//   console.log("List...");
-//   slack.listUsers(1);
-// }, 8000);
-
-
 // Catch errors
-app.use(function(err, req, res, next){
+app.use(function (err, req, res, next) {
   console.error(err.stack);
   res.status(500).send('Something broke!');
 });

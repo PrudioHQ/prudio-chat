@@ -1,7 +1,7 @@
 "use strict";
 
 module.exports = function(sequelize, DataTypes) {
-  var Room = sequelize.define("room", {
+  var room = sequelize.define("room", {
     account_id: DataTypes.INTEGER,
     app_id: DataTypes.INTEGER,
     count: DataTypes.INTEGER
@@ -13,5 +13,5 @@ module.exports = function(sequelize, DataTypes) {
     }
   });
 
-  return Room;
+  return room;
 };

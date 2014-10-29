@@ -4,7 +4,7 @@ var request = require('request'); // github.com/mikeal/request
 
 module.exports = function(app, slack, models) {
 
-  	models.App.find({ where: { active: true } }).success(function(application) {
+  	models.app.find({ where: { active: true } }).success(function(application) {
 
 		slack.connect(application);
 

@@ -8,7 +8,7 @@ module.exports = function(app, io, slack, models)
 		{
 			console.log("Socket JOINROOM CH: " + channel);
 
-		  	models.App.find({ where: { token: token, active: true } }).success(function(application) {
+		  	models.app.find({ where: { token: token, active: true } }).success(function(application) {
 
 				if(application == null) {
 					console.log('Wrong token.');

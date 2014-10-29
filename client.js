@@ -14,7 +14,7 @@ module.exports = function(app, io, slack, models) {
 		if(token == null)
 			return res.status(401).json({ success: false, message: "Unauthorized" }).send();
 
-		models.App.find({ where: { token: token } }).success(function(app) {
+		models.app.find({ where: { token: token } }).success(function(app) {
 			if(app == null)
 				return res.status(401).json({ success: false, message: "Unauthorized" }).send();
 
@@ -32,7 +32,7 @@ module.exports = function(app, io, slack, models) {
 
 	app.post('/app/connect', isAuthorized, function(req, res, next) {
 		var token            = req.param('token');
-		models.App.find({ where: { token: token, active: true } }).success(function(application) {
+		models.app.find({ where: { token: token, active: true } }).success(function(application) {
 			slack.connect(application);
 
 			return res.status(200).json({ success: true, message: "Initializing" }).send();
@@ -41,7 +41,7 @@ module.exports = function(app, io, slack, models) {
 
 	app.post('/app/disconnect', isAuthorized, function(req, res, next) {
 		var token            = req.param('token');
-		models.App.find({ where: { token: token, active: true } }).success(function(application) {
+		models.app.find({ where: { token: token, active: true } }).success(function(application) {
 			slack.disconnect(application.id);
 
 			return res.status(200).json({ success: true, message: "Disconnecting" }).send();
@@ -57,7 +57,7 @@ module.exports = function(app, io, slack, models) {
 		var channelSignature = req.param('signature');
 		var userInfo         = req.param('userInfo');
 
-		models.App.find({ where: { token: token, active: true } }).success(function(application) {
+		models.app.find({ where: { token: token, active: true } }).success(function(application) {
 	
 			if(application == null)
 				return res.status(404).json({ success: false, message: "Not found" }).send();
@@ -78,7 +78,7 @@ module.exports = function(app, io, slack, models) {
 								return callback(null, channel);
 						}
 						// No channel or signature, or invalid signature/channel, get the next channel
-						models.Room.find({ where: { app_id: application.id }}).success(function(room) {
+						models.room.find({ where: { app_id: application.id }}).success(function(room) {
 							room.increment('count').success(function() {
 								var chname = "sp-" + room.count;
 								return callback(null, chname);

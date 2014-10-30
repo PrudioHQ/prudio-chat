@@ -82,11 +82,9 @@ module.exports = function(app, io, slack, models) {
 								return callback(null, channel);
 						}
 						// No channel or signature, or invalid signature/channel, get the next channel
-						models.room.find({ where: { app_id: application.id }}).success(function(room) {
-							room.increment('count').success(function() {
-								var chname = "sp-" + room.count;
-								return callback(null, chname);
-							});
+						application.increment('room_count').success(function() {
+							var chname = application.room_prefix + application.room_count;
+							return callback(null, chname);
 						});
 
 						

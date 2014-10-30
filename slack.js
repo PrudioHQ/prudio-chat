@@ -120,7 +120,7 @@ var self = module.exports = {
 
 						// Gambiarra
 						Bots[appid].msgCount++
-						// Ignore first 2 messages: hello, last message
+						// Ignore first 2 messages: hello and last message
 						if(Bots[appid].msgCount <= 2) return;
 
 						if(message.type == 'message' && message.channel.indexOf("C") == 0) {

@@ -83,7 +83,7 @@ module.exports = function(app, io, slack, models) {
 						}
 						
 						// No channel or signature, or invalid signature/channel, get the next channel
-						var chname = application.room_prefix + application.room_count;
+						var chname = application.room_prefix + application.room_count; 
 						application.increment('room_count').success(function() {
 							console.log(chname);
 							return callback(null, chname);

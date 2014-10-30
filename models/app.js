@@ -11,8 +11,12 @@ module.exports = function(sequelize, DataTypes) {
     active: DataTypes.BOOLEAN,
     online: DataTypes.BOOLEAN,
     slack_api_token: DataTypes.STRING,
-    slack_invite_user: DataTypes.STRING
+    slack_invite_user: DataTypes.STRING,
   }, {
+    updatedAt: 'updated_at',
+    createdAt: 'created_at',
+    deletedAt: 'deleted_at',
+    tableName: 'apps',
     classMethods: {
       associate: function(models) {
         // associations can be defined here

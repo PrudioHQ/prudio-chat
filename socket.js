@@ -119,7 +119,7 @@ module.exports = function(app, io, slack, models)
 				bot.on('error', function(err) {
 					// Let the user know about the error?
 					clientSocket.emit('serverMessage', {
-						message: '<i>error connecting to support.</i>'
+						message: 'Error connecting to support.'
 					});
 				});
 		
@@ -127,7 +127,7 @@ module.exports = function(app, io, slack, models)
 				bot.on('disconnect', function(e) {
 					// Let the user know about the error?
 					clientSocket.emit('serverMessage', {
-						message: '<i>support is now offline.</i>'
+						message: 'Support is offline.'
 					});
 
 				});

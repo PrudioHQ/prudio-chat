@@ -12,6 +12,8 @@ module.exports = function(sequelize, DataTypes) {
     online: DataTypes.BOOLEAN,
     slack_api_token: DataTypes.STRING,
     slack_invite_user: DataTypes.STRING,
+    room_prefix: DataTypes.STRING,
+    room_count: DataTypes.INTEGER
   }, {
     updatedAt: 'updated_at',
     createdAt: 'created_at',

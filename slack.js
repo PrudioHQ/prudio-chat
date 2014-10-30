@@ -104,8 +104,13 @@ var self = module.exports = {
 
 					// Socket Listner
 					Bots[appid].websocket.addListener('open', function () {
+						console.log(appid + " is now open");
+					});
+
+					Bots[appid].addListener('hello', function () {
+						console.log(appid + " said hello");
 						Bots[appid].isConnected = true;
-						console.log(appid + " is online");
+						self.say(appid, self.getChannelCode(appid, "general"), "I'm online!");
 					});
 
 					Bots[appid].websocket.addListener('close', function () {
@@ -120,8 +125,8 @@ var self = module.exports = {
 
 						// Gambiarra
 						Bots[appid].msgCount++
-						// Ignore first 2 messages: hello and last message
-						if(Bots[appid].msgCount <= 2) return;
+						// Ignore the 2 message (last message)
+						if(Bots[appid].msgCount == 2) return;
 
 						if(message.type == 'message' && message.channel.indexOf("C") == 0) {
 
@@ -143,10 +148,6 @@ var self = module.exports = {
 							console.log("Undefined message %j", message);
 
 						}
-					});
-
-					Bots[appid].addListener('hello', function () {
-						console.log(appid + " said hello");
 					});
 
 					Bots[appid].addListener('error', function (e) {
@@ -220,6 +221,7 @@ var self = module.exports = {
 		}
 
 		if(Bots[appid].isConnected == true) {
+			self.say(appid, self.getChannelCode(appid, "general"), "I'm going offline!");
 			Bots[appid].websocket.close();
 		}
 		

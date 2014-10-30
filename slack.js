@@ -128,17 +128,23 @@ var self = module.exports = {
 						// Ignore the 2 message (last message)
 						if(Bots[appid].msgCount == 2) return;
 
-						if(message.type == 'message' && message.channel.indexOf("C") == 0) {
+						if(message.type == 'message' && message.channel.indexOf("C") == 0 && typeof message.subtype === 'undefined') {
 
 							console.log("Channel message %j", message);
 							Bots[appid].emit('message', message);
+						
+						} else if(message.type == 'message' && message.channel.indexOf("C") == 0 && message.subtype === 'file_share') {
+
+							console.log("File shared %j", message);
+							var shared_message = {text: "Shared a file: " + message.file.url , channel: message.channel}
+							Bots[appid].emit('message', shared_message);
 						
 						} else if(message.type == 'message' && message.channel.indexOf("D") == 0) {
 						
 							console.log("Direct message %j", message);
 							Bots[appid].emit('direct_message', message);
 						
-						} else if(typeof message.type !== 'undefined') {
+						} else if(typeof message.type !== 'undefined' && message.type !== 'message') {
 						
 							console.log("Other message %s %j", message.type, message);
 							Bots[appid].emit(message.type, message);

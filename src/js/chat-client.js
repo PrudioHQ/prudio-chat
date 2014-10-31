@@ -456,6 +456,9 @@ function main() {
 
         $.checkUserInfo = function(settings) {
 
+            console.log(settings);
+
+
             // No name 
             if(typeof settings.name === 'undefined') {
                 // Ask
@@ -474,6 +477,8 @@ function main() {
                         $(this).val('').unbind('keypress');
 
                         $('<li class="self"></li>').text(settings.name).appendTo($('#prudio-window ul'));
+
+                        console.log(settings);
 
                         return $.checkUserInfo(settings);
                     }
@@ -623,6 +628,8 @@ function main() {
             if(open === false) {
 
                 var settings  = $.getSettings();
+
+                console.log(settings);
 
                 var domContent = [
                     '<nav class="prudio-window prudio-window-vertical prudio-window-right" id="prudio-window">',

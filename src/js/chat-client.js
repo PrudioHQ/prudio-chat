@@ -4,6 +4,7 @@
 var jQuery
 
 var baseURL = "http://chat.prud.io"; 
+var ENTER_KEY_CODE = 13;
 
 if(window.location.hostname == "localhost")
     baseURL = "http://localhost:8888";
@@ -57,7 +58,10 @@ function main() {
 
         $.findJS = function() {
             var elems = document.getElementsByTagName('script');
-            var re = /.*chat\.js/;
+            var re = /chat\.prud\.io/;
+
+            if(window.location.hostname == "localhost")
+                re = "client\.js";
 
             for(var i = 0; i < elems.length; i++) {
                 if(elems[i].src.match(re))
@@ -77,9 +81,9 @@ function main() {
                 settings[p] = $.urlParam(p, el.src);
             }
 
-            if (typeof window._SCSettings != 'undefined') {
-                for (var attrname in window._SCSettings) {
-                    settings[attrname] = window._SCSettings[attrname];
+            if (typeof window._PrudioSettings != 'undefined') {
+                for (var attrname in window._PrudioSettings) {
+                    settings[attrname] = window._PrudioSettings[attrname];
                 }
             }
 
@@ -97,7 +101,7 @@ function main() {
         }
 
         $.scrollChat = function(to) {
-            $(to).animate({
+            $(to).stop().animate({
                 scrollTop: $(to).prop("scrollHeight")
             }, 'slow');
         }
@@ -442,6 +446,163 @@ function main() {
             $('#prudio-notification').html('<audio autoplay="autoplay"><source src="' + filename + '.mp3" type="audio/mpeg" /><source src="' + filename + '.ogg" type="audio/ogg" /><embed hidden="true" autostart="true" loop="false" src="' + filename +'.mp3" /></audio>');
         }
 
+        $.continueProgram = function(settings) {
+
+            $('#prudio-window input').attr('type', 'text').attr('placeholder', 'Just write...').blur();
+            $.openSocket(settings);
+
+        }
+
+
+        $.checkUserInfo = function(settings) {
+
+            // No name 
+            if(typeof settings.name === 'undefined') {
+                // Ask
+                $('<li class="other"></li>').text("Please provide your name:").appendTo($('#prudio-window ul'));
+
+                $('#prudio-window input').prop('placeholder', 'Your name').blur();
+
+                // Capture
+                $('#prudio-window input').bind('keypress', function(e) {
+                    if (e.keyCode == ENTER_KEY_CODE && $(this).val() != "") {
+                        var message = $(this).val();
+
+                        console.log("ENTER name");
+                        settings.name = message;
+
+                        $(this).val('').unbind('keypress');
+
+                        $('<li class="self"></li>').text(settings.name).appendTo($('#prudio-window ul'));
+
+                        return $.checkUserInfo(settings);
+                    }
+                });
+            }
+
+            // No e-mail
+            else if(typeof settings.email === 'undefined') {
+                // Ask
+                $('<li class="other"></li>').text("Please provide your e-mail:").appendTo($('#prudio-window ul'));
+
+                $('#prudio-window input').prop('placeholder', "Your e-mail").prop('type','email').blur();
+
+                // Capture
+                $('#prudio-window input').bind('keypress', function(e) {
+                    if (e.keyCode == ENTER_KEY_CODE && $(this).val() != "") {
+                        var message = $(this).val();
+ 
+                        console.log("ENTER email");
+                        settings.email = message;
+
+                        $(this).val('').prop('type', 'text').unbind('keypress');
+
+                        $('<li class="self"></li>').text(settings.email).appendTo($('#prudio-window ul'));
+
+                        return $.checkUserInfo(settings);
+                    }
+                });
+            } else {
+                return $.continueProgram(settings);
+            }
+        }
+
+        $.openSocket = function(settings) {
+
+            // If they exist.
+            var channel   = $.getCookie('prudio-channel');
+            var signature = $.getCookie('prudio-signature');
+            var userInfo  = $.getUserSystemInfo();
+
+            $('<li class="server"></li>').text("Connecting to the server").appendTo($('#prudio-window ul'));
+
+            $.ajax({
+                url: baseURL + "/chat/create",
+                method: 'POST',
+                data: {
+                    token:     settings.token,
+                    channel:   channel,
+                    signature: signature,
+                    settings:  JSON.stringify(settings),
+                    userInfo:  JSON.stringify(userInfo)
+                },
+                error : function(xhr, ajaxOptions, thrownError){
+
+                    $('<li class="error"></li>').text("We got a problem connecting to the server!").appendTo($('#prudio-window ul'));
+
+                    console.log(xhr);
+                    console.log(ajaxOptions);
+                    console.log(thrownError);
+                },
+                success: function(data) {
+
+                    console.log(data);
+
+                    // Save connection to cookies
+                    $.setCookie('prudio-channel',   data.channel);
+                    $.setCookie('prudio-signature', data.signature);
+
+                    var socket = io.connect(baseURL + '/chat');
+
+                    $('#prudio-window input').bind('keypress', function(e){
+                        // if enter key
+                        if (e.keyCode == ENTER_KEY_CODE && $(this).val() != "") {
+                            var message = $(this).val();
+                            
+                            socket.emit('sendMessage', {
+                                message: message,
+                            });
+                            
+                            console.log("SEND: " + message);
+                            $('<li class="self"></li>').text(message).appendTo($('#prudio-window ul'));
+
+                            $.scrollChat('#prudio-window div.messages');
+
+                            $(this).val(''); // clear message field after sending
+                        }
+                    });
+
+                    socket.on('connect', function(){
+                        console.log("Connected to " + data.channel);
+                        socket.emit('joinRoom', settings.token, data.channel, data.signature);
+                    });
+
+                    // On Slack message
+                    socket.on('message', function (data) {
+                        if(data.sender == "Other") {
+                            $('#prudio-window ul li.typing').remove();
+                            $('<li class="other"></li>').html(data.message).appendTo($('#prudio-window ul'));
+                            $.scrollChat('#prudio-window div.messages');
+                            $.titleAlert("New message", { stopOnMouseMove:true, stopOnFocus:true, requireBlur: true});
+                            $.playSound();
+                        }
+                    });
+
+                    socket.on('disconnect', function () {
+                        $('<li class="error"></li>').text("Server is now offline!").appendTo($('#prudio-window ul'));
+                        $.scrollChat('#prudio-window div.messages');
+                        $('#prudio-window input').prop('disabled', true);
+                    });
+
+                    socket.on('serverMessage', function (data) {
+                        $('<li class="server"></li>').text(data.message).appendTo($('#prudio-window ul'));
+                        $.scrollChat('#prudio-window div.messages');
+                        $('#prudio-window input').prop('disabled', false);
+                    });
+
+                    socket.on('typingMessage', function (data) {
+                        $('#prudio-window ul li.typing').remove();
+                        $('<li class="typing"></li>').text('User is typing...').appendTo($('#prudio-window ul')).show().delay(5000).fadeOut();
+                        $.scrollChat('#prudio-window div.messages');
+                    });
+                }
+            });
+        }
+
+
+
+
+
         $.loadCSS(baseURL + "/client.css");
         $.loadJS( baseURL + "/socket.io/socket.io.js");
 
@@ -461,132 +622,33 @@ function main() {
 
             if(open === false) {
 
-                var messageField = document.getElementById('messageField');
-                var content = document.getElementById('conversation');
-                var ENTER_KEY_CODE = 13;
-
-                // If they exist.
-                var channel   = $.getCookie('prudio-channel');
-                var signature = $.getCookie('prudio-signature');
-                var userInfo  = $.getUserSystemInfo();
                 var settings  = $.getSettings();
 
+                var domContent = [
+                    '<nav class="prudio-window prudio-window-vertical prudio-window-right" id="prudio-window">',
+                    '       <h3>' + (settings.title || 'Support') + ' <span class="close" title="Close">&times</span></h3>',
+                    '       <div class="messages">',
+                    '           <ul>',
+                    '           </ul>',
+                    '           <div class="reply-container">',
+                    '              <div class="reply">',
+                    '                  <input type="text" name="message" placeholder="Just write..." autofocus="autofocus">',
+                    '              </div>',
+                    '           </div>',
+                    '       </div>',
+                    '   </nav>',
+                    ].join('');
 
-                $.ajax({
-                    url: baseURL + "/chat/create",
-                    method: 'POST',
-                    data: {
-                        token:     settings.token,
-                        channel:   channel,
-                        signature: signature,
-                        settings:  JSON.stringify(settings),
-                        userInfo:  JSON.stringify(userInfo)
-                    },
-                    error : function(xhr, ajaxOptions, thrownError){
-                        var domContent = [
-                            '<nav class="prudio-window prudio-window-vertical prudio-window-right" id="prudio-window">',
-                            '       <h3>Chat <span class="close" title="Close">&times</span></h3>',
-                            '       <div class="messages">',
-                            '           <ul>',
-                            '               <li class="server">Sorry, support is currently offline.</li>',
-                            '           </ul>',
-                            '       </div>',
-                            '   </nav>',
-                            ].join('');
+                $('body').append(domContent);
 
-                        $('body').append(domContent);
+                $('#prudio-window').toggleClass('prudio-window-open');
 
-                        $('#prudio-window').toggleClass('prudio-window-open');
+                settings = $.checkUserInfo(settings);
 
-                        console.log(xhr);
-                        console.log(ajaxOptions);
-                        console.log(thrownError);
-                    },
-                    success: function(data) {
+                console.log("cont");
 
-                        console.log(data);
+                
 
-                        // Save connection to cookies
-                        $.setCookie('prudio-channel',   data.channel);
-                        $.setCookie('prudio-signature', data.signature);
-
-                        var socket = io.connect(baseURL + '/chat');
-
-                        var domContent = [
-                            '<nav class="prudio-window prudio-window-vertical prudio-window-right" id="prudio-window">',
-                            '       <h3>Chat <span class="close" title="Close">&times</span></h3>',
-                            '       <div class="messages">',
-                            '           <ul>',
-                            '           </ul>',
-                            '           <div class="reply-container">',
-                            '              <div class="reply">',
-                            '                  <input type="text" name="message" placeholder="Just write..." autofocus="autofocus">',
-                            '              </div>',
-                            '           </div>',
-                            '       </div>',
-                            '   </nav>',
-                            ].join('');
-
-                        $('body').append(domContent);
-
-                        $('#prudio-window').toggleClass('prudio-window-open');
-                        
-
-                        $.scrollChat('#prudio-window div.messages');
-
-                        $('#prudio-window input').bind('keypress', function(e){
-                            // if enter key
-                            if (e.keyCode == ENTER_KEY_CODE && $(this).val() != "") {
-                                var message = $(this).val();
-                                
-                                socket.emit('sendMessage', {
-                                    message: message,
-                                });
-                                
-                                console.log("SEND: " + message);
-                                $('<li class="self"></li>').text(message).appendTo($('#prudio-window ul'));
-
-                                $.scrollChat('#prudio-window div.messages');
-
-                                $(this).val(''); // clear message field after sending
-                            }
-                        });
-
-                        socket.on('connect', function(){
-                            console.log("Connected to " + data.channel);
-                            socket.emit('joinRoom', settings.token, data.channel, data.signature);
-                        });
-
-                        // On Slack message
-                        socket.on('message', function (data) {
-                            if(data.sender == "Other") {
-                                $('#prudio-window ul li.typing').remove();
-                                $('<li class="other"></li>').html(data.message).appendTo($('#prudio-window ul'));
-                                $.scrollChat('#prudio-window div.messages');
-                                $.titleAlert("New message", { stopOnMouseMove:true, stopOnFocus:true, requireBlur: true});
-                                $.playSound();
-                            }
-                        });
-
-                        socket.on('disconnect', function () {
-                            $('<li class="error"></li>').text("Server is now offline!").appendTo($('#prudio-window ul'));
-                            $.scrollChat('#prudio-window div.messages');
-                            $('#prudio-window input').prop('disabled', true);
-                        });
-
-                        socket.on('serverMessage', function (data) {
-                            $('<li class="server"></li>').text(data.message).appendTo($('#prudio-window ul'));
-                            $.scrollChat('#prudio-window div.messages');
-                            $('#prudio-window input').prop('disabled', false);
-                        });
-
-                        socket.on('typingMessage', function (data) {
-                            $('#prudio-window ul li.typing').remove();
-                            $('<li class="typing"></li>').text('User is typing...').appendTo($('#prudio-window ul')).show().delay(5000).fadeOut();
-                            $.scrollChat('#prudio-window div.messages');
-                        });
-                    }
-                });
             }
 
             open = true;

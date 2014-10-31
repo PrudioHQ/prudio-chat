@@ -1,7 +1,5 @@
 var async   = require('async');
 var request = require('request'); // github.com/mikeal/request
-var passport = require('passport');
-var SlackStrategy = require('passport-slack').Strategy;
 
 module.exports = function(app, io, slack, models) {
 
@@ -60,6 +58,7 @@ module.exports = function(app, io, slack, models) {
 		var channel          = req.param('channel');
 		var channelSignature = req.param('signature');
 		var userInfo         = req.param('userInfo');
+		var settings         = req.param('settings');
 
 		models.app.find({ where: { token: token, active: true } }).success(function(application) {
 	
@@ -118,9 +117,11 @@ module.exports = function(app, io, slack, models) {
 
 					// Set purpose of channel
 					function(channel, new_channel, callback) {
-						var info = JSON.parse(userInfo);
+						var info     = JSON.parse(userInfo);
+						var personal = JSON.parse(settings);
 
-						var topic = "Help this user!" +
+						var topic = "Help!" +
+						"\nName: " + personal.name + " (" + personal.email + ")" +
 						"\nURL: " + info.url + " (" + req.ip + ")" +
 						"\nBrowser: " + info.browser + " - " + info.browserVersion + 
 						"\nOS: " + info.os + " - " + info.osVersion +

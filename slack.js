@@ -110,7 +110,7 @@ var self = module.exports = {
 					Bots[appid].addListener('hello', function () {
 						console.log(appid + " said hello");
 						Bots[appid].isConnected = true;
-						self.say(appid, self.getChannelCode(appid, "general"), "I'm online!");
+						//self.say(appid, self.getChannelCode(appid, "general"), "I'm online!");
 					});
 
 					Bots[appid].websocket.addListener('close', function () {

@@ -58,7 +58,7 @@ function main() {
 
         $.findJS = function() {
             var elems = document.getElementsByTagName('script');
-            var re = /chat\.prud\.io/;
+            var re = /chat\.prud\.io\/client/;
 
             if(window.location.hostname == "localhost")
                 re = "client\.js";

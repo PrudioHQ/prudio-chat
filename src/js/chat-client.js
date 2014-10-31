@@ -442,7 +442,7 @@ function main() {
             $('#prudio-notification').html('<audio autoplay="autoplay"><source src="' + filename + '.mp3" type="audio/mpeg" /><source src="' + filename + '.ogg" type="audio/ogg" /><embed hidden="true" autostart="true" loop="false" src="' + filename +'.mp3" /></audio>');
         }
 
-        $.loadCSS(baseURL + "/chat.css");
+        $.loadCSS(baseURL + "/client.css");
         $.loadJS( baseURL + "/socket.io/socket.io.js");
 
         $.createButton();

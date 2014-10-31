@@ -1,6 +1,7 @@
 {
-  "name": "slack-chat",
+  "name": "Prudio",
   "version": "0.0.3",
+  "exportName": "chat",
   "description": "Slack Instant Messaging Widget",
   "engines": {
     "node": "0.10.x"

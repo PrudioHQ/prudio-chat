@@ -87,25 +87,6 @@ module.exports = function(app, io, slack, models)
 							message: message.text,
 							sender: 'Other'
 						});
-
-				    // If the message is not from the bot
-				    /*
-				    if(from !== application.slack_xmpp_user) {
-				    	if(message.indexOf("!") == 0 && message.length > 1) {
-							console.log('Command message: ' + message);	
-
-							clientSocket.emit('message', {
-								message: "Hi, how may I help you?",
-								sender: 'Other'
-							});						
-						} else {
-							clientSocket.emit('message', {
-								message: message,
-								sender: 'Other'
-							});
-						}
-					}
-					*/
 				});
 
 				bot.on('user_typing', function (message) {

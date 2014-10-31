@@ -57,14 +57,14 @@ function main() {
 
         $.findJS = function() {
             var elems = document.getElementsByTagName('script');
-            var re = /.*slack-chat\.js/;
+            var re = /.*chat\.js/;
 
             for(var i = 0; i < elems.length; i++) {
                 if(elems[i].src.match(re))
                     return elems[i];
             }
 
-            throw "Could not find the script from Oghma.";
+            throw "Could not find the script from Prudio.";
         }
 
         $.getSettings = function() {
@@ -138,9 +138,9 @@ function main() {
         /**
         * Gets the UUID for this user. If doesn't exist, creates a new UUID.
         */
-
+        /*
         $.getUUID = function() {
-            var cookieName = "oghma-uuid";
+            var cookieName = "prudio-uuid";
             if($.getCookie(cookieName) === null) {
                 // Does not exists; Lets create a UUID for this user
                 $.loadJS(baseURL + "/js/uuid.js");
@@ -151,6 +151,7 @@ function main() {
             }
             return $.getCookie(cookieName);            
         }
+        */
 
         /**
         * Get User Info
@@ -441,7 +442,7 @@ function main() {
             $('#prudio-notification').html('<audio autoplay="autoplay"><source src="' + filename + '.mp3" type="audio/mpeg" /><source src="' + filename + '.ogg" type="audio/ogg" /><embed hidden="true" autostart="true" loop="false" src="' + filename +'.mp3" /></audio>');
         }
 
-        $.loadCSS(baseURL + "/slack-chat.css");
+        $.loadCSS(baseURL + "/chat.css");
         $.loadJS( baseURL + "/socket.io/socket.io.js");
 
         $.createButton();
@@ -465,8 +466,8 @@ function main() {
                 var ENTER_KEY_CODE = 13;
 
                 // If they exist.
-                var channel   = $.getCookie('oghma-channel');
-                var signature = $.getCookie('oghma-signature');
+                var channel   = $.getCookie('prudio-channel');
+                var signature = $.getCookie('prudio-signature');
                 var userInfo  = $.getUserSystemInfo();
                 var settings  = $.getSettings();
 
@@ -506,8 +507,8 @@ function main() {
                         console.log(data);
 
                         // Save connection to cookies
-                        $.setCookie('oghma-channel',   data.channel);
-                        $.setCookie('oghma-signature', data.signature);
+                        $.setCookie('prudio-channel',   data.channel);
+                        $.setCookie('prudio-signature', data.signature);
 
                         var socket = io.connect(baseURL + '/chat');
 
@@ -560,7 +561,7 @@ function main() {
                         socket.on('message', function (data) {
                             if(data.sender == "Other") {
                                 $('#prudio-window ul li.typing').remove();
-                                $('<li class="other"></li>').text(data.message).appendTo($('#prudio-window ul'));
+                                $('<li class="other"></li>').html(data.message).appendTo($('#prudio-window ul'));
                                 $.scrollChat('#prudio-window div.messages');
                                 $.titleAlert("New message", { stopOnMouseMove:true, stopOnFocus:true, requireBlur: true});
                                 $.playSound();

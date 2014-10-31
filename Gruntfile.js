@@ -8,8 +8,8 @@ module.exports = function(grunt) {
         banner: '/*! JS <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
       },
       build: {
-        src:  'src/js/oghma-chat.js',
-        dest: 'build/<%= pkg.name %>.js'
+        src:  'src/js/chat-client.js',
+        dest: 'build/<%= pkg.exportName %>.js'
       }
     },
     cssmin: {
@@ -18,7 +18,7 @@ module.exports = function(grunt) {
         banner: '/*! CSS <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
         },
         files: {
-          'build/<%= pkg.name %>.css': ['src/css/*.css']
+          'build/<%= pkg.exportName %>.css': ['src/css/*.css']
         }
       }
     },

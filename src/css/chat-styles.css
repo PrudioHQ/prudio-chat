@@ -11,7 +11,7 @@
     box-shadow: 0 0 6px #666;
     color: white;
     z-index: 9999;
-    content: 'i'
+    content: 'i';
 }
 
 /* General styles for all menus */

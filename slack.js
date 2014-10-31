@@ -216,6 +216,8 @@ var self = module.exports = {
 
 		Bots[appid].websocket.send(JSON.stringify(data), function(error) {
 			console.log("Error sending data to socket!");
+			console.log(error);
+			console.log(data);
 		});
 	},
 

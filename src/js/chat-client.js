@@ -448,7 +448,7 @@ function main() {
 
         $.continueProgram = function(settings) {
 
-            $('#prudio-window input').attr('type', 'text').attr('placeholder', 'Just write...').blur();
+            $('#prudio-window input').attr('type', 'text').attr('placeholder', 'Just write...').blur().focus();
             $.openSocket(settings);
 
         }
@@ -461,7 +461,7 @@ function main() {
                 // Ask
                 $('<li class="other"></li>').text("Please provide your name:").appendTo($('#prudio-window ul'));
 
-                $('#prudio-window input').prop('placeholder', 'Your name').blur();
+                $('#prudio-window input').prop('placeholder', 'Your name').blur().focus();
 
                 // Capture
                 $('#prudio-window input').bind('keypress', function(e) {
@@ -485,7 +485,7 @@ function main() {
                 // Ask
                 $('<li class="other"></li>').text("Please provide your e-mail:").appendTo($('#prudio-window ul'));
 
-                $('#prudio-window input').prop('placeholder', "Your e-mail").prop('type','email').blur();
+                $('#prudio-window input').prop('placeholder', "Your e-mail").prop('type','email').blur().focus();
 
                 // Capture
                 $('#prudio-window input').bind('keypress', function(e) {
@@ -643,12 +643,7 @@ function main() {
 
                 $('#prudio-window').toggleClass('prudio-window-open');
 
-                settings = $.checkUserInfo(settings);
-
-                console.log("cont");
-
-                
-
+                $.checkUserInfo(settings);
             }
 
             open = true;

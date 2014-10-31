@@ -73,9 +73,9 @@ app.use(cors());
 app.use('/',                 express.static(__dirname + '/build'));
 app.use('/notification.mp3', express.static(__dirname + '/src/sound/notification.mp3'));
 app.use('/notification.ogg', express.static(__dirname + '/src/sound/notification.ogg'));
+app.use('/favicon.ico', express.static(__dirname + '/src/img/favicon.ico'));
 
 if ('development' === app.get('env')) {
-
   // HTML client
   app.use('/client-html',  express.static(__dirname + '/client-html'));
 }

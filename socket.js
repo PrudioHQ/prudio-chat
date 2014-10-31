@@ -98,6 +98,7 @@ module.exports = function(app, io, slack, models)
 
 				// Error handler
 				bot.on('error', function(err) {
+					console.log("Error message: %j", err);
 					// Let the user know about the error?
 					clientSocket.emit('serverMessage', {
 						message: 'Error connecting to support.'

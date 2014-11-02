@@ -607,6 +607,7 @@ function main() {
         }
 
         $.loadCSS(baseURL + "/client.css");
+        $.loadJS(baseURL + "/socket.io/socket.io.js");
 
         var settings  = $.getSettings();
 
@@ -623,8 +624,6 @@ function main() {
 
             $('#prudio-window').toggleClass('prudio-window-open');
             $('#prudio-button').fadeOut('fast');
-
-            $.loadJS(baseURL + "/socket.io/socket.io.js");
 
             if(open === false) {
 

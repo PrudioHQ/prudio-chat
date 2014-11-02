@@ -25,7 +25,6 @@ module.exports = function(app, io, slack, models)
 				var crypto      = require('crypto');
 				var signature   = crypto.createHmac('sha1', application.slack_api_token).update(channel).digest('hex');
 				var appid       = application.id;
-				var channelCode = slack.getChannelCode(appid, channel);
 
 				if(signature != client_signature) {
 					console.log('Wrong channel signature.');
@@ -73,7 +72,7 @@ module.exports = function(app, io, slack, models)
 					});
 
 					// send response to slack
-					slack.say(appid, channelCode, text.message);
+					slack.say(appid, channel, text.message);
 				});
 
 				console.log("Type: " + typeof bot);
@@ -82,7 +81,7 @@ module.exports = function(app, io, slack, models)
 				bot.on('message', function (message) {
 				    console.log('Message from the socket: %j', message);
 
-				    if(message.channel == bot.channels["#" + channel])
+				    if(message.channel == channel)
 				    	clientSocket.emit('message', {
 							message: message.text,
 							sender: 'Other'
@@ -92,7 +91,7 @@ module.exports = function(app, io, slack, models)
 				bot.on('user_typing', function (message) {
 				    console.log('User typing from the socket: %j', message);
 
-				    if(message.channel == bot.channels["#" + channel])
+				    if(message.channel == channel)
 				    	clientSocket.emit('typingMessage');
 				});
 
@@ -116,7 +115,7 @@ module.exports = function(app, io, slack, models)
 
 				// Socket disconnect listener, notify Slack that user left the chat
 				clientSocket.on('disconnect', function() {
-					slack.say(appid, channelCode, "_User disconnected!_");
+					slack.say(appid, channel, "_User disconnected!_");
 				});
 
 			}); 

@@ -7,7 +7,7 @@
     position: fixed;
     bottom: 15px;
     right: 15px;
-    cursor: hand;
+    cursor: pointer;
     box-shadow: 0 0 6px #666;
     color: white;
     z-index: 9999;

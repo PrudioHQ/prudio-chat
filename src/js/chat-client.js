@@ -458,7 +458,6 @@ function main() {
 
             console.log(settings);
 
-
             // No name 
             if(typeof settings.name === 'undefined') {
                 // Ask
@@ -515,9 +514,10 @@ function main() {
         $.openSocket = function(settings) {
 
             // If they exist.
-            var channel   = $.getCookie('prudio-channel');
-            var signature = $.getCookie('prudio-signature');
-            var userInfo  = $.getUserSystemInfo();
+            var channel     = $.getCookie('prudio-channel');
+            var channelName = $.getCookie('prudio-channel-name');
+            var signature   = $.getCookie('prudio-signature');
+            var userInfo    = $.getUserSystemInfo();
 
             $('<li class="server"></li>').text("Connecting to the server").appendTo($('#prudio-window ul'));
 
@@ -525,11 +525,12 @@ function main() {
                 url: baseURL + "/chat/create",
                 method: 'POST',
                 data: {
-                    token:     settings.token,
-                    channel:   channel,
-                    signature: signature,
-                    settings:  JSON.stringify(settings),
-                    userInfo:  JSON.stringify(userInfo)
+                    token:       settings.token,
+                    channel:     channel,
+                    channelName: channelName,
+                    signature:   signature,
+                    settings:    JSON.stringify(settings),
+                    userInfo:    JSON.stringify(userInfo)
                 },
                 error : function(xhr, ajaxOptions, thrownError){
 
@@ -544,8 +545,9 @@ function main() {
                     console.log(data);
 
                     // Save connection to cookies
-                    $.setCookie('prudio-channel',   data.channel);
-                    $.setCookie('prudio-signature', data.signature);
+                    $.setCookie('prudio-channel',      data.channel);
+                    $.setCookie('prudio-channel-name', data.channelName);
+                    $.setCookie('prudio-signature',    data.signature);
 
                     var socket = io.connect(baseURL + '/chat');
 
@@ -645,7 +647,12 @@ function main() {
 
                 $('#prudio-window').toggleClass('prudio-window-open');
 
-                $.checkUserInfo(settings);
+                var hasSignature = $.getCookie('prudio-signature');
+
+                if(hasSignature == null)
+                    $.checkUserInfo(settings);
+                else 
+                    $.continueProgram(settings);
             }
 
             open = true;

@@ -55,7 +55,8 @@ module.exports = function(app, io, slack, models) {
 		var crypto = require('crypto');
 
 		var token            = req.param('token');
-		var channel          = req.param('channel');
+		var channelId        = req.param('channel');
+		var channelName      = req.param('channelName');
 		var channelSignature = req.param('signature');
 		var userInfo         = req.param('userInfo');
 		var settings         = req.param('settings');
@@ -70,49 +71,56 @@ module.exports = function(app, io, slack, models) {
 					function(callback) {
 
 						// Verify if the user already has previous support (from cookies)
-						if(channel != null && channelSignature != null)
+						if(channelId != null && channelSignature != null)
 						{
 							// Returning user with cookie
-							var verify = crypto.createHmac('sha1', application.slack_api_token).update(channel).digest('hex');
+							var verify = crypto.createHmac('sha1', application.slack_api_token).update(channelId).digest('hex');
 							
 							// Verify signature else it will create a new one!
 							if(verify == channelSignature)
-								return callback(null, channel);
+								return callback(null, channelName, channelId);
 						}
 						
 						// No channel or signature, or invalid signature/channel, get the next channel
 						application.increment('room_count').success(function() {
-							var chname = application.room_prefix + application.room_count; 
-							return callback(null, chname);
+							var channelName = application.room_prefix + application.room_count; 
+							return callback(null, channelName, null);
 						});
 
 						
 					},
 
 					// Create channel
-					function(channel, callback) {
+					function(channelName, channelId, callback) {
 
-						request.post(app.get('slack_api_url') + '/channels.join', { json: true, form: { token: application.slack_api_token, name: channel }}, function (error, response, body) {
-							if (!error && response.statusCode == 200 && typeof body.channel !== "undefined") {
-								return callback(null, channel, body.channel.id);
-							}
-							return callback('Create Channel');
-						});
-
+						if(channelId != null) {
+							return callback(null, channelName, channelId, true)
+						} else {
+							request.post(app.get('slack_api_url') + '/channels.join', { json: true, form: { token: application.slack_api_token, name: channelName }}, function (error, response, body) {
+								if (!error && response.statusCode == 200 && typeof body.channel !== "undefined") {
+									return callback(null, channelName, body.channel.id, false);
+								}
+								return callback('Create Channel');
+							});
+						}
 					},
 
 					// Invite user to channel
-					function(channel, channelId, callback) {
+					function(channelName, channelId, returning, callback) {
 						request.post(app.get('slack_api_url') + '/channels.invite', { json: true, form: { token: application.slack_api_token, channel: channelId, user: application.slack_invite_user }}, function (error, response, body) {
 							if (!error && response.statusCode == 200) {
-								return callback(null, channel, channelId);
+								return callback(null, channelName, channelId, returning);
 							}
 							return callback('Invite user to channel');
 						});
 					},
 
 					// Set purpose of channel
-					function(channel, channelId, callback) {
+					function(channelName, channelId, returning, callback) {
+
+						if(returning)
+							return callback(null, channelName, channelId);
+
 						var info     = JSON.parse(userInfo);
 						var personal = JSON.parse(settings);
 
@@ -125,14 +133,14 @@ module.exports = function(app, io, slack, models) {
 
 						request.post(app.get('slack_api_url') + '/channels.setPurpose', { json: true, form: { token: application.slack_api_token, channel: channelId, purpose: topic }}, function (error, response, body) {
 							if (!error && response.statusCode == 200) {
-								return callback(null, channel, channelId);
+								return callback(null, channelName, channelId);
 							}
 							return callback('Set purpose of channel');
 						});
 					},
 
 				],
-				function(err, channel, channelId) {
+				function(err, channelName, channelId) {
 					if(err) {
 						console.log(err);
 						return res.status(404).json({ error: "Error: " + err});
@@ -140,7 +148,7 @@ module.exports = function(app, io, slack, models) {
 
 					var signature = crypto.createHmac('sha1', application.slack_api_token).update(channelId).digest('hex');
 
-					return res.status(200).json({ success: true, channel: channelId, signature: signature });
+					return res.status(200).json({ success: true, channel: channelId, channelName: channelName, signature: signature });
 				}
 			);
 		});

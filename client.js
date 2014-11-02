@@ -10,17 +10,17 @@ module.exports = function(app, io, slack, models) {
 		var token = req.param('token');
 
 		if(token == null)
-			return res.status(401).json({ success: false, message: "Unauthorized" }).send();
+			return res.status(401).json({ success: false, message: "Unauthorized" });
 
 		models.app.find({ where: { token: token } }).success(function(app) {
 			if(app == null)
-				return res.status(401).json({ success: false, message: "Unauthorized" }).send();
+				return res.status(401).json({ success: false, message: "Unauthorized" });
 
 			if(app.online == false)
-				return res.status(503).json({ success: false, message: "Support offline" }).send();
+				return res.status(503).json({ success: false, message: "Support offline" });
 
 			if(app.active == false)
-				return res.status(404).json({ success: false, message: "Application offline" }).send();
+				return res.status(404).json({ success: false, message: "Application offline" });
 
 			application = app;
 
@@ -29,7 +29,7 @@ module.exports = function(app, io, slack, models) {
 	}
 
 	app.get('/', function(req, res, next) {
-		return res.status(200).json({ success: true, message: "Welcome, nothing here" }).send();
+		return res.status(200).json({ success: true, message: "Welcome, nothing here" });
 	});
 
 	app.post('/app/connect', isAuthorized, function(req, res, next) {
@@ -37,7 +37,7 @@ module.exports = function(app, io, slack, models) {
 		models.app.find({ where: { token: token, active: true } }).success(function(application) {
 			slack.connect(application);
 
-			return res.status(200).json({ success: true, message: "Initializing" }).send();
+			return res.status(200).json({ success: true, message: "Initializing" });
 		});
 	});
 
@@ -46,7 +46,7 @@ module.exports = function(app, io, slack, models) {
 		models.app.find({ where: { token: token, active: true } }).success(function(application) {
 			slack.disconnect(application.id);
 
-			return res.status(200).json({ success: true, message: "Disconnecting" }).send();
+			return res.status(200).json({ success: true, message: "Disconnecting" });
 		});
 	});
 	
@@ -63,8 +63,7 @@ module.exports = function(app, io, slack, models) {
 		models.app.find({ where: { token: token, active: true } }).success(function(application) {
 	
 			if(application == null)
-				return res.status(404).json({ success: false, message: "Not found" }).send();
-
+				return res.status(404).json({ success: false, message: "Not found" });
 
 			async.waterfall(
 				[
@@ -93,11 +92,8 @@ module.exports = function(app, io, slack, models) {
 					// Create channel
 					function(channel, callback) {
 
-						console.log(channel);
-
 						request.post(app.get('slack_api_url') + '/channels.join', { json: true, form: { token: application.slack_api_token, name: channel }}, function (error, response, body) {
 							if (!error && response.statusCode == 200 && typeof body.channel !== "undefined") {
-								console.log('CH ID: ' + body.channel.id);
 								return callback(null, channel, body.channel.id);
 							}
 							return callback('Create Channel');
@@ -106,17 +102,17 @@ module.exports = function(app, io, slack, models) {
 					},
 
 					// Invite user to channel
-					function(channel, new_channel, callback) {
-						request.post(app.get('slack_api_url') + '/channels.invite', { json: true, form: { token: application.slack_api_token, channel: new_channel, user: application.slack_invite_user }}, function (error, response, body) {
+					function(channel, channelId, callback) {
+						request.post(app.get('slack_api_url') + '/channels.invite', { json: true, form: { token: application.slack_api_token, channel: channelId, user: application.slack_invite_user }}, function (error, response, body) {
 							if (!error && response.statusCode == 200) {
-								return callback(null, channel, new_channel);
+								return callback(null, channel, channelId);
 							}
 							return callback('Invite user to channel');
 						});
 					},
 
 					// Set purpose of channel
-					function(channel, new_channel, callback) {
+					function(channel, channelId, callback) {
 						var info     = JSON.parse(userInfo);
 						var personal = JSON.parse(settings);
 
@@ -127,24 +123,24 @@ module.exports = function(app, io, slack, models) {
 						"\nOS: " + info.os + " - " + info.osVersion +
 						"\nMobile: " + info.mobile +" - Screen resolution: " + info.screen;
 
-						request.post(app.get('slack_api_url') + '/channels.setPurpose', { json: true, form: { token: application.slack_api_token, channel: new_channel, purpose: topic }}, function (error, response, body) {
+						request.post(app.get('slack_api_url') + '/channels.setPurpose', { json: true, form: { token: application.slack_api_token, channel: channelId, purpose: topic }}, function (error, response, body) {
 							if (!error && response.statusCode == 200) {
-								return callback(null, channel);
+								return callback(null, channel, channelId);
 							}
 							return callback('Set purpose of channel');
 						});
 					},
 
 				],
-				function(err, channel) {
+				function(err, channel, channelId) {
 					if(err) {
 						console.log(err);
-						return res.status(404).json({ error: "Error: " + err}).end();
+						return res.status(404).json({ error: "Error: " + err});
 					}
 
-					var signature = crypto.createHmac('sha1', application.slack_api_token).update(channel).digest('hex');
+					var signature = crypto.createHmac('sha1', application.slack_api_token).update(channelId).digest('hex');
 
-					return res.status(200).json({ success: true, channel: channel, signature: signature }).end();
+					return res.status(200).json({ success: true, channel: channelId, signature: signature });
 				}
 			);
 		});

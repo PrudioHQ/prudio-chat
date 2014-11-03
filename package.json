@@ -23,6 +23,7 @@
     "grunt-contrib-uglify": "latest",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-express-server": "^0.4.19",
+    "grunt-text-replace": "^0.3.12",
     "hbs": "^2.7.0",
     "moment": "^2.8.3",
     "mysql": "2.5.1",

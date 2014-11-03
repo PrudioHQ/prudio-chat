@@ -33,3 +33,6 @@ bower_components
 
 # Builds from grunt
 build/*
+
+# Webstorm
+.idea

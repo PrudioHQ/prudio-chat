@@ -6,9 +6,6 @@ var jQuery
 var baseURL = "http://chat.prud.io"; 
 var ENTER_KEY_CODE = 13;
 
-if(window.location.hostname == "localhost")
-    baseURL = "http://localhost:8888";
-
 /******** Load jQuery if not present *********/
 if (window.jQuery === undefined || window.jQuery.fn.jquery !== '2.1.1') {
     var script_tag = document.createElement('script');
@@ -59,9 +56,6 @@ function main() {
         $.findJS = function() {
             var elems = document.getElementsByTagName('script');
             var re = /chat\.prud\.io\/client/;
-
-            if(window.location.hostname == "localhost")
-                re = "client\.js";
 
             for(var i = 0; i < elems.length; i++) {
                 if(elems[i].src.match(re))

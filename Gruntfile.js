@@ -22,6 +22,20 @@ module.exports = function(grunt) {
         }
       }
     },
+    replace: {
+      example: {
+        src: ['build/<%= pkg.exportName %>.js'],             // source files array (supports minimatch)
+        dest: 'build/<%= pkg.exportName %>.local.js',             // destination directory or file
+        replacements: [{
+          from: 'http://chat.prud.io',                   // string replacement
+          to: 'http://localhost:8888'
+        },{
+          /// /chat\.prud\.io\/client/
+          from: '/chat\\\.prud\\\.io\\/client/',
+          to: '/client\\\.local/'
+        }]
+      }
+    },
     express: {
         development: {
             options: {
@@ -48,9 +62,11 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-express-server');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-text-replace');
+
 
   // Default task(s).
-  grunt.registerTask('default', ['uglify', 'cssmin']);
+  grunt.registerTask('default', ['uglify', 'replace', 'cssmin']);
 
   grunt.registerTask('server', [ 'express:development', 'watch' ]);
 

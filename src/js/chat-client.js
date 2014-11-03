@@ -1,7 +1,7 @@
 (function() {
 
 // Localize jQuery variable
-var jQuery
+var jQuery;
 
 var baseURL = "http://chat.prud.io:80"; 
 var ENTER_KEY_CODE = 13;
@@ -46,12 +46,12 @@ function main() {
             var results = new RegExp('[?|&|#]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(url);
             if (results == null) return;
             return results[1] || 0;
-        }
+        };
 
         $.loadCSS = function(href) {
             var cssLink = $("<link rel='stylesheet' type='text/css' href='"+href+"'>");
             $("head").append(cssLink);
-        }
+        };
 
         $.findJS = function() {
             var elems = document.getElementsByTagName('script');
@@ -63,7 +63,7 @@ function main() {
             }
 
             throw "Could not find the script from Prudio.";
-        }
+        };
 
         $.getSettings = function() {
             var el = $.findJS();
@@ -82,23 +82,23 @@ function main() {
             }
 
             return settings;
-        }
+        };
 
         $.createButton = function() {
-            var button = $('<div id="prudio-button" style="background-color: ' + (settings.buttonColor || '') + '" title="Chat with us"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" width="30px" height="30px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve" style="margin: 3px auto; display: block; fill: rgba(255, 255, 255, 0.9)"><g><path d="M47.605,77.205c-0.625,1.13-0.474,1.888,0.62,1.888c2.197,0,10.807-4.905,14.729-7.923c1.87,0,3.436,1.389,2.972,3.018   C59.813,80.732,45.883,89.14,33.045,89.14c-4.081,0-7.206-3.514-7.206-5.018c0-1.39,0.623-2.899,1.864-5.404l16.293-31.315   c0.471-1.001,0.471-1.752-0.311-1.752c-2.658,0-11.427,5.28-13.933,7.155c-1.886-0.246-3.139-1.875-2.505-3.015   c8.454-8.293,23.175-14.459,31.47-14.459c3.45,0,7.208,2.764,7.208,5.528c0,1.257-1.102,3.645-2.05,5.542L47.605,77.205z    M65.451,7.798c5.322,0,8.77,2.647,8.77,7.416c0,5.542-4.696,10.188-11.901,10.188c-5.788,0-9.232-3.143-9.232-7.162   C53.087,12.703,58.243,7.798,65.451,7.798z"/></g></svg></div><div id="prudio-notification"></div>');
+            var button = $('<div id="prudio-button" style="background-color: ' + (settings.buttonColor || '') + '" title="Chat with us"><i class="icon-chat-alt"></i></div><div id="prudio-notification"></div>');
             $("body").append(button);
-        }
+        };
 
         $.loadJS = function(href) {
             var jsLink = $("<script src='" + href + "'></script>");
             $("head").append(jsLink);
-        }
+        };
 
         $.scrollChat = function(to) {
             $(to).stop().animate({
                 scrollTop: $(to).prop("scrollHeight")
             }, 'slow');
-        }
+        };
 
         /**
         * Set cookie with name @var cookie with value @var value for @var days period.
@@ -111,7 +111,7 @@ function main() {
 
             // Set Cookie
             document.cookie = cookie + "=" + value + "; expires=" + date.toGMTString() + "; path=/";
-        }
+        };
 
         /**
         * Get a cookie named @var cookie
@@ -131,7 +131,7 @@ function main() {
                 value = unescape(value.substring(start,end));
             }
             return value;
-        }
+        };
 
         /**
         * Gets the UUID for this user. If doesn't exist, creates a new UUID.
@@ -238,11 +238,11 @@ function main() {
             var mobile = /Mobile|mini|Fennec|Android|iP(ad|od|hone)/.test(nVer);
 
             // cookie
-            var cookieEnabled = (navigator.cookieEnabled) ? true : false;
+            var cookieEnabled = !!(navigator.cookieEnabled);
 
             if (typeof navigator.cookieEnabled == 'undefined' && !cookieEnabled) {
                 document.cookie = 'testcookie';
-                cookieEnabled = (document.cookie.indexOf('testcookie') != -1) ? true : false;
+                cookieEnabled = (document.cookie.indexOf('testcookie') != -1);
             }
 
             // system
@@ -306,7 +306,7 @@ function main() {
                 break;
             }
 
-            var info = {
+            return {
                 screen: screenSize,
                 browser: browser,
                 browserVersion: version,
@@ -316,9 +316,7 @@ function main() {
                 cookies: cookieEnabled,
                 url: url
             };
-            
-            return info;
-        }
+        };
 
         /**
         * Flash page title
@@ -351,7 +349,8 @@ function main() {
                 showingAlertTitle = !showingAlertTitle;
                 document.title = (showingAlertTitle ? text : $.titleAlert._initialText);
                 $.titleAlert._intervalToken = setTimeout(switchTitle, (showingAlertTitle ? settings.interval : settings.originalTitleInterval));
-            }
+            };
+
             $.titleAlert._intervalToken = setTimeout(switchTitle, settings.interval);
             
             if (settings.stopOnMouseMove) {
@@ -393,7 +392,7 @@ function main() {
             $.titleAlert._initialText = null;
             $.titleAlert._running = false;
             $.titleAlert._settings = null;
-        }
+        };
 
         $.titleAlert.hasFocus = true;
         $.titleAlert._running = false;
@@ -437,15 +436,18 @@ function main() {
         */
         $.playSound = function() {
             var filename = baseURL + "/notification";
-            $('#prudio-notification').html('<audio autoplay="autoplay"><source src="' + filename + '.mp3" type="audio/mpeg" /><source src="' + filename + '.ogg" type="audio/ogg" /><embed hidden="true" autostart="true" loop="false" src="' + filename +'.mp3" /></audio>');
-        }
+
+            if(!muted) {
+                $('#prudio-notification').html('<audio autoplay="autoplay"><source src="' + filename + '.mp3" type="audio/mpeg" /><source src="' + filename + '.ogg" type="audio/ogg" /><embed hidden="true" autostart="true" loop="false" src="' + filename + '.mp3" /></audio>');
+            }
+        };
 
         $.continueProgram = function(settings) {
 
             $('#prudio-window input').attr('type', 'text').attr('placeholder', 'Just write...').blur().focus();
             $.openSocket(settings);
 
-        }
+        };
 
 
         $.checkUserInfo = function(settings) {
@@ -503,7 +505,7 @@ function main() {
             } else {
                 return $.continueProgram(settings);
             }
-        }
+        };
 
         $.openSocket = function(settings) {
 
@@ -513,7 +515,7 @@ function main() {
             var signature   = $.getCookie('prudio-signature');
             var userInfo    = $.getUserSystemInfo();
 
-            $('<li class="server"></li>').text("Connecting to the server").appendTo($('#prudio-window ul'));
+            $('<li class="server"></li>').html('<i class="icon-flash-outline"></i> Connecting to the server...').appendTo($('#prudio-window ul')).show().delay(3000).slideUp();
 
             $.ajax({
                 url: baseURL + "/chat/create",
@@ -526,7 +528,7 @@ function main() {
                     settings:    JSON.stringify(settings),
                     userInfo:    JSON.stringify(userInfo)
                 },
-                error : function(xhr, ajaxOptions, thrownError){
+                error: function(xhr, ajaxOptions, thrownError){
 
                     $('<li class="error"></li>').text("We got a problem connecting to the server!").appendTo($('#prudio-window ul'));
 
@@ -551,7 +553,7 @@ function main() {
                             var message = $(this).val();
                             
                             socket.emit('sendMessage', {
-                                message: message,
+                                message: message
                             });
                             
                             console.log("SEND: " + message);
@@ -591,14 +593,14 @@ function main() {
                         $('#prudio-window input').prop('disabled', false);
                     });
 
-                    socket.on('typingMessage', function (data) {
+                    socket.on('typingMessage', function () {
                         $('#prudio-window ul li.typing').remove();
-                        $('<li class="typing"></li>').text('User is typing...').appendTo($('#prudio-window ul')).show().delay(5000).fadeOut();
+                        $('<li class="typing"></li>').html('<i class="icon-chat"></i> User is typing...').appendTo($('#prudio-window ul')).show().delay(7000).slideUp();
                         $.scrollChat('#prudio-window div.messages');
                     });
                 }
             });
-        }
+        };
 
         $.loadCSS(baseURL + "/client.css");
         $.loadJS(baseURL + "/socket.io/socket.io.js");
@@ -608,22 +610,31 @@ function main() {
         $.createButton(settings);
 
         var open = false;
+        var muted = false;
 
         $(document).on('click', '#prudio-window span.close', function() {
             $('#prudio-window').toggleClass('prudio-window-open');
             $('#prudio-button').fadeIn();
         });
 
+        $(document).on('click', '#prudio-window span.mute', function() {
+            muted = !muted;
+            if(muted) {
+                $('#prudio-window span.mute i').removeClass('icon-volume-high').addClass('icon-volume-off');
+            } else {
+                $('#prudio-window span.mute i').removeClass('icon-volume-off').addClass('icon-volume-high');
+            }
+        });
+
         $(document).on('click', '#prudio-button', function() {
 
-            $('#prudio-window').toggleClass('prudio-window-open');
-            $('#prudio-button').fadeOut('fast');
+            $('#prudio-window').toggleClass('prudio-window-open').fadeOut('fast');
 
             if(open === false) {
 
                 var domContent = [
                     '<nav class="prudio-window prudio-window-vertical prudio-window-right" id="prudio-window">',
-                    '       <h3>' + (settings.title || 'Support') + ' <span class="close" title="Close">&times</span></h3>',
+                    '       <h3><span class="mute" title="Mute"><i class="icon-volume-high"></i></span>' + (settings.title || 'Support') + ' <span class="close" title="Close"><i class="icon-cancel"></i></span></h3>',
                     '       <div class="messages">',
                     '           <ul>',
                     '           </ul>',
@@ -633,7 +644,7 @@ function main() {
                     '              </div>',
                     '           </div>',
                     '       </div>',
-                    '   </nav>',
+                    '   </nav>'
                     ].join('');
 
                 $('body').append(domContent);

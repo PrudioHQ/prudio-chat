@@ -40,18 +40,15 @@ module.exports = function(grunt) {
         development: {
             options: {
                 script: './app.js',
-                hostname: '0.0.0.0'
+                hostname: '0.0.0.0',
+                port: 8888
             }
         }
     },
     watch: {
         scripts: {
-            files:  [ ],
-            tasks:  [ 'watch' ],
-            options: {
-                spawn: false, // Without this option specified express won't be reloaded
-                livereload: true
-            }
+            files:  [ 'src/**/*.js', 'src/**/*.css' ],
+            tasks:  [ 'uglify', 'replace', 'cssmin' ]
         }
     }
 

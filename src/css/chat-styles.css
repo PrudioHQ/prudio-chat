@@ -1,3 +1,65 @@
+@font-face {
+	font-family: 'prudio';
+	src: url('../font/prudio.eot?61597957');
+	src: url('../font/prudio.eot?61597957#iefix') format('embedded-opentype'),
+	url('../font/prudio.woff?61597957') format('woff'),
+	url('../font/prudio.ttf?61597957') format('truetype'),
+	url('../font/prudio.svg?61597957#prudio') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+/* Chrome hack: SVG is rendered more smooth in Windozze. 100% magic, uncomment if you need it. */
+/* Note, that will break hinting! In other OS-es font will be not as sharp as it could be */
+/*
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: 'prudio';
+    src: url('../font/prudio.svg?61597957#prudio') format('svg');
+  }
+}
+*/
+
+[class^="icon-"]:before, [class*=" icon-"]:before {
+	font-family: "prudio";
+	font-style: normal;
+	font-weight: normal;
+	speak: none;
+
+	display: inline-block;
+	text-decoration: inherit;
+	width: 1em;
+	margin-right: .2em;
+	text-align: center;
+	/* opacity: .8; */
+
+	/* For safety - reset parent styles, that can break glyph codes*/
+	font-variant: normal;
+	text-transform: none;
+
+	/* fix buttons height, for twitter bootstrap */
+	line-height: 1em;
+
+	/* Animation center compensation - margins should be symmetric */
+	/* remove if not needed */
+	margin-left: .2em;
+
+	/* you can be more comfortable with increased icons size */
+	/* font-size: 120%; */
+
+	/* Uncomment for 3D effect */
+	/* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
+}
+
+.icon-cancel:before { content: '\e800'; } /* '' */
+.icon-volume-off:before { content: '\e801'; } /* '' */
+.icon-volume-high:before { content: '\e802'; } /* '' */
+.icon-cancel-outline:before { content: '\e803'; } /* '' */
+.icon-flash-outline:before { content: '\e804'; } /* '' */
+.icon-chat:before { content: '\e805'; } /* '' */
+.icon-comment:before { content: '\e806'; } /* '' */
+.icon-chat-alt:before { content: '\e807'; } /* '' */
+.icon-forward-outline:before { content: '\e808'; } /* '' */
+
 #prudio-button {
     background: #0072B0;
     border-radius: 50%;
@@ -9,11 +71,15 @@
     right: 15px;
     cursor: pointer;
     box-shadow: 0 0 6px #666;
-    color: white;
     z-index: 9999;
-    content: 'i';
 }
 
+#prudio-button i {
+	color: white;
+	display: block;
+	font-size: 1.3em;
+	margin-top: 8px;
+}
 /* General styles for all menus */
 .prudio-window {
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -37,12 +103,22 @@
 }
 
 .prudio-window h3 span.close {
-	font-size: 1.6em;
-	padding: 0;
-	margin-top: -6px;
+	font-size: 1em;
 	font-weight: lighter;
 	float: right;
 	cursor: pointer;
+}
+
+.prudio-window h3 span.mute {
+	color: #eee;
+	font-size: 1em;
+	font-weight: lighter;
+	float: left;
+	cursor: pointer;
+}
+
+.prudio-window h3 span.mute:hover {
+	color: #455A64;
 }
 
 .prudio-window div.messages {
@@ -190,11 +266,11 @@
 
 
 .prudio-window li.self:hover, .prudio-window li.other:hover {
-	box-shadow: 0px 0px 15px 5px rgba(10, 10, 10, .05);
+	box-shadow: 0 0 15px 5px rgba(10, 10, 10, .05);
 }
 
 .prudio-window li.self:active, .prudio-window li.other:active {
-	box-shadow: 0px 0px 15px 5px rgba(10, 10, 10, .15);
+	box-shadow: 0 0 15px 5px rgba(10, 10, 10, .15);
 }
 
 .prudio-window div.reply-container {
@@ -212,11 +288,10 @@
 }
 
 .prudio-window div.reply {
-	border: 1px solid #afdefa;
+	border: 1px solid #DADEE2;
 	border-radius: 4px;
 	margin: 15px; 
 	padding: 6px 10px;
-	border: 1px solid #DADEE2;
 	background: #FFFFFF;
 	width: 315px;
 	clear: both;
@@ -224,7 +299,7 @@
 
 .prudio-window div.reply input {
 	background-color: transparent;
-    border: 0px solid;
+    border: 0 solid;
     color: #60686E;
     width: 100%;
     font-size: 0.8em;
@@ -257,7 +332,7 @@
 }
 
 .prudio-window-right.prudio-window-open {
-	right: 0px;
+	right: 0;
 }
 
 /* Push classes applied to the body */

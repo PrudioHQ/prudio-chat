@@ -22,6 +22,7 @@
 	position: fixed;
     z-index: 999;
     opacity: 0.99;
+    line-height: 1em;
 }
 
 .prudio-window h3 {

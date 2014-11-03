@@ -27,7 +27,7 @@ module.exports = function(grunt) {
         src: ['build/<%= pkg.exportName %>.js'],             // source files array (supports minimatch)
         dest: 'build/<%= pkg.exportName %>.local.js',             // destination directory or file
         replacements: [{
-          from: 'http://chat.prud.io',                   // string replacement
+          from: 'http://chat.prud.io:80',                   // string replacement
           to: 'http://localhost:8888'
         },{
           /// /chat\.prud\.io\/client/

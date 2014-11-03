@@ -35,4 +35,4 @@ bower_components
 build/*
 
 # Webstorm
-.idea
+.idea/*

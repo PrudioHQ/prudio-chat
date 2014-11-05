@@ -607,14 +607,16 @@ function main() {
 
         var settings  = $.getSettings();
 
-        $.createButton(settings);
+        if(!settings.buttonSelector)
+            $.createButton(settings);
 
         var open = false;
         var muted = false;
 
         $(document).on('click', '#prudio-window span.close', function() {
             $('#prudio-window').toggleClass('prudio-window-open');
-            $('#prudio-button').fadeIn();
+            if(!settings.buttonSelector)
+                $('#prudio-button').fadeIn();
         });
 
         $(document).on('click', '#prudio-window span.mute', function() {
@@ -626,9 +628,12 @@ function main() {
             }
         });
 
-        $(document).on('click', '#prudio-button', function() {
+        $(document).on('click', (settings.buttonSelector || '#prudio-button'), function() {
 
-            $('#prudio-window').toggleClass('prudio-window-open').fadeOut('fast');
+            $('#prudio-window').toggleClass('prudio-window-open');
+
+            if(!settings.buttonSelector)
+                $(this).fadeOut('fast');
 
             if(open === false) {
 
@@ -660,11 +665,6 @@ function main() {
             }
 
             open = true;
-
-            // Get Channel from LB API with token
-            // If no users online (not possible right now in Slack) show form for e-mail message.
-            // Else create chat window and connect socket
-
         });
 
 

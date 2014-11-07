@@ -61,24 +61,27 @@
 .icon-forward-outline:before { content: '\e808'; } /* '' */
 
 #prudio-button {
-    background: #0072B0;
+    background: rgba(0, 114, 176, 0.9);
     border-radius: 50%;
-    border: 1px solid #455A64;
-    width: 35px;
-    height: 35px;
+    border-width: 2px;
+	border-style: solid;
+	border-color: rgba(0, 114, 176, 1);
+    width: 38px;
+    height: 38px;
     position: fixed;
     bottom: 15px;
     right: 15px;
     cursor: pointer;
     box-shadow: 0 0 6px #666;
     z-index: 9999;
+
 }
 
 #prudio-button i {
 	color: white;
 	display: block;
-	font-size: 1.3em;
-	margin-top: 8px;
+	font-size: 1.2em;
+	margin: 10px 4px;
 }
 /* General styles for all menus */
 .prudio-window {

@@ -79,9 +79,10 @@
 #prudio-button i {
 	color: white;
 	display: block;
-	font-size: 1.2em;
-	margin: 10px 4px;
+	font-size: 1.35em;
+	margin: 6px 0;
 }
+
 /* General styles for all menus */
 .prudio-window {
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;

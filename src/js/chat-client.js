@@ -85,7 +85,7 @@ function main() {
         };
 
         $.createButton = function() {
-            var button = $('<div id="prudio-button" style="background-color: ' + (settings.buttonColor || '') + '" title="Chat with us"><i class="icon-chat-alt"></i></div><div id="prudio-notification"></div>');
+            var button = $('<div id="prudio-button" style="background-color: ' + (settings.buttonColor || '') + '" title="Chat with us"><i class="icon-prudio"></i></div><div id="prudio-notification"></div>');
             $("body").append(button);
         };
 

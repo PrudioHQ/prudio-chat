@@ -39,7 +39,7 @@ Open your browser at [localhost:5000/client-html](http://localhost:5000/client-h
 
 # Widget 
 
-You can check the shipped example at [client-html/index.html](https://github.com/PrudioHQ/prudio-irc/blob/master/client-html/index.html).
+You can check the shipped example at [client-html/index.html](https://github.com/asm-products/prudio-chat/blob/master/client-html/index.html).
 
 Or this quick example `index.html`:
 
@@ -85,3 +85,7 @@ Please use the GitHub issues or chat with us at [Assembly](https://assembly.com/
 When doing `CTRL + C` in Foreman the Node.js process does not exit.
 
 This happens because of Socket.io opens a persistent connection to the server and Foreman cannot exit. Try doing `killall node`.
+
+# License
+
+[AGPL v3](https://github.com/asm-products/prudio-chat/blob/master/LICENSE).

@@ -24,7 +24,9 @@ It contains:
 
 Does not contain:
 
-* **Database:** it will not work by itself has it does not contain the database migrations (included in the [backoffice repo](#soon)).
+* **Database migrations:** it will not work by itself has it does not contain the database migrations (included in the [backoffice repo](#soon)).
+
+Alternatively you can check the database [file](https://github.com/asm-products/prudio-chat/blob/master/database.sql). You will have to add only a row to your `apps` table.
 
 # Demo (TL;DR)
 

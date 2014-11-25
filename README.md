@@ -1,8 +1,27 @@
-# Prudio
+# Prudio Chat
 
 ## Connect your website to your Slack team
 
 This is a product being built by the Assembly community. You can help push this idea forward by visiting [https://assembly.com/prudio](https://assembly.com/prudio).
+
+## Repository
+
+This repository is exclusive for the `chat.prud.io` part of the project.
+
+It contains:
+
+* The CSS, Fonts, sounds, images of the client.
+* The embeddable client script.
+* The build script for client script (minimized and compressed).
+* Handles the bridge to Slack Websocket.
+* Handles the creation of channels in Slack and the counters.
+
+Does not contain:
+
+
+* **Database:** it will not work by itself has it does not contain the database migrations (included in the [backoffice repo](#soon)).
+
+# Assembly
 
 ### How Assembly Works
 
@@ -73,6 +92,25 @@ Or this quick example `index.html`:
 ```
 
 You can check all the `window._PrudioSettings` settings at [docs.prud.io](http://docs.prud.io) (soon) website.
+
+# Contributing
+
+**Note:** contributions to this project will only be accepted if they reference a design task in the respective project on [Assembly](https://assembly.com/prudio) or fix a bug or an issue.
+
+Have a look at existing projects and tasks or start a discussion about what you’d like to be working on - you can do that on the [Assembly](https://assembly.com/prudio) project page.
+
+1. [Create a Task](https://assembly.com/prudio/bounties/new) that describes what you want to do. This gives others the opportunity to help and provide feedback.
+2. Fork the repo
+3. Create your feature branch git checkout -b my-new-feature
+4. Commit your changes git commit -am 'Add some feature’
+5. Push to the branch git push origin my-new-feature
+6. Create new Pull Request which references the Task number.
+
+We will accept patches that:
+
+* Don’t break existing functionality.
+* Are well documented and commented.
+* Are written in strict Javascript only (no Coffeescript, sorry)
 
 # Issues
 

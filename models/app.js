@@ -1,7 +1,5 @@
 "use strict";
 
-var uuid = require('node-uuid');
-
 module.exports = function(sequelize, DataTypes) {
   var app = sequelize.define("app", {
     account_id: DataTypes.INTEGER,

@@ -457,7 +457,7 @@ function main() {
             // No name 
             if(typeof settings.name === 'undefined') {
                 // Ask
-                $('<li class="other"></li>').text("Please provide your name:").appendTo($('#prudio-window ul'));
+                $('<li class="other"></li>').text("Please type your name in the chatbox below").appendTo($('#prudio-window ul'));
 
                 $('#prudio-window input').prop('placeholder', 'Your name').blur().focus();
 
@@ -483,7 +483,7 @@ function main() {
             // No e-mail
             else if(typeof settings.email === 'undefined') {
                 // Ask
-                $('<li class="other"></li>').text("Please provide your e-mail:").appendTo($('#prudio-window ul'));
+                $('<li class="other"></li>').text("Please type your e-mail in the chatbox below").appendTo($('#prudio-window ul'));
 
                 $('#prudio-window input').prop('placeholder', "Your e-mail").prop('type','email').blur().focus();
 

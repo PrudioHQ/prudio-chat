@@ -1,0 +1,400 @@
+@font-face {
+	font-family: 'prudio';
+	src: url('../font/prudio.eot?61597957');
+	src: url('../font/prudio.eot?61597957#iefix') format('embedded-opentype'),
+	url('../font/prudio.woff?61597957') format('woff'),
+	url('../font/prudio.ttf?61597957') format('truetype'),
+	url('../font/prudio.svg?61597957#prudio') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+/* Chrome hack: SVG is rendered more smooth in Windozze. 100% magic, uncomment if you need it. */
+/* Note, that will break hinting! In other OS-es font will be not as sharp as it could be */
+/*
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: 'prudio';
+    src: url('../font/prudio.svg?61597957#prudio') format('svg');
+  }
+}
+*/
+
+[class^="icon-"]:before, [class*=" icon-"]:before {
+	font-family: "prudio";
+	font-style: normal;
+	font-weight: normal;
+	speak: none;
+
+	display: inline-block;
+	text-decoration: inherit;
+	width: 1em;
+	margin-right: .2em;
+	text-align: center;
+	/* opacity: .8; */
+
+	/* For safety - reset parent styles, that can break glyph codes*/
+	font-variant: normal;
+	text-transform: none;
+
+	/* fix buttons height, for twitter bootstrap */
+	line-height: 1em;
+
+	/* Animation center compensation - margins should be symmetric */
+	/* remove if not needed */
+	margin-left: .2em;
+
+	/* you can be more comfortable with increased icons size */
+	/* font-size: 120%; */
+
+	/* Uncomment for 3D effect */
+	/* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
+}
+
+.icon-cancel:before { content: '\e800'; } /* '' */
+.icon-volume-off:before { content: '\e801'; } /* '' */
+.icon-volume-high:before { content: '\e802'; } /* '' */
+.icon-cancel-outline:before { content: '\e803'; } /* '' */
+.icon-flash-outline:before { content: '\e804'; } /* '' */
+.icon-chat:before { content: '\e805'; } /* '' */
+.icon-comment:before { content: '\e806'; } /* '' */
+.icon-forward-outline:before { content: '\e808'; } /* '' */
+.icon-prudio:before { content: '\e809'; } /* '' */
+
+#prudio-button {
+    background: rgba(0, 114, 176, 0.9);
+    border-radius: 50%;
+    border-width: 2px;
+	border-style: solid;
+	border-color: rgba(0, 114, 176, 1);
+    width: 38px;
+    height: 38px;
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    cursor: pointer;
+    box-shadow: 0 0 6px #666;
+    z-index: 9999;
+}
+
+#prudio-button i {
+	color: white;
+	display: block;
+	font-size: 1.35em;
+	margin: 6px 0;
+}
+
+/* General styles for all menus */
+.prudio-window {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	background: #f9f9fa;
+	border-left: 1px solid #DADEE2;
+	position: fixed;
+    z-index: 999;
+    opacity: 0.99;
+    line-height: 1em;
+}
+
+.prudio-window h3 {
+	color: #455A64;
+	font-size: 1em;
+	padding: 20px;
+	margin: 0;
+	font-weight: bold;
+	text-align: center;
+	background: #fff;
+	border-bottom: 1px solid #DADEE2;
+}
+
+.prudio-window h3 span.close {
+	font-size: 1em;
+	font-weight: lighter;
+	float: right;
+	cursor: pointer;
+}
+
+.prudio-window h3 span.mute {
+	color: #eee;
+	font-size: 1em;
+	font-weight: lighter;
+	float: left;
+	cursor: pointer;
+}
+
+.prudio-window h3 span.mute:hover {
+	color: #455A64;
+}
+
+.prudio-window div.messages {
+    height: 100%; 
+    overflow-y: scroll;
+}
+
+.prudio-window ul {
+	height: auto;
+	overflow: auto;
+	list-style-type: none;
+	padding: 0 0 160px 0;
+	margin: 0;
+}
+
+.prudio-window li {
+	position: relative;
+	border: 1px solid #afdefa;
+	border-radius: 4px;
+	padding: 10px 15px;
+	margin: 10px;
+	color: #fff;
+	font-size: 0.9em;
+    opacity: 0.9;
+    clear: both;
+}
+
+.prudio-window li.server {
+	padding: 4px 15px;
+	text-align: center;
+	border: none;
+	color: #CCC; 
+	font-size: 0.7em;
+	font-weight: normal;
+	font-style: italic;
+}
+
+.prudio-window li.typing {
+	padding: 4px 15px;
+	text-align: center;
+	border: none;
+	color: #CCC; 
+	font-size: 0.7em;
+	font-weight: normal;
+	font-style: italic;
+}
+
+.prudio-window li.error {
+	padding: 4px 15px;
+	text-align: center;
+	border: none;
+	color: #AE3C2E; 
+	font-size: 0.7em;
+	font-weight: normal;
+	font-style: italic;
+}
+
+.prudio-window li.time {
+	margin: 0;
+	padding: 4px 15px;
+	text-align: right;
+	border: none;
+	color: #DDD; 
+	font-size: 0.6em;
+	font-weight: normal;
+}
+
+.prudio-window li.other {
+	margin-right: 35px; 
+	margin-left: 10px; 
+	border: 1px solid #DADEE2;
+	background: #FFFFFF;
+	color: #60686E; 
+	box-shadow: 1px 1px 1px 1px rgba(10, 10, 10, 0.02);
+}
+
+.prudio-window li.other:after 
+{
+	content: '';
+	position: absolute;
+	border-style: solid;
+	border-width: 5px 5px 5px 0;
+	border-color: transparent #FFFFFF;
+	display: block;
+	width: 0;
+	z-index: 1;
+	margin-top: -5px;
+	left: -5px;
+	top: 50%;
+}
+
+.prudio-window li.other:before 
+{
+	content: '';
+	position: absolute;
+	border-style: solid;
+	border-width: 5px 5px 5px 0;
+	border-color: transparent #DADEE2;
+	display: block;
+	width: 0;
+	z-index: 0;
+	margin-top: -5px;
+	left: -6px;
+	top: 50%;
+}
+
+.prudio-window li.self {
+	margin-right: 10px; 
+	margin-left: 35px; 
+	background-color: #0072B0;
+	border-color: #0072B0;
+	color: #fff;
+	box-shadow: 1px 1px 1px 1px rgba(10, 10, 10, 0.05);
+}
+
+.prudio-window li.self:after 
+{
+	content: '';
+	position: absolute;
+	border-style: solid;
+	border-width: 5px 0 5px 5px;
+	border-color: transparent #0072B0;
+	display: block;
+	width: 0;
+	z-index: 1;
+	margin-top: -5px;
+	right: -5px;
+	top: 50%;
+}
+
+.prudio-window li.self:before 
+{
+	content: '';
+	position: absolute;
+	border-style: solid;
+	border-width: 5px 0 5px 5px;
+	border-color: transparent #DADEE2;
+	display: block;
+	width: 0;
+	z-index: 0;
+	margin-top: -5px;
+	right: -6px;
+	top: 50%;
+}
+
+
+.prudio-window li.self:hover, .prudio-window li.other:hover {
+	box-shadow: 0 0 15px 5px rgba(10, 10, 10, .05);
+}
+
+.prudio-window li.self:active, .prudio-window li.other:active {
+	box-shadow: 0 0 15px 5px rgba(10, 10, 10, .15);
+}
+
+.prudio-window div.reply-container {
+	position: absolute;
+	height: 80px;
+	bottom: 0;
+	background: rgba(249,249,250,0.95);
+	background: -moz-linear-gradient(top,  rgba(249,249,250,0) 0%, rgba(249,249,250,0.95) 20%, rgba(249,249,250,0.95) 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(249,249,250,0)), color-stop(20%,rgba(249,249,250,0.95)), color-stop(100%,rgba(249,249,250,0.95)));
+	background: -webkit-linear-gradient(top,  rgba(249,249,250,0) 0%,rgba(249,249,250,0.95) 20%,rgba(249,249,250,0.95) 100%);
+	background: -o-linear-gradient(top,  rgba(249,249,250,0) 0%,rgba(249,249,250,0.95) 20%,rgba(249,249,250,0.95) 100%);
+	background: -ms-linear-gradient(top,  rgba(249,249,250,0) 0%,rgba(249,249,250,0.95) 20%,rgba(249,249,250,0.95) 100%);
+	background: linear-gradient(to bottom,  rgba(249,249,250,0) 0%,rgba(249,249,250,0.95) 20%,rgba(249,249,250,0.95) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00f9f9fa', endColorstr='#f2f9f9fa',GradientType=0 );
+}
+
+.prudio-window div.reply {
+	border: 1px solid #DADEE2;
+	border-radius: 4px;
+	margin: 15px; 
+	padding: 6px 10px;
+	background: #FFFFFF;
+	width: 315px;
+	clear: both;
+}
+
+.prudio-window div.reply input {
+	background-color: transparent;
+    border: 0 solid;
+    color: #60686E;
+    width: 100%;
+    font-size: 0.8em;
+    font-weight: normal;
+}
+
+.prudio-window div.reply input:focus {
+    outline: 0;
+}
+
+/* Orientation-dependent styles for the content of the menu */
+
+.prudio-window-vertical {
+	width: 370px;
+	height: 100%;
+	top: 0;
+	z-index: 1000;
+}
+
+.prudio-window-vertical a {
+	border-bottom: 1px solid #258ecd;
+	padding: 1em;
+}
+
+/* Vertical menu that slides from the left or right */
+
+
+.prudio-window-right {
+	right: -370px;
+}
+
+.prudio-window-right.prudio-window-open {
+	right: 0;
+}
+
+/* Push classes applied to the body */
+
+.prudio-window-push {
+	overflow-x: hidden;
+	position: relative;
+	left: 0;
+}
+
+.prudio-window-push-toleft {
+	left: -730px;
+}
+
+/* Transitions */
+
+.prudio-window,
+.prudio-window-push {
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+}
+
+/* Example media queries */
+
+@media screen and (max-width: 55.1875em){
+
+	.prudio-window-horizontal {
+		font-size: 75%;
+		height: 110px;
+	}
+
+	.prudio-window-top {
+		top: -110px;
+	}
+
+	.prudio-window-bottom {
+		bottom: -110px;
+	}
+
+}
+
+@media screen and (max-height: 26.375em){
+
+	.prudio-window-vertical {
+		font-size: 90%;
+		width: 190px;
+	}
+
+	.prudio-window-left,
+	.prudio-window-push-toleft {
+		left: -190px;
+	}
+
+	.prudio-window-right {
+		right: -190px;
+	}
+
+	.prudio-window-push-toright {
+		left: 190px;
+	}
+}

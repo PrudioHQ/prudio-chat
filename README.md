@@ -4,13 +4,19 @@
 
 This is a product being built by the Assembly community. You can help push this idea forward by visiting [https://assembly.com/prudio](https://assembly.com/prudio).
 
+### How Assembly Works
+
+Assembly products are like open-source and made with contributions from the community. Assembly handles the boring stuff like hosting, support, financing, legal, etc. Once the product launches we collect the revenue and split the profits amongst the contributors.
+
+Visit [https://assembly.com](https://assembly.com) to learn more.
+
 ## Repository
 
 This repository is exclusive for the `chat.prud.io` part of the project.
 
 It contains:
 
-* The CSS, Fonts, sounds, images of the client.
+* The assets (CSS, fonts, sounds and images) of the client.
 * The embeddable client script.
 * The build script for client script (minimized and compressed).
 * Handles the bridge to Slack Websocket.
@@ -18,18 +24,9 @@ It contains:
 
 Does not contain:
 
-
 * **Database:** it will not work by itself has it does not contain the database migrations (included in the [backoffice repo](#soon)).
 
-# Assembly
-
-### How Assembly Works
-
-Assembly products are like open-source and made with contributions from the community. Assembly handles the boring stuff like hosting, support, financing, legal, etc. Once the product launches we collect the revenue and split the profits amongst the contributors.
-
-Visit [https://assembly.com](https://assembly.com) to learn more.
-
-# Demo
+# Demo (TL;DR)
 
 ![Demo](http://g.recordit.co/UGeRPvWx3C.gif)
 

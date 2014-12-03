@@ -1,22 +1,18 @@
 {
   "name": "Prudio",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "exportName": "client",
   "description": "Slack Instant Messaging Widget",
   "engines": {
     "node": "0.10.x"
   },
   "dependencies": {
-    "async": "latest",
+    "async": "0.9.0",
     "bcrypt": "0.8.0",
-    "body-parser": "latest",
-    "cookie-parser": "^1.3.3",
+    "body-parser": "1.9.0",
     "cors": "2.4.2",
-    "csurf": "^1.6.2",
     "errorhandler": "1.2.0",
-    "evercookie": "^0.3.0",
     "express": "4.9.4",
-    "express-session": "^1.9.1",
     "grunt": "latest",
     "grunt-cli": "latest",
     "grunt-contrib-cssmin": "latest",
@@ -24,12 +20,10 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-express-server": "^0.4.19",
     "grunt-text-replace": "^0.3.12",
-    "hbs": "^2.7.0",
+    "grunt-contrib-copy": "^0.7.0",
     "moment": "^2.8.3",
     "mysql": "2.5.1",
     "newrelic": "^1.12.1",
-    "passport": "^0.2.1",
-    "passport-slack": "0.0.1",
     "pg": "2.x",
     "request": "latest",
     "sequelize": "1.7.10",
@@ -46,20 +40,22 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "grunt"
+    "postinstall": "grunt build"
   },
   "repository": {
     "type": "git",
-    "url": "http://zeus.spunk.pt/cossou/oghma"
+    "url": "git@github.com:asm-products/prudio-app.git"
   },
   "keywords": [
     "slack",
     "chat",
-    "software"
+    "software",
+    "livechat",
+    "communication"
   ],
   "license": "MIT",
   "bugs": {
-    "url": "http://zeus.spunk.pt/cossou/oghma/issues"
+    "url": "https://github.com/asm-products/prudio-app"
   },
-  "homepage": "http://oghma.herokuapp.com/"
+  "homepage": "http://prud.io/"
 }

@@ -51,3 +51,5 @@ CREATE TABLE `apps` (
   UNIQUE KEY `apps_token_unique` (`token`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+-- Change token to appid field on APPS table.
+-- ALTER TABLE `apps` CHANGE COLUMN `token` `appid` VARCHAR(255) CHARACTER SET 'utf8' COLLATE 'utf8_unicode_ci' NOT NULL ;

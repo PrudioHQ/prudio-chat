@@ -4,7 +4,7 @@ module.exports = function(sequelize, DataTypes) {
   var app = sequelize.define("app", {
     account_id: DataTypes.INTEGER,
     user_id: DataTypes.INTEGER,
-    token: DataTypes.STRING,
+    appid: DataTypes.STRING,
     name: DataTypes.STRING,
     active: DataTypes.BOOLEAN,
     online: DataTypes.BOOLEAN,

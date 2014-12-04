@@ -67,7 +67,7 @@ function main() {
 
         $.getSettings = function() {
             var el = $.findJS();
-            var params = ['token', 'name', 'email'];
+            var params = ['appid', 'name', 'email'];
             var settings = new Object();
 
             for(var i = 0; i < params.length; i++) {
@@ -521,7 +521,7 @@ function main() {
                 url: baseURL + "/chat/create",
                 method: 'POST',
                 data: {
-                    token:       settings.token,
+                    appid:       settings.appid,
                     channel:     channel,
                     channelName: channelName,
                     signature:   signature,
@@ -567,7 +567,7 @@ function main() {
 
                     socket.on('connect', function(){
                         console.log("Connected to " + data.channel);
-                        socket.emit('joinRoom', settings.token, data.channel, data.signature);
+                        socket.emit('joinRoom', settings.appid, data.channel, data.signature);
                     });
 
                     // On Slack message

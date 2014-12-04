@@ -7,12 +7,12 @@ module.exports = function(app, io, slack, models) {
 
 	function isAuthorized(req, res, next) {
 
-		var token = req.param('token');
+		var appid = req.param('appid');
 
-		if(token == null)
+		if(appid == null)
 			return res.status(401).json({ success: false, message: "Unauthorized" });
 
-		models.app.find({ where: { token: token } }).success(function(app) {
+		models.app.find({ where: { appid: appid } }).success(function(app) {
 			if(app == null)
 				return res.status(401).json({ success: false, message: "Unauthorized" });
 
@@ -33,8 +33,8 @@ module.exports = function(app, io, slack, models) {
 	});
 
 	app.post('/app/connect', isAuthorized, function(req, res, next) {
-		var token            = req.param('token');
-		models.app.find({ where: { token: token, active: true } }).success(function(application) {
+		var appid            = req.param('appid');
+		models.app.find({ where: { appid: appid, active: true } }).success(function(application) {
 			slack.connect(application);
 
 			return res.status(200).json({ success: true, message: "Initializing" });
@@ -42,8 +42,8 @@ module.exports = function(app, io, slack, models) {
 	});
 
 	app.post('/app/disconnect', isAuthorized, function(req, res, next) {
-		var token            = req.param('token');
-		models.app.find({ where: { token: token, active: true } }).success(function(application) {
+		var appid            = req.param('appid');
+		models.app.find({ where: { appid: appid, active: true } }).success(function(application) {
 			slack.disconnect(application.id);
 
 			return res.status(200).json({ success: true, message: "Disconnecting" });
@@ -54,14 +54,14 @@ module.exports = function(app, io, slack, models) {
 
 		var crypto = require('crypto');
 
-		var token            = req.param('token');
+		var appid            = req.param('appid');
 		var channelId        = req.param('channel');
 		var channelName      = req.param('channelName');
 		var channelSignature = req.param('signature');
 		var userInfo         = req.param('userInfo');
 		var settings         = req.param('settings');
 
-		models.app.find({ where: { token: token, active: true } }).success(function(application) {
+		models.app.find({ where: { appid: appid, active: true } }).success(function(application) {
 	
 			if(application == null)
 				return res.status(404).json({ success: false, message: "Not found" });

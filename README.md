@@ -73,7 +73,7 @@ Or this quick example `index.html`:
 	</body>
 	
 	<!-- PRUDIO START HERE -->
-	<script src="/client.local.js?token=xxx" async></script>
+	<script src="/client.local.js?appid=xxx" async></script>
 	<script>
   		// OPTIONAL
       	window._PrudioSettings = {

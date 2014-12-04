@@ -36,7 +36,7 @@ CREATE TABLE `apps` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `account_id` bigint(20) unsigned NOT NULL,
   `user_id` bigint(20) unsigned NOT NULL,
-  `token` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `appid` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `active` tinyint(1) NOT NULL DEFAULT '1',
   `online` tinyint(1) NOT NULL DEFAULT '1',

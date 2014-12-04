@@ -4,17 +4,17 @@ module.exports = function(app, io, slack, models)
 	var chat = io.of('/chat').on('connection', function(clientSocket)
 	{
 		// each client is put into a chat room restricted to max 2 clients
-		clientSocket.on('joinRoom', function(token, channel, client_signature)
+		clientSocket.on('joinRoom', function(appid, channel, client_signature)
 		{
 			console.log("Socket JOINROOM CH: " + channel);
 
-		  	models.app.find({ where: { token: token, active: true } }).success(function(application) {
+		  	models.app.find({ where: { appid: appid, active: true } }).success(function(application) {
 
 				if(application == null) {
-					console.log('Wrong token.');
+					console.log('Wrong application identifier.');
 					
 					clientSocket.emit('serverMessage', {
-						message: 'Wrong token.'
+						message: 'Wrong application identifier.'
 					});
 
 					// force client to disconnect
@@ -24,7 +24,6 @@ module.exports = function(app, io, slack, models)
 
 				var crypto      = require('crypto');
 				var signature   = crypto.createHmac('sha1', application.slack_api_token).update(channel).digest('hex');
-				var appid       = application.id;
 
 				if(signature != client_signature) {
 					console.log('Wrong channel signature.');
@@ -51,7 +50,7 @@ module.exports = function(app, io, slack, models)
 				/** sendMessage **/
 				clientSocket.on('sendMessage', function (text) {
 
-					if(slack.isConnected(appid) === false) {
+					if(slack.isConnected(application.id) === false) {
 						// Let the user know about the error?
 						clientSocket.emit('serverMessage', {
 							message: 'Could not deliver the message: ' + text.message
@@ -72,7 +71,7 @@ module.exports = function(app, io, slack, models)
 					});
 
 					// send response to slack
-					slack.say(appid, channel, text.message);
+					slack.say(application.id, channel, text.message);
 				});
 
 				console.log("Type: " + typeof bot);
@@ -115,7 +114,7 @@ module.exports = function(app, io, slack, models)
 
 				// Socket disconnect listener, notify Slack that user left the chat
 				clientSocket.on('disconnect', function() {
-					slack.say(appid, channel, "_User disconnected!_");
+					slack.say(application.id, channel, "_User disconnected!_");
 				});
 
 			}); 

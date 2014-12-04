@@ -718,22 +718,21 @@ function main() {
             }
         });
 
-        $(document).on('dragover', '#prudio-window div.drop_zone', function(event) {
+        $(document).on('dragover', '#prudio-window div.drop-zone, #prudio-window div.drop-overlay', function(event) {
             $.handleFilesDragOver(event);
-            $(this).addClass("drag_over");
+            $('.drop-overlay').removeClass('hidden');
         });
 
-        $(document).on('dragleave', '#prudio-window div.drop_zone', function(event) {
-            $(this).removeClass("drag_over");
+        $(document).on('dragleave', '#prudio-window div.drop-overlay', function(event) {
+            $('.drop-overlay').addClass('hidden');
         });
 
-        $(document).on('drop', '#prudio-window div.drop_zone', function(event) {
+        $(document).on('drop', '#prudio-window div.drop-overlay', function(event) {
             $.handleFileSelect(event);
-            $(this).removeClass("drag_over");
+            $('.drop-overlay').addClass('hidden');
         });
 
         $(document).on('click', '#prudio-window span.icon-plus', function(event) {
-            console.log($('#hiddenfile'));
             $('#hiddenfile').trigger('click');
         });
 
@@ -762,27 +761,26 @@ function main() {
 
                 var domContent = [
                     '<nav class="prudio-window prudio-window-vertical prudio-window-right" id="prudio-window">',
-                    '   <div class="drop_zone">',
-                    '       <h3><span class="mute" title="Mute"><i class="icon-volume-high"></i></span>' + (settings.title || 'Support') + ' <span class="close" title="Close"><i class="icon-cancel"></i></span></h3>',
-                    '       <div class="messages">',
-                    '           <ul>',
-                    '           </ul>',
-                    '           <div class="file-container">',
-                    '              <div class="file">',
-                    '                  <input type="file" id="hiddenfile" style="display:none" multiple/>',
-                    '                  <input type="text" id="selectedfile" />',
-                    '                  <span class="icon-plus">+</span>',
-                    '                  <span class="icon-upload"></span>',
-                    '              </div>',
-                    '           </div>',
-                    '           <div class="reply-container">',
-                    '              <div class="reply">',
-                    '                  <input type="text" name="message" placeholder="Just write..." autofocus="autofocus">',
-                    '                  <span class="icon-attach"></span>',
-                    '              </div>',
-                    '           </div>',
-                    '       </div>',
-                    '   </div>',
+                    '     <h3><span class="mute" title="Mute"><i class="icon-volume-high"></i></span>' + (settings.title || 'Support') + ' <span class="close" title="Close"><i class="icon-cancel"></i></span></h3>',
+                    '     <div class="messages drop-zone">',
+                    '         <div class="drop-overlay hidden"></div>',
+                    '         <ul>',
+                    '         </ul>',
+                    '         <div class="file-container">',
+                    '            <div class="file">',
+                    '                <input type="file" id="hiddenfile" style="display:none" multiple/>',
+                    '                <input type="text" id="selectedfile" />',
+                    '                <span class="icon-plus">+</span>',
+                    '                <span class="icon-upload"></span>',
+                    '            </div>',
+                    '         </div>',
+                    '         <div class="reply-container">',
+                    '            <div class="reply">',
+                    '                <input type="text" name="message" placeholder="Just write..." autofocus="autofocus">',
+                    '                <span class="icon-attach"></span>',
+                    '            </div>',
+                    '         </div>',
+                    '     </div>',
                     '</nav>'
                     ].join('');
 

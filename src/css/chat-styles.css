@@ -132,12 +132,26 @@
     overflow-y: scroll;
 }
 
-.prudio-window div.drop_zone.drag_over {
+.hidden {
+	display: none;
+}
+
+.prudio-window div.drop-zone div.drop-overlay {
+	position: absolute;
 	background: rgba(216,216,217,.50);
-	background-image: url("./plus.png"); 
-	background-repeat:no-repeat;
-	background-size: 60px 60px;
-	background-position:center center;
+	width: 100%;
+	height: 100%;
+	z-index: 10;
+}
+
+.prudio-window div.drop-zone div.drop-overlay:before {
+	position: absolute;
+	font-family: prudio;
+	color: #455A64;
+	font-size: 5em;
+	top: 40%;
+	left: 40%;
+	content: "\e80c";
 }
 
 .prudio-window ul {
@@ -164,7 +178,7 @@
 	padding: 4px 15px;
 	text-align: center;
 	border: none;
-	color: #CCC; 
+	color: #CCC;
 	font-size: 0.7em;
 	font-weight: normal;
 	font-style: italic;
@@ -174,7 +188,7 @@
 	padding: 4px 15px;
 	text-align: center;
 	border: none;
-	color: #CCC; 
+	color: #CCC;
 	font-size: 0.7em;
 	font-weight: normal;
 	font-style: italic;
@@ -184,7 +198,7 @@
 	padding: 4px 15px;
 	text-align: center;
 	border: none;
-	color: #AE3C2E; 
+	color: #AE3C2E;
 	font-size: 0.7em;
 	font-weight: normal;
 	font-style: italic;
@@ -195,21 +209,21 @@
 	padding: 4px 15px;
 	text-align: right;
 	border: none;
-	color: #DDD; 
+	color: #DDD;
 	font-size: 0.6em;
 	font-weight: normal;
 }
 
 .prudio-window li.other {
-	margin-right: 35px; 
-	margin-left: 10px; 
+	margin-right: 35px;
+	margin-left: 10px;
 	border: 1px solid #DADEE2;
 	background: #FFFFFF;
-	color: #60686E; 
+	color: #60686E;
 	box-shadow: 1px 1px 1px 1px rgba(10, 10, 10, 0.02);
 }
 
-.prudio-window li.other:after 
+.prudio-window li.other:after
 {
 	content: '';
 	position: absolute;
@@ -224,7 +238,7 @@
 	top: 50%;
 }
 
-.prudio-window li.other:before 
+.prudio-window li.other:before
 {
 	content: '';
 	position: absolute;
@@ -240,15 +254,15 @@
 }
 
 .prudio-window li.self {
-	margin-right: 10px; 
-	margin-left: 35px; 
+	margin-right: 10px;
+	margin-left: 35px;
 	background-color: #0072B0;
 	border-color: #0072B0;
 	color: #fff;
 	box-shadow: 1px 1px 1px 1px rgba(10, 10, 10, 0.05);
 }
 
-.prudio-window li.self:after 
+.prudio-window li.self:after
 {
 	content: '';
 	position: absolute;
@@ -263,7 +277,7 @@
 	top: 50%;
 }
 
-.prudio-window li.self:before 
+.prudio-window li.self:before
 {
 	content: '';
 	position: absolute;
@@ -311,7 +325,7 @@
 .prudio-window div.file {
 	border: 1px solid #DADEE2;
 	border-radius: 4px;
-	margin: 15px; 
+	margin: 15px;
 	padding: 6px 10px;
 	background: #FFFFFF;
 	width: 315px;
@@ -352,7 +366,7 @@
 .prudio-window div.reply {
 	border: 1px solid #DADEE2;
 	border-radius: 4px;
-	margin: 15px; 
+	margin: 15px;
 	padding: 6px 10px;
 	background: #FFFFFF;
 	width: 315px;

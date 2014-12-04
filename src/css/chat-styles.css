@@ -59,6 +59,9 @@
 .icon-comment:before { content: '\e806'; } /* '' */
 .icon-forward-outline:before { content: '\e808'; } /* '' */
 .icon-prudio:before { content: '\e809'; } /* '' */
+.icon-attach:before { content: '\e80a'; } /* '' */
+.icon-attach-outline:before { content: '\e80b'; } /* '' */
+.icon-upload:before { content: '\e80c'; } /* '' */
 
 #prudio-button {
     background: rgba(0, 114, 176, 0.9);

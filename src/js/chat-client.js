@@ -449,7 +449,7 @@ function main() {
 
         $.continueProgram = function(settings) {
 
-            $('#prudio-window div.reply input').attr('type', 'text').attr('placeholder', 'Just write...').blur().focus();
+            $('#prudio-window div.reply input[name=message]').attr('type', 'text').attr('placeholder', 'Just write...').blur().focus();
             $.openSocket(settings);
 
         };
@@ -464,10 +464,10 @@ function main() {
                 // Ask
                 $('<li class="other"></li>').text("Please type your name in the chatbox below").appendTo($('#prudio-window ul'));
 
-                $('#prudio-window div.reply input').prop('placeholder', 'Your name').blur().focus();
+                $('#prudio-window div.reply input[name=message]').prop('placeholder', 'Your name').blur().focus();
 
                 // Capture
-                $('#prudio-window div.reply input').bind('keypress', function(e) {
+                $('#prudio-window div.reply input[name=message]').bind('keypress', function(e) {
                     if (e.keyCode == ENTER_KEY_CODE && $(this).val() != "") {
                         var message = $(this).val();
 
@@ -490,10 +490,10 @@ function main() {
                 // Ask
                 $('<li class="other"></li>').text("Please type your e-mail in the chatbox below").appendTo($('#prudio-window ul'));
 
-                $('#prudio-window div.reply input').prop('placeholder', "Your e-mail").prop('type','email').blur().focus();
+                $('#prudio-window div.reply input[name=message]').prop('placeholder', "Your e-mail").prop('type','email').blur().focus();
 
                 // Capture
-                $('#prudio-window div.reply input').bind('keypress', function(e) {
+                $('#prudio-window div.reply input[name=message]').bind('keypress', function(e) {
                     if (e.keyCode == ENTER_KEY_CODE && $(this).val() != "") {
                         var message = $(this).val();
  
@@ -552,7 +552,7 @@ function main() {
 
                     var socket = io.connect(baseURL + '/chat');
 
-                    $('#prudio-window div.reply input').bind('keypress', function(e){
+                    $('#prudio-window div.reply input[name=message]').bind('keypress', function(e){
                         // if enter key
                         if (e.keyCode == ENTER_KEY_CODE && $(this).val() != "") {
                             var message = $(this).val();
@@ -593,13 +593,13 @@ function main() {
                     socket.on('disconnect', function () {
                         $('<li class="error"></li>').text("Server is now offline!").appendTo($('#prudio-window ul'));
                         $.scrollChat('#prudio-window div.messages');
-                        $('#prudio-window div.reply input').prop('disabled', true);
+                        $('#prudio-window div.reply input[name=message]').prop('disabled', true);
                     });
 
                     socket.on('serverMessage', function (data) {
                         $('<li class="server"></li>').text(data.message).appendTo($('#prudio-window ul'));
                         $.scrollChat('#prudio-window div.messages');
-                        $('#prudio-window div.reply input').prop('disabled', false);
+                        $('#prudio-window div.reply input[name=message]').prop('disabled', false);
                     });
 
                     socket.on('typingMessage', function () {
@@ -621,7 +621,7 @@ function main() {
 
             // Perform the request
             $.ajax({
-                url: '/app/fileUpload?appid='+settings.appid+'&channel='+settings.joinedChannel,
+                url: '/app/fileUpload?appid=' + settings.appid + '&channel=' + settings.joinedChannel,
                 type: 'POST',
                 data: data,
                 cache: false,
@@ -677,9 +677,7 @@ function main() {
         };
 
         $.handleFormFileSelect = function(event) {
-
-            $('#prudio-window div.file-container').removeClass('open'); 
-
+            
             // Append files into a FileList Object
             var files = event.files;
 
@@ -732,22 +730,13 @@ function main() {
             $('.drop-overlay').addClass('hidden');
         });
 
-        $(document).on('click', '#prudio-window span.icon-plus', function(event) {
-            $('#hiddenfile').trigger('click');
+        $(document).on('change', 'input[name=uploads]', function(event) {
+            $.handleFormFileSelect($('input[name=uploads]')[0]);
+            $('input[name=uploads]').val('');
         });
-
-        $(document).on('change', '#prudio-window #hiddenfile', function(event) {
-            $('#selectedfile').val($('#hiddenfile').val()); 
-        });
-
-        $(document).on('click', '#prudio-window span.icon-upload', function(event) {
-            $.handleFormFileSelect($('#hiddenfile')[0]); 
-            $('#selectedfile').val('');
-            $('#hiddenfile').val('');        
-        }); 
 
         $(document).on('click', '#prudio-window span.icon-attach', function(event) {
-            $('#prudio-window div.file-container').toggleClass('open');        
+            $('input[name=uploads]').trigger('click');
         }); 
 
         $(document).on('click', (settings.buttonSelector || '#prudio-button'), function() {
@@ -766,18 +755,11 @@ function main() {
                     '         <div class="drop-overlay hidden"></div>',
                     '         <ul>',
                     '         </ul>',
-                    '         <div class="file-container">',
-                    '            <div class="file">',
-                    '                <input type="file" id="hiddenfile" style="display:none" multiple/>',
-                    '                <input type="text" id="selectedfile" />',
-                    '                <span class="icon-plus">+</span>',
-                    '                <span class="icon-upload"></span>',
-                    '            </div>',
-                    '         </div>',
                     '         <div class="reply-container">',
                     '            <div class="reply">',
+                    '                <input type="file" name="uploads" class="hidden" multiple>',
                     '                <input type="text" name="message" placeholder="Just write..." autofocus="autofocus">',
-                    '                <span class="icon-attach"></span>',
+                    '                <span class="icon-attach" title="Attach a file"></span>',
                     '            </div>',
                     '         </div>',
                     '     </div>',

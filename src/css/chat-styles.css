@@ -388,9 +388,12 @@
 
 .prudio-window div.reply span.icon-attach {
 	cursor: pointer;
+	color: #CCCCCC;
 }
 
-
+.prudio-window div.reply span.icon-attach:hover {
+	color: #333;
+}
 
 /* Orientation-dependent styles for the content of the menu */
 

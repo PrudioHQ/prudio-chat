@@ -26,6 +26,7 @@ if (window.jQuery === undefined || window.jQuery.fn.jquery !== '2.1.1') {
 } else {
     // The jQuery version on the window is the one we want to use
     jQuery = window.jQuery;
+
     main();
 }
 
@@ -40,12 +41,16 @@ function scriptLoadHandler() {
 
 /******** Our main function ********/
 function main() {
+
+    // Adding the proprety dataTransfer to jQuery events
+    jQuery.event.props.push( "dataTransfer" );
+
     jQuery(document).ready(function($)
     {
         $.urlParam = function(name, url) {
-            var results = new RegExp('[?|&|#]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(url);
+            var results = new RegExp('[?|&|#]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(url);
             if (results == null) return;
-            return results[1] || 0;
+            return results[1] || 0;
         };
 
         $.loadCSS = function(href) {
@@ -444,7 +449,7 @@ function main() {
 
         $.continueProgram = function(settings) {
 
-            $('#prudio-window input').attr('type', 'text').attr('placeholder', 'Just write...').blur().focus();
+            $('#prudio-window div.reply input').attr('type', 'text').attr('placeholder', 'Just write...').blur().focus();
             $.openSocket(settings);
 
         };
@@ -459,10 +464,10 @@ function main() {
                 // Ask
                 $('<li class="other"></li>').text("Please type your name in the chatbox below").appendTo($('#prudio-window ul'));
 
-                $('#prudio-window input').prop('placeholder', 'Your name').blur().focus();
+                $('#prudio-window div.reply input').prop('placeholder', 'Your name').blur().focus();
 
                 // Capture
-                $('#prudio-window input').bind('keypress', function(e) {
+                $('#prudio-window div.reply input').bind('keypress', function(e) {
                     if (e.keyCode == ENTER_KEY_CODE && $(this).val() != "") {
                         var message = $(this).val();
 
@@ -485,10 +490,10 @@ function main() {
                 // Ask
                 $('<li class="other"></li>').text("Please type your e-mail in the chatbox below").appendTo($('#prudio-window ul'));
 
-                $('#prudio-window input').prop('placeholder', "Your e-mail").prop('type','email').blur().focus();
+                $('#prudio-window div.reply input').prop('placeholder', "Your e-mail").prop('type','email').blur().focus();
 
                 // Capture
-                $('#prudio-window input').bind('keypress', function(e) {
+                $('#prudio-window div.reply input').bind('keypress', function(e) {
                     if (e.keyCode == ENTER_KEY_CODE && $(this).val() != "") {
                         var message = $(this).val();
  
@@ -547,7 +552,7 @@ function main() {
 
                     var socket = io.connect(baseURL + '/chat');
 
-                    $('#prudio-window input').bind('keypress', function(e){
+                    $('#prudio-window div.reply input').bind('keypress', function(e){
                         // if enter key
                         if (e.keyCode == ENTER_KEY_CODE && $(this).val() != "") {
                             var message = $(this).val();
@@ -567,7 +572,11 @@ function main() {
 
                     socket.on('connect', function(){
                         console.log("Connected to " + data.channel);
+
+                        // Store the joinedChannel fo further external uses (e.g. files upload)
+                        settings.joinedChannel = channel;
                         socket.emit('joinRoom', settings.appid, data.channel, data.signature);
+
                     });
 
                     // On Slack message
@@ -584,13 +593,13 @@ function main() {
                     socket.on('disconnect', function () {
                         $('<li class="error"></li>').text("Server is now offline!").appendTo($('#prudio-window ul'));
                         $.scrollChat('#prudio-window div.messages');
-                        $('#prudio-window input').prop('disabled', true);
+                        $('#prudio-window div.reply input').prop('disabled', true);
                     });
 
                     socket.on('serverMessage', function (data) {
                         $('<li class="server"></li>').text(data.message).appendTo($('#prudio-window ul'));
                         $.scrollChat('#prudio-window div.messages');
-                        $('#prudio-window input').prop('disabled', false);
+                        $('#prudio-window div.reply input').prop('disabled', false);
                     });
 
                     socket.on('typingMessage', function () {
@@ -600,6 +609,87 @@ function main() {
                     });
                 }
             });
+        };
+
+        $.uploadFiles = function(file){
+
+            // Create the FormData object to send the file as a form
+            var data = new FormData();
+
+            // Add the file to the formData
+            data.append('file', file, file.name);
+
+            // Perform the request
+            $.ajax({
+                url: '/app/fileUpload?appid='+settings.appid+'&channel='+settings.joinedChannel,
+                type: 'POST',
+                data: data,
+                cache: false,
+                dataType: 'json',
+                processData: false, // Don't process the files
+                contentType: false, // Set content type to false as jQuery will tell the server its a query string request
+                success: function(data, textStatus, jqXHR)
+                {
+                    if(typeof data.error === 'undefined')
+                    {
+                        console.log('SUCCESS: ' + data);
+                    }
+                    else
+                    {
+                        console.log('ERRORS: ' + data.error);
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown)
+                {
+                    console.log('ERRORS: ' + textStatus);
+                }
+            });
+
+        };
+
+        $.handleFilesDragOver = function(event) {
+
+            // Avoid Standard actions
+            event.stopPropagation();
+            event.preventDefault();
+
+            // Explicitly show this is a copy, avoid user to _self with the files.
+            event.dataTransfer.dropEffect = 'copy';     
+            
+        };
+
+        $.handleFileSelect = function(event) {
+
+            // Avoid Standard actions
+            event.stopPropagation();
+            event.preventDefault();
+
+            // Append files into a FileList Object
+            var files = event.dataTransfer.files;
+
+            // Itterate on files to send them one by one (async)
+            for (var i = 0, file; file = files[i]; i++) {
+
+                $.uploadFiles(file);
+            
+            }
+
+        };
+
+        $.handleFormFileSelect = function(event) {
+
+            $('#prudio-window div.file-container').removeClass('open'); 
+
+            // Append files into a FileList Object
+            var files = event.files;
+
+            // Itterate on files to send them one by one (async)
+            for (var i = 0, file; file = files[i]; i++) {
+
+                $.uploadFiles(file);
+            
+            }
+
         };
 
         $.loadCSS(baseURL + "/client.css");
@@ -628,6 +718,39 @@ function main() {
             }
         });
 
+        $(document).on('dragover', '#prudio-window div.drop_zone', function(event) {
+            $.handleFilesDragOver(event);
+            $(this).addClass("drag_over");
+        });
+
+        $(document).on('dragleave', '#prudio-window div.drop_zone', function(event) {
+            $(this).removeClass("drag_over");
+        });
+
+        $(document).on('drop', '#prudio-window div.drop_zone', function(event) {
+            $.handleFileSelect(event);
+            $(this).removeClass("drag_over");
+        });
+
+        $(document).on('click', '#prudio-window span.icon-plus', function(event) {
+            console.log($('#hiddenfile'));
+            $('#hiddenfile').trigger('click');
+        });
+
+        $(document).on('change', '#prudio-window #hiddenfile', function(event) {
+            $('#selectedfile').val($('#hiddenfile').val()); 
+        });
+
+        $(document).on('click', '#prudio-window span.icon-upload', function(event) {
+            $.handleFormFileSelect($('#hiddenfile')[0]); 
+            $('#selectedfile').val('');
+            $('#hiddenfile').val('');        
+        }); 
+
+        $(document).on('click', '#prudio-window span.icon-attach', function(event) {
+            $('#prudio-window div.file-container').toggleClass('open');        
+        }); 
+
         $(document).on('click', (settings.buttonSelector || '#prudio-button'), function() {
 
             $('#prudio-window').toggleClass('prudio-window-open');
@@ -639,17 +762,28 @@ function main() {
 
                 var domContent = [
                     '<nav class="prudio-window prudio-window-vertical prudio-window-right" id="prudio-window">',
+                    '   <div class="drop_zone">',
                     '       <h3><span class="mute" title="Mute"><i class="icon-volume-high"></i></span>' + (settings.title || 'Support') + ' <span class="close" title="Close"><i class="icon-cancel"></i></span></h3>',
                     '       <div class="messages">',
                     '           <ul>',
                     '           </ul>',
+                    '           <div class="file-container">',
+                    '              <div class="file">',
+                    '                  <input type="file" id="hiddenfile" style="display:none" multiple/>',
+                    '                  <input type="text" id="selectedfile" />',
+                    '                  <span class="icon-plus">+</span>',
+                    '                  <span class="icon-upload"></span>',
+                    '              </div>',
+                    '           </div>',
                     '           <div class="reply-container">',
                     '              <div class="reply">',
                     '                  <input type="text" name="message" placeholder="Just write..." autofocus="autofocus">',
+                    '                  <span class="icon-attach"></span>',
                     '              </div>',
                     '           </div>',
                     '       </div>',
-                    '   </nav>'
+                    '   </div>',
+                    '</nav>'
                     ].join('');
 
                 $('body').append(domContent);
@@ -667,8 +801,10 @@ function main() {
             open = true;
         });
 
-
     });
 }
+
+
+
 
 })(); // We call our anonymous function immediately

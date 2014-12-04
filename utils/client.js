@@ -1,5 +1,6 @@
 var async   = require('async');
 var request = require('request'); // github.com/mikeal/request
+var formidable = require('formidable');
 
 module.exports = function(app, io, slack, models) {
 
@@ -30,6 +31,27 @@ module.exports = function(app, io, slack, models) {
 
 	app.get('/', function(req, res, next) {
 		return res.status(200).json({ success: true, message: "Welcome, nothing here" });
+	});
+
+	app.post('/app/fileUpload', isAuthorized, function(req, res, next) {
+
+		// Retrieve Prudio appid
+		var appid 		= req.param('appid');
+
+		// Retrieve Slack channel
+		var channel 	= req.param('channel');
+
+		// Create the POST parser object
+		var form 		= new formidable.IncomingForm();
+
+		// Parse data from POST
+	    form.parse(req, function(err, fields, files) {
+		    models.app.find({ where: { appid: appid, active: true } }).success(function(application) {
+				slack.uploadFile(application.slack_api_token,channel,files);
+				return res.status(200).json({ success: true, message: "Uploading" });
+			});
+	    });
+
 	});
 
 	app.post('/app/connect', isAuthorized, function(req, res, next) {
@@ -152,8 +174,6 @@ module.exports = function(app, io, slack, models) {
 				}
 			);
 		});
-
-
 
 	});
 

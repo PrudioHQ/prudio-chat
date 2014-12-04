@@ -1,4 +1,3 @@
-
 module.exports = function(app, io, slack, models)
 {
 	var chat = io.of('/chat').on('connection', function(clientSocket)
@@ -11,10 +10,10 @@ module.exports = function(app, io, slack, models)
 		  	models.app.find({ where: { appid: appid, active: true } }).success(function(application) {
 
 				if(application == null) {
-					console.log('Wrong application identifier.');
+					console.log('Wrong appid.');
 					
 					clientSocket.emit('serverMessage', {
-						message: 'Wrong application identifier.'
+						message: 'Wrong appid.'
 					});
 
 					// force client to disconnect
@@ -24,6 +23,7 @@ module.exports = function(app, io, slack, models)
 
 				var crypto      = require('crypto');
 				var signature   = crypto.createHmac('sha1', application.slack_api_token).update(channel).digest('hex');
+				var appid       = application.id;
 
 				if(signature != client_signature) {
 					console.log('Wrong channel signature.');
@@ -50,7 +50,7 @@ module.exports = function(app, io, slack, models)
 				/** sendMessage **/
 				clientSocket.on('sendMessage', function (text) {
 
-					if(slack.isConnected(application.id) === false) {
+					if(slack.isConnected(appid) === false) {
 						// Let the user know about the error?
 						clientSocket.emit('serverMessage', {
 							message: 'Could not deliver the message: ' + text.message
@@ -71,7 +71,7 @@ module.exports = function(app, io, slack, models)
 					});
 
 					// send response to slack
-					slack.say(application.id, channel, text.message);
+					slack.say(appid, channel, text.message);
 				});
 
 				console.log("Type: " + typeof bot);
@@ -114,7 +114,7 @@ module.exports = function(app, io, slack, models)
 
 				// Socket disconnect listener, notify Slack that user left the chat
 				clientSocket.on('disconnect', function() {
-					slack.say(application.id, channel, "_User disconnected!_");
+					slack.say(appid, channel, "_User disconnected!_");
 				});
 
 			}); 

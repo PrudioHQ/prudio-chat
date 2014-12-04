@@ -132,6 +132,14 @@
     overflow-y: scroll;
 }
 
+.prudio-window div.drop_zone.drag_over {
+	background: rgba(216,216,217,.50);
+	background-image: url("./plus.png"); 
+	background-repeat:no-repeat;
+	background-size: 60px 60px;
+	background-position:center center;
+}
+
 .prudio-window ul {
 	height: auto;
 	overflow: auto;
@@ -279,6 +287,54 @@
 	box-shadow: 0 0 15px 5px rgba(10, 10, 10, .15);
 }
 
+.prudio-window div.file-container {
+	position: absolute;
+	height: 80px;
+	bottom: 0;
+	background: rgba(249,249,250,0.95);
+	background: -moz-linear-gradient(top,  rgba(249,249,250,0) 0%, rgba(249,249,250,0.95) 20%, rgba(249,249,250,0.95) 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(249,249,250,0)), color-stop(20%,rgba(249,249,250,0.95)), color-stop(100%,rgba(249,249,250,0.95)));
+	background: -webkit-linear-gradient(top,  rgba(249,249,250,0) 0%,rgba(249,249,250,0.95) 20%,rgba(249,249,250,0.95) 100%);
+	background: -o-linear-gradient(top,  rgba(249,249,250,0) 0%,rgba(249,249,250,0.95) 20%,rgba(249,249,250,0.95) 100%);
+	background: -ms-linear-gradient(top,  rgba(249,249,250,0) 0%,rgba(249,249,250,0.95) 20%,rgba(249,249,250,0.95) 100%);
+	background: linear-gradient(to bottom,  rgba(249,249,250,0) 0%,rgba(249,249,250,0.95) 20%,rgba(249,249,250,0.95) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00f9f9fa', endColorstr='#f2f9f9fa',GradientType=0 );
+	-webkit-transition: all .2s ease-in-out;
+    -moz-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+}
+
+.prudio-window div.file-container.open {
+	height: 130px;
+}
+
+.prudio-window div.file {
+	border: 1px solid #DADEE2;
+	border-radius: 4px;
+	margin: 15px; 
+	padding: 6px 10px;
+	background: #FFFFFF;
+	width: 315px;
+	clear: both;
+}
+
+.prudio-window div.file input {
+	background-color: transparent;
+    border: 0 solid;
+    color: #60686E;
+    width: 86%;
+    font-size: 0.8em;
+    font-weight: normal;
+}
+
+.prudio-window div.file span.icon-plus {
+	cursor: pointer;
+}
+
+.prudio-window div.file span.icon-upload {
+	cursor: pointer;
+}
+
 .prudio-window div.reply-container {
 	position: absolute;
 	height: 80px;
@@ -307,7 +363,7 @@
 	background-color: transparent;
     border: 0 solid;
     color: #60686E;
-    width: 100%;
+    width: 90%;
     font-size: 0.8em;
     font-weight: normal;
 }
@@ -315,6 +371,12 @@
 .prudio-window div.reply input:focus {
     outline: 0;
 }
+
+.prudio-window div.reply span.icon-attach {
+	cursor: pointer;
+}
+
+
 
 /* Orientation-dependent styles for the content of the menu */
 

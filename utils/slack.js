@@ -1,6 +1,7 @@
 var WebSocket = require('ws');
 var emitter   = require('./emitter');
 var moment    = require('moment');
+var fs 		  = require('fs');
 var request   = require('request'); // github.com/mikeal/request
 
 // Private
@@ -92,7 +93,6 @@ var self = module.exports = {
 					Bots[appid].bootedAt    = moment().utc().unix();
 					Bots[appid].channels    = [];
 					Bots[appid].errors      = [];
-
 
 					console.log("Undefined");
 					console.log("T: " + Object.size(Bots));
@@ -219,6 +219,38 @@ var self = module.exports = {
 			console.log(error);
 			console.log(data);
 		});
+	},
+
+	// Upload a file
+	uploadFile: function uploadFile(applicationToken,channel,stream) {
+
+		var formData = {
+
+			// Pass Slack token
+			token: applicationToken,
+
+			// Pass Slack channel
+			channels: channel,
+			
+			// Pass data via file stream
+			file: {
+			    value:  fs.createReadStream(stream.file.path),
+			    options: {
+			      filename: stream.file.name,
+			      contentType: stream.file.type
+			    }
+  			}
+		};
+
+		// Sending the request
+		request.post('https://slack.com/api/files.upload?pretty=1', { 'content-type': 'multipart\/form-data', formData: formData }, function (error, response, body) {
+			if (!error && response.statusCode == 200 && typeof body.ok !== "undefined" && body.ok == true) {
+				console.log('File ('+stream.file.name+') Uploaded');
+			} else {
+				console.log('File ('+stream.file.name+') Not Uploaded');
+			}
+		});
+
 	},
 
 	// Disconect one websocket

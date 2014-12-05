@@ -543,8 +543,6 @@ function main() {
                 },
                 success: function(data) {
 
-                    console.log(data);
-
                     // Save connection to cookies
                     $.setCookie('prudio-channel',      data.channel);
                     $.setCookie('prudio-channel-name', data.channelName);
@@ -570,13 +568,10 @@ function main() {
                         }
                     });
 
-                    socket.on('connect', function(){
-                        console.log("Connected to " + data.channel);
-
+                    socket.on('connect', function() {
                         // Store the joinedChannel fo further external uses (e.g. files upload)
-                        settings.joinedChannel = channel;
+                        settings.joinedChannel = data.channel;
                         socket.emit('joinRoom', settings.appid, data.channel, data.signature);
-
                     });
 
                     // On Slack message
@@ -621,7 +616,7 @@ function main() {
 
             // Perform the request
             $.ajax({
-                url: '/app/fileUpload?appid=' + settings.appid + '&channel=' + settings.joinedChannel,
+                url: baseURL + '/app/fileUpload?appid=' + settings.appid + '&channel=' + settings.joinedChannel,
                 type: 'POST',
                 data: data,
                 cache: false,
@@ -677,7 +672,7 @@ function main() {
         };
 
         $.handleFormFileSelect = function(event) {
-            
+
             // Append files into a FileList Object
             var files = event.files;
 

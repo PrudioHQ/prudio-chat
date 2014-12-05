@@ -39,7 +39,8 @@ module.exports = function(grunt) {
       main: {
         files: [
           { expand: true, flatten: true, src: ['src/sound/*', 'src/img/*'], dest: 'build/', filter: 'isFile' },
-          { expand: true, flatten: true, src: ['src/font/*'], dest: 'build/font/', filter: 'isFile' }
+          { expand: true, flatten: true, src: ['src/font/*'], dest: 'build/font/', filter: 'isFile' },
+          { expand: true, flatten: true, src: ['src/img/emojis/*'], dest: 'build/emojis/', filter: 'isFile' }
         ]
       }
     },

@@ -132,6 +132,12 @@
     overflow-y: scroll;
 }
 
+.prudio-window img.emoji {
+	max-width: 22px;
+	max-height: 22px;
+	vertical-align: middle;
+}
+
 .hidden {
 	display: none;
 }

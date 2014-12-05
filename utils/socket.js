@@ -1,4 +1,4 @@
-module.exports = function(app, io, slack, models)
+module.exports = function(app, io, slack, models, emoji)
 {
 	var chat = io.of('/chat').on('connection', function(clientSocket)
 	{
@@ -64,6 +64,7 @@ module.exports = function(app, io, slack, models)
 						message: text.message,
 						sender: 'Other'
 					});
+
 					// and then shown to client
 					clientSocket.emit('message', {
 						message: text.message,
@@ -82,7 +83,7 @@ module.exports = function(app, io, slack, models)
 
 				    if(message.channel == channel)
 				    	clientSocket.emit('message', {
-							message: message.text,
+							message: emoji.parse(message.text, "/emojis"),
 							sender: 'Other'
 						});
 				});

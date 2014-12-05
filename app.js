@@ -8,8 +8,9 @@ var server  = require('http').Server(app);
 var io      = require('socket.io')(server);
 
 // Body parser & CORS
-var bodyParser   = require('body-parser');
-var cors         = require('cors');
+var bodyParser = require('body-parser');
+var cors       = require('cors');
+var emoji      = require('emoji-parser');
 
 // Models
 var models    = require('./models');
@@ -34,9 +35,16 @@ if ('development' === app.get('env')) {
 
 models.sequelize.sync().success(function () {
   var listening = server.listen(app.get('port'), function() {
+    
+    // keep emoji-images in sync with the official repository
+    emoji.init().update();
+
     console.log('Express server listening on port ' + listening.address().port);
+
+    // If in heroku inform which DYNO is running 
     if(process.env.DYNO)
       console.log('I\'m running at ' + process.env.DYNO);
+
   });
 });
 
@@ -55,7 +63,7 @@ if ('development' === app.get('env')) {
 
 
 // linking
-require('./utils/socket')(app, io, slack, models); // socketIO logic
+require('./utils/socket')(app, io, slack, models, emoji); // socketIO logic
 require('./utils/client')(app, io, slack, models); // sets up endpoints
 require('./utils/bot')(slack, models); // Sets bots up
 

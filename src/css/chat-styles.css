@@ -133,12 +133,12 @@
 }
 
 .prudio-window img.emoji {
-	max-width: 22px;
-	max-height: 22px;
+	max-width: 20px;
+	max-height: 20px;
 	vertical-align: middle;
 }
 
-.hidden {
+.prudio-window .hidden {
 	display: none;
 }
 

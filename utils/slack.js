@@ -140,10 +140,20 @@ var self = module.exports = {
 							Bots[appid].emit('message', shared_message);
 						
 						} else if(message.type == 'message' && message.channel.indexOf("D") == 0) {
-						
+
 							console.log("Direct message %j", message);
 							Bots[appid].emit('direct_message', message);
-						
+
+						} else if(message.type == 'file_public') {
+
+							console.log("File public shared  %j", message);
+							//Bots[appid].emit('message', message);
+
+						} else if(message.type == 'file_shared') {
+
+							console.log("File shared  %j", message);
+							//Bots[appid].emit('message', message);
+
 						} else if(typeof message.type !== 'undefined' && message.type !== 'message') {
 						
 							console.log("Other message %s %j", message.type, message);

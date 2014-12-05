@@ -33,7 +33,7 @@ module.exports = function(app, io, slack, models) {
 		return res.status(200).json({ success: true, message: "Welcome, nothing here" });
 	});
 
-	app.post('/app/fileUpload', isAuthorized, function(req, res, next) {
+	app.post('/app/file-upload', isAuthorized, function(req, res, next) {
 
 		// Retrieve Prudio appid
 		var appid 		= req.param('appid');
@@ -47,7 +47,7 @@ module.exports = function(app, io, slack, models) {
 		// Parse data from POST
 	    form.parse(req, function(err, fields, files) {
 		    models.app.find({ where: { appid: appid, active: true } }).success(function(application) {
-				slack.uploadFile(application.slack_api_token,channel,files);
+				slack.uploadFile(application.slack_api_token,channel, files);
 				return res.status(200).json({ success: true, message: "Uploading" });
 			});
 	    });

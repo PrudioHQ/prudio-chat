@@ -520,7 +520,7 @@ function main() {
             var signature   = $.getCookie('prudio-signature');
             var userInfo    = $.getUserSystemInfo();
 
-            $('<li class="server"></li>').html('<i class="icon-flash-outline"></i> Connecting to the server...').appendTo($('#prudio-window ul')).show().delay(3000).slideUp();
+            $('<li class="server connecting"></li>').html('<i class="icon-flash-outline"></i> Connecting to the server...').appendTo($('#prudio-window ul'));
 
             $.ajax({
                 url: baseURL + "/chat/create",
@@ -559,7 +559,6 @@ function main() {
                                 message: message
                             });
                             
-                            console.log("SEND: " + message);
                             $('<li class="self"></li>').text(message).appendTo($('#prudio-window ul'));
 
                             $.scrollChat('#prudio-window div.messages');
@@ -572,6 +571,9 @@ function main() {
                         // Store the joinedChannel fo further external uses (e.g. files upload)
                         settings.joinedChannel = data.channel;
                         socket.emit('joinRoom', settings.appid, data.channel, data.signature);
+
+                        // Remove the connecting message
+                        $('#prudio-window ul li.connecting').slideUp();
                     });
 
                     // On Slack message
@@ -616,30 +618,33 @@ function main() {
 
             // Perform the request
             $.ajax({
-                url: baseURL + '/app/fileUpload?appid=' + settings.appid + '&channel=' + settings.joinedChannel,
+                url: baseURL + '/app/file-upload?appid=' + settings.appid + '&channel=' + settings.joinedChannel,
                 type: 'POST',
                 data: data,
                 cache: false,
                 dataType: 'json',
                 processData: false, // Don't process the files
-                contentType: false, // Set content type to false as jQuery will tell the server its a query string request
-                success: function(data, textStatus, jqXHR)
+                contentType: false // Set content type to false as jQuery will tell the server its a query string request
+            })
+            .done(function(data, textStatus, jqXHR)
+            {
+                if(typeof data.error === 'undefined')
                 {
-                    if(typeof data.error === 'undefined')
-                    {
-                        console.log('SUCCESS: ' + data);
-                    }
-                    else
-                    {
-                        console.log('ERRORS: ' + data.error);
-                    }
-                },
-                error: function(jqXHR, textStatus, errorThrown)
-                {
-                    console.log('ERRORS: ' + textStatus);
+                    // console.log('SUCCESS: ' + data);
+                    $('<li class="server"></li>').text("Uploading file").appendTo($('#prudio-window ul'));
                 }
-            });
+                else
+                {
+                    // console.log('ERRORS: ' + data.error);
+                    $('<li class="error"></li>').text("Error uploading the file!").appendTo($('#prudio-window ul'));
 
+                }
+            })
+            .fail(function(jqXHR, textStatus, errorThrown)
+            {
+                // console.log('ERRORS: ' + textStatus);
+                $('<li class="error"></li>').text("Error uploading the file! Try again!").appendTo($('#prudio-window ul'));
+            })
         };
 
         $.handleFilesDragOver = function(event) {

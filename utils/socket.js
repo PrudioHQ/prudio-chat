@@ -83,7 +83,7 @@ module.exports = function(app, io, slack, models, emoji)
 
 				    if(message.channel == channel)
 				    	clientSocket.emit('message', {
-							message: emoji.parse(message.text, "/emojis"),
+							message: emoji.parse(message.text, "//chat.prud.io/emojis"),
 							sender: 'Other'
 						});
 				});

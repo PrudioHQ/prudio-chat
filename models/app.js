@@ -9,7 +9,9 @@ module.exports = function(sequelize, DataTypes) {
     active: DataTypes.BOOLEAN,
     online: DataTypes.BOOLEAN,
     slack_api_token: DataTypes.STRING,
+    slack_bot_token: DataTypes.STRING,
     slack_invite_user: DataTypes.STRING,
+    slack_invite_bot: DataTypes.STRING,
     room_prefix: DataTypes.STRING,
     room_count: DataTypes.INTEGER
   }, {

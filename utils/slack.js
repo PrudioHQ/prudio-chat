@@ -79,7 +79,7 @@ var self = module.exports = {
 
 		if(typeof Bots[appid] === 'undefined' || Bots[appid].isConnected == false) {
 
-			request.post('https://slack.com/api/rtm.start', { json: true, form: { token: application.slack_api_token, t: Date.now() }}, function (error, response, connection) {
+			request.post('https://slack.com/api/rtm.start', { json: true, form: { token: application.slack_bot_token, t: Date.now() }}, function (error, response, connection) {
 				if (!error && response.statusCode == 200 && typeof connection.ok !== "undefined" && connection.ok == true) {
 								
 					Bots[appid]             = emitter;

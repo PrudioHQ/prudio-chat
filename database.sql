@@ -41,14 +41,16 @@ CREATE TABLE `apps` (
   `active` tinyint(1) NOT NULL DEFAULT '1',
   `online` tinyint(1) NOT NULL DEFAULT '1',
   `slack_api_token` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `slack_bot_token` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `slack_invite_user` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `slack_invite_bot` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `room_count` bigint(20) NOT NULL DEFAULT '1',
   `room_prefix` varchar(5) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'sp-',
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `apps_token_unique` (`token`)
+  UNIQUE KEY `apps_token_unique` (`appid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Change token to appid field on APPS table.

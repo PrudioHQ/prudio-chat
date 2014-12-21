@@ -129,7 +129,7 @@ module.exports = function(app, io, slack, models) {
 
 					// Invite user to channel
 					function(channelName, channelId, returning, callback) {
-						request.post(app.get('slack_api_url') + '/channels.invite', { json: true, form: { token: application.slack_api_token, channel: channelId, user: application.slack_invite_user }}, function (error, response, body) {
+						request.post(app.get('slack_api_url') + '/channels.invite', { json: true, form: { token: application.slack_api_token, channel: channelId, user: application.slack_invite_bot }}, function (error, response, body) {
 							if (!error && response.statusCode == 200) {
 								return callback(null, channelName, channelId, returning);
 							}
@@ -164,7 +164,7 @@ module.exports = function(app, io, slack, models) {
 				],
 				function(err, channelName, channelId) {
 					if(err) {
-						console.log(err);
+						console.log("ERROR: " + err);
 						return res.status(404).json({ error: "Error: " + err});
 					}
 

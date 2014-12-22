@@ -40,6 +40,7 @@ CREATE TABLE `apps` (
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `active` tinyint(1) NOT NULL DEFAULT '1',
   `online` tinyint(1) NOT NULL DEFAULT '1',
+  `join` tinyint(1) NOT NULL DEFAULT '1',
   `slack_api_token` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `slack_bot_token` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `slack_invite_user` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',

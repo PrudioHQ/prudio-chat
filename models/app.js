@@ -8,6 +8,7 @@ module.exports = function(sequelize, DataTypes) {
     name: DataTypes.STRING,
     active: DataTypes.BOOLEAN,
     online: DataTypes.BOOLEAN,
+    join: DataTypes.BOOLEAN,
     slack_api_token: DataTypes.STRING,
     slack_bot_token: DataTypes.STRING,
     slack_invite_user: DataTypes.STRING,

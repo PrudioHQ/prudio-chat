@@ -118,6 +118,7 @@ module.exports = function(app, io, slack, models) {
 						if(channelId != null) {
 							return callback(null, channelName, channelId, true)
 						} else {
+
 							request.post(app.get('slack_api_url') + '/channels.join', { json: true, form: { token: application.slack_api_token, name: channelName }}, function (error, response, body) {
 								if (!error && response.statusCode == 200 && typeof body.channel !== "undefined") {
 									return callback(null, channelName, body.channel.id, false);
@@ -158,6 +159,34 @@ module.exports = function(app, io, slack, models) {
 								return callback(null, channelName, channelId);
 							}
 							return callback('Set purpose of channel');
+						});
+					},
+
+					// Leave the channel
+					function(channelName, channelId, callback) {
+
+						if (!application.join) {
+							request.post(app.get('slack_api_url') + '/channels.leave', { json: true, form: { token: application.slack_api_token, channel: channelId }}, function (error, response, body) {
+								if (!error && response.statusCode == 200) {
+									return callback(null, channelName, channelId);
+								}
+								return callback('Leave the channel');
+							});
+						} else {
+							return callback(null, channelName, channelId);
+						}
+					},
+
+					// Send notification
+					function(channelName, channelId, callback) {
+
+						var text = "New help request at channel <#" + channelId + "|" + channelName + ">. Join now!";
+
+						request.post(app.get('slack_api_url') + '/chat.postMessage', { json: true, form: { token: application.slack_api_token, channel: '#general', text: text, username: 'Prud.io', icon_url: 'http://chat.prud.io/prudio-notification-icon.png' }}, function (error, response, body) {
+							if (!error && response.statusCode == 200) {
+								return callback(null, channelName, channelId);
+							}
+							return callback('Leave the channel');
 						});
 					},
 

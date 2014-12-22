@@ -49,7 +49,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "grunt build",
-    "jscs": "jscs app.js"
+    "jscs": "jscs *.js utils/*.js src/js/*.js models/*.js"
   },
   "repository": {
     "type": "git",

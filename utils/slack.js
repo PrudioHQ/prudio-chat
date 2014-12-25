@@ -35,8 +35,7 @@ var self = module.exports = {
     onlineUsers: function onlineUsers(appid) {
 
         var users = Users.where(function(obj) {
-            return
-            obj.appid == appid &&
+            return obj.appid == appid &&
             obj.user.presence == 'active' &&
             obj.user.id != 'USLACKBOT' &&
             obj.user.is_bot == false &&

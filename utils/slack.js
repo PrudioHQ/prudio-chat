@@ -9,7 +9,7 @@ var db        = new loki();
 
 // Private
 var Bots  = {};
-var Apps = db.addCollection('Apps');
+//var Apps = db.addCollection('Apps');
 var Users = db.addCollection('Users');
 var Channels = db.addCollection('Channels');
 
@@ -49,7 +49,7 @@ var self = module.exports = {
     addChannels: function addChannels(appid, channels) {
 
         for (var channel in channels) {
-            Channels.insert({ appid: appid, user: channels[channel]});
+            Channels.insert({ appid: appid, channel: channels[channel]});
         }
 
         return Channels;
@@ -65,11 +65,16 @@ var self = module.exports = {
     },
 
     getChannelCode: function getChannelCode(appid, name) {
-        if (typeof Bots[appid] === 'undefined') {
+
+        var channel = Channels.where(function(obj) {
+            return obj.appid == appid && obj.channel.name == name;
+        });
+
+        if (channel != null && channel.length == 1) {
+            return channel[0].channel.id;
+        } else {
             return false;
         }
-
-        return Bots[appid].channels['#' + name];
     },
 
     isConnected: function isConnected(appid) {
@@ -177,8 +182,6 @@ var self = module.exports = {
                                 Users.update(usr);
                             }
 
-                            console.log(self.onlineUsers(appid));
-
                         } else if (typeof message.type !== 'undefined' && message.type !== 'message') {
 
                             console.log('Other message %s %j', message.type, message);
@@ -273,7 +276,7 @@ var self = module.exports = {
 
         // Sending the request
         request.post(
-            'https://slack.com/api/files.upload?pretty=1',
+            'https://slack.com/api/files.upload',
             {
                 'content-type': 'multipart\/form-data',
                 formData: formData

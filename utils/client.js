@@ -193,7 +193,7 @@ module.exports = function(app, io, slack, models) {
 
                         var text = "New help request at channel <#" + channelId + "|" + channelName + ">. Join now!";
 
-                        request.post(app.get('slack_api_url') + '/chat.postMessage', { json: true, form: { token: application.slack_api_token, channel: '#random', text: text, username: 'Prud.io', icon_url: 'http://chat.prud.io/prudio-notification-icon.png' }}, function (error, response, body) {
+                        request.post(app.get('slack_api_url') + '/chat.postMessage', { json: true, form: { token: application.slack_api_token, channel: '#general', text: text, username: 'Prud.io', icon_url: 'http://chat.prud.io/prudio-notification-icon.png' }}, function (error, response, body) {
                             if (!error && response.statusCode == 200) {
                                 return callback(null, channelName, channelId);
                             }

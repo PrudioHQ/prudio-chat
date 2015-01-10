@@ -8,21 +8,21 @@ var ENTER_KEY_CODE = 13;
 
 /******** Load jQuery if not present *********/
 if (window.jQuery === undefined || window.jQuery.fn.jquery !== '2.1.1') {
-    var script_tag = document.createElement('script');
-    script_tag.setAttribute("type","text/javascript");
-    script_tag.setAttribute("src",
+    var scriptTag = document.createElement('script');
+    scriptTag.setAttribute("type","text/javascript");
+    scriptTag.setAttribute("src",
         "//code.jquery.com/jquery-2.1.1.min.js");
-    if (script_tag.readyState) {
-      script_tag.onreadystatechange = function () { // For old versions of IE
+    if (scriptTag.readyState) {
+      scriptTag.onreadystatechange = function () { // For old versions of IE
           if (this.readyState == 'complete' || this.readyState == 'loaded') {
               scriptLoadHandler();
           }
       };
     } else { // Other browsers
-      script_tag.onload = scriptLoadHandler;
+      scriptTag.onload = scriptLoadHandler;
     }
     // Try to find the head, otherwise default to the documentElement
-    (document.getElementsByTagName("head")[0] || document.documentElement).appendChild(script_tag);
+    (document.getElementsByTagName("head")[0] || document.documentElement).appendChild(scriptTag);
 } else {
     // The jQuery version on the window is the one we want to use
     jQuery = window.jQuery;
@@ -170,8 +170,8 @@ function main() {
             // screen
             var screenSize = '';
             if (screen.width) {
-                width = (screen.width) ? screen.width : '';
-                height = (screen.height) ? screen.height : '';
+                var width = (screen.width) ? screen.width : '';
+                var height = (screen.height) ? screen.height : '';
                 screenSize += '' + width + " x " + height;
             }
 
@@ -185,38 +185,38 @@ function main() {
             var url = document.URL;
 
             // Opera
-            if ((verOffset = nAgt.indexOf('Opera')) != -1) {
+            if ((verOffset = nAgt.indexOf('Opera')) !== -1) {
                 browser = 'Opera';
                 version = nAgt.substring(verOffset + 6);
-                if ((verOffset = nAgt.indexOf('Version')) != -1) {
+                if ((verOffset = nAgt.indexOf('Version')) !== -1) {
                     version = nAgt.substring(verOffset + 8);
                 }
             }
             // MSIE
-            else if ((verOffset = nAgt.indexOf('MSIE')) != -1) {
+            else if ((verOffset = nAgt.indexOf('MSIE')) !== -1) {
                 browser = 'Microsoft Internet Explorer';
                 version = nAgt.substring(verOffset + 5);
             }
             // Chrome
-            else if ((verOffset = nAgt.indexOf('Chrome')) != -1) {
+            else if ((verOffset = nAgt.indexOf('Chrome')) !== -1) {
                 browser = 'Chrome';
                 version = nAgt.substring(verOffset + 7);
             }
             // Safari
-            else if ((verOffset = nAgt.indexOf('Safari')) != -1) {
+            else if ((verOffset = nAgt.indexOf('Safari')) !== -1) {
                 browser = 'Safari';
                 version = nAgt.substring(verOffset + 7);
-                if ((verOffset = nAgt.indexOf('Version')) != -1) {
+                if ((verOffset = nAgt.indexOf('Version')) !== -1) {
                     version = nAgt.substring(verOffset + 8);
                 }
             }
             // Firefox
-            else if ((verOffset = nAgt.indexOf('Firefox')) != -1) {
+            else if ((verOffset = nAgt.indexOf('Firefox')) !== -1) {
                 browser = 'Firefox';
                 version = nAgt.substring(verOffset + 8);
             }
             // MSIE 11+
-            else if (nAgt.indexOf('Trident/') != -1) {
+            else if (nAgt.indexOf('Trident/') !== -1) {
                 browser = 'Microsoft Internet Explorer';
                 version = nAgt.substring(nAgt.indexOf('rv:') + 3);
             }
@@ -229,9 +229,9 @@ function main() {
                 }
             }
             // trim the version string
-            if ((ix = version.indexOf(';')) != -1) version = version.substring(0, ix);
-            if ((ix = version.indexOf(' ')) != -1) version = version.substring(0, ix);
-            if ((ix = version.indexOf(')')) != -1) version = version.substring(0, ix);
+            if ((ix = version.indexOf(';')) !== -1) version = version.substring(0, ix);
+            if ((ix = version.indexOf(' ')) !== -1) version = version.substring(0, ix);
+            if ((ix = version.indexOf(')')) !== -1) version = version.substring(0, ix);
 
             majorVersion = parseInt('' + version, 10);
             if (isNaN(majorVersion)) {
@@ -245,7 +245,7 @@ function main() {
             // cookie
             var cookieEnabled = !!(navigator.cookieEnabled);
 
-            if (typeof navigator.cookieEnabled == 'undefined' && !cookieEnabled) {
+            if (typeof navigator.cookieEnabled === 'undefined' && !cookieEnabled) {
                 document.cookie = 'testcookie';
                 cookieEnabled = (document.cookie.indexOf('testcookie') != -1);
             }
@@ -307,7 +307,7 @@ function main() {
 
             case 'iOS':
                 osVersion = /OS (\d+)_(\d+)_?(\d+)?/.exec(nVer);
-                osVersion = osVersion[1] + '.' + osVersion[2] + '.' + (osVersion[3] | 0);
+                osVersion = osVersion[1] + '.' + osVersion[2] + '.' + (osVersion[3] || 0);
                 break;
             }
 
@@ -329,15 +329,17 @@ function main() {
         */
         $.titleAlert = function(text, settings) {
             // check if it currently flashing something, if so reset it
-            if ($.titleAlert._running)
+            if ($.titleAlert._running) {
                 $.titleAlert.stop();
-            
+            }
+
             // override default settings with specified settings
             $.titleAlert._settings = settings = $.extend( {}, $.titleAlert.defaults, settings);
             
             // if it's required that the window doesn't have focus, and it has, just return
-            if (settings.requireBlur && $.titleAlert.hasFocus)
+            if (settings.requireBlur && $.titleAlert.hasFocus) {
                 return;
+            }
             
             // originalTitleInterval defaults to interval if not set
             settings.originalTitleInterval = settings.originalTitleInterval || settings.interval;
@@ -348,8 +350,9 @@ function main() {
             var showingAlertTitle = true;
             var switchTitle = function() {
                 // WTF! Sometimes Internet Explorer 6 calls the interval function an extra time!
-                if (!$.titleAlert._running)
+                if (!$.titleAlert._running) {
                     return;
+                }
                 
                 showingAlertTitle = !showingAlertTitle;
                 document.title = (showingAlertTitle ? text : $.titleAlert._initialText);
@@ -385,8 +388,9 @@ function main() {
 
         // stop current title flash
         $.titleAlert.stop = function() {
-            if (!$.titleAlert._running)
+            if (!$.titleAlert._running) {
                 return;
+            }
             
             clearTimeout($.titleAlert._intervalToken);
             clearTimeout($.titleAlert._timeoutToken);
@@ -417,8 +421,9 @@ function main() {
                 // ugly hack because of a bug in Chrome which causes a change of document.title immediately after tab switch
                 // to have no effect on the browser title
                 setTimeout(function() {
-                    if ($.titleAlert._running)
+                    if ($.titleAlert._running) {
                         return;
+                    }
                     document.title = ".";
                     document.title = initialText;
                 }, 1000);
@@ -468,7 +473,7 @@ function main() {
 
                 // Capture
                 $('#prudio-window div.reply input[name=message]').bind('keypress', function(e) {
-                    if (e.keyCode == ENTER_KEY_CODE && $(this).val() != "") {
+                    if (e.keyCode === ENTER_KEY_CODE && $(this).val() !== "") {
                         var message = $(this).val();
 
                         console.log("ENTER name");
@@ -494,7 +499,7 @@ function main() {
 
                 // Capture
                 $('#prudio-window div.reply input[name=message]').bind('keypress', function(e) {
-                    if (e.keyCode == ENTER_KEY_CODE && $(this).val() != "") {
+                    if (e.keyCode === ENTER_KEY_CODE && $(this).val() !== "") {
                         var message = $(this).val();
  
                         console.log("ENTER email");
@@ -552,7 +557,7 @@ function main() {
 
                     $('#prudio-window div.reply input[name=message]').bind('keypress', function(e){
                         // if enter key
-                        if (e.keyCode == ENTER_KEY_CODE && $(this).val() != "") {
+                        if (e.keyCode === ENTER_KEY_CODE && $(this).val() !== "") {
                             var message = $(this).val();
                             
                             socket.emit('sendMessage', {
@@ -578,7 +583,7 @@ function main() {
 
                     // On Slack message
                     socket.on('message', function (data) {
-                        if(data.sender == "Other") {
+                        if(data.sender === "Other") {
                             $('#prudio-window ul li.typing').remove();
                             $('<li class="other"></li>').html(data.message).appendTo($('#prudio-window ul'));
                             $.scrollChat('#prudio-window div.messages');
@@ -684,7 +689,7 @@ function main() {
             // Itterate on files to send them one by one (async)
             for (var i = 0, file; file = files[i]; i++) {
 
-                $.uploadFiles(file);
+                $.uploadFiles(files[i]);
             
             }
 
@@ -695,16 +700,18 @@ function main() {
 
         var settings  = $.getSettings();
 
-        if(!settings.buttonSelector)
+        if(!settings.buttonSelector) {
             $.createButton(settings);
+        }
 
         var open = false;
         var muted = false;
 
         $(document).on('click', '#prudio-window span.close', function() {
             $('#prudio-window').toggleClass('prudio-window-open');
-            if(!settings.buttonSelector)
+            if(!settings.buttonSelector) {
                 $('#prudio-button').fadeIn();
+            }
         });
 
         $(document).on('click', '#prudio-window span.mute', function() {
@@ -743,8 +750,9 @@ function main() {
 
             $('#prudio-window').toggleClass('prudio-window-open');
 
-            if(!settings.buttonSelector)
+            if(!settings.buttonSelector) {
                 $(this).fadeOut('fast');
+            }
 
             if(open === false) {
 
@@ -772,10 +780,11 @@ function main() {
 
                 var hasSignature = $.getCookie('prudio-signature');
 
-                if(hasSignature == null)
+                if(hasSignature == null) {
                     $.checkUserInfo(settings);
-                else 
+                } else { 
                     $.continueProgram(settings);
+                }
             }
 
             open = true;

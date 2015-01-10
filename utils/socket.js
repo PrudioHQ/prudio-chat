@@ -3,13 +3,13 @@ module.exports = function(app, io, slack, models, emoji)
 	var chat = io.of('/chat').on('connection', function(clientSocket)
 	{
 		// each client is put into a chat room restricted to max 2 clients
-		clientSocket.on('joinRoom', function(appid, channel, client_signature)
+		clientSocket.on('joinRoom', function(appid, channel, clientSignature)
 		{
 			console.log("Socket JOINROOM CH: " + channel);
 
 		  	models.app.find({ where: { appid: appid, active: true } }).success(function(application) {
 
-				if(application == null) {
+				if(application === null) {
 					console.log('Wrong appid.');
 					
 					clientSocket.emit('serverMessage', {
@@ -25,7 +25,7 @@ module.exports = function(app, io, slack, models, emoji)
 				var signature   = crypto.createHmac('sha1', application.slack_api_token).update(channel).digest('hex');
 				var appid       = application.id;
 
-				if(signature != client_signature) {
+				if(signature !== clientSignature) {
 					console.log('Wrong channel signature.');
 
 					clientSocket.emit('serverMessage', {
@@ -81,18 +81,20 @@ module.exports = function(app, io, slack, models, emoji)
 				bot.on('message', function (message) {
 				    console.log('Message from the socket: %j', message);
 
-				    if(message.channel == channel)
+				    if(message.channel === channel) {
 				    	clientSocket.emit('message', {
 							message: emoji.parse(message.text, "//chat.prud.io/emojis"),
 							sender: 'Other'
 						});
+					}
 				});
 
 				bot.on('user_typing', function (message) {
 				    console.log('User typing from the socket: %j', message);
 
-				    if(message.channel == channel)
+				    if(message.channel === channel) {
 				    	clientSocket.emit('typingMessage');
+				    }
 				});
 
 				// Error handler

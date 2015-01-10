@@ -1,4 +1,4 @@
-# Prudio Chat
+# Prudio Chat [![Codacy Badge](https://www.codacy.com/project/badge/465a9af1b11d44e390e29da236c52ac6)](https://www.codacy.com/public/cossou/prudio-chat) <a href="https://assembly.com/prudio/bounties"><img src="https://asm-badger.herokuapp.com/prudio/badges/tasks.svg" height="24px" alt="Open Tasks" /></a>
 
 ## Connect your website to your Slack team
 

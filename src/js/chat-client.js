@@ -14,7 +14,7 @@ if (window.jQuery === undefined || window.jQuery.fn.jquery !== '2.1.1') {
         "//code.jquery.com/jquery-2.1.1.min.js");
     if (scriptTag.readyState) {
       scriptTag.onreadystatechange = function () { // For old versions of IE
-          if (this.readyState == 'complete' || this.readyState == 'loaded') {
+          if (this.readyState === 'complete' || this.readyState === 'loaded') {
               scriptLoadHandler();
           }
       };
@@ -49,7 +49,9 @@ function main() {
     {
         $.urlParam = function(name, url) {
             var results = new RegExp('[?|&|#]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(url);
-            if (results == null) return;
+            if (results === null) {
+                return;
+            }
             return results[1] || 0;
         };
 
@@ -63,8 +65,9 @@ function main() {
             var re = /chat\.prud\.io\/client/;
 
             for(var i = 0; i < elems.length; i++) {
-                if(elems[i].src.match(re))
+                if(elems[i].src.match(re)) {
                     return elems[i];
+                }
             }
 
             throw "Could not find the script from Prudio.";
@@ -80,9 +83,11 @@ function main() {
                 settings[p] = $.urlParam(p, el.src);
             }
 
-            if (typeof window._PrudioSettings != 'undefined') {
+            if (typeof window._PrudioSettings !== 'undefined') {
                 for (var attrname in window._PrudioSettings) {
-                    settings[attrname] = window._PrudioSettings[attrname];
+                    if (window._PrudioSettings.hasOwnProperty(attrname)) {
+                        settings[attrname] = window._PrudioSettings[attrname];
+                    }
                 }
             }
 
@@ -124,13 +129,13 @@ function main() {
         $.getCookie = function(name) {
             var value = " " + document.cookie;
             var start = value.indexOf(" " + name + "=");
-            if (start == -1) {
+            if (start === -1) {
                 value = null;
             }
             else {
                 start = value.indexOf("=", start) + 1;
                 var end = value.indexOf(";", start);
-                if (end == -1) {
+                if (end === -1) {
                     end = value.length;
                 }
                 value = unescape(value.substring(start,end));
@@ -224,7 +229,7 @@ function main() {
             else if ((nameOffset = nAgt.lastIndexOf(' ') + 1) < (verOffset = nAgt.lastIndexOf('/'))) {
                 browser = nAgt.substring(nameOffset, verOffset);
                 version = nAgt.substring(verOffset + 1);
-                if (browser.toLowerCase() == browser.toUpperCase()) {
+                if (browser.toLowerCase() === browser.toUpperCase()) {
                     browser = navigator.appName;
                 }
             }
@@ -247,7 +252,7 @@ function main() {
 
             if (typeof navigator.cookieEnabled === 'undefined' && !cookieEnabled) {
                 document.cookie = 'testcookie';
-                cookieEnabled = (document.cookie.indexOf('testcookie') != -1);
+                cookieEnabled = (document.cookie.indexOf('testcookie') !== -1);
             }
 
             // system
@@ -282,10 +287,12 @@ function main() {
             ];
 
             for (var id in clientStrings) {
-                var cs = clientStrings[id];
-                if (cs.r.test(nAgt)) {
-                    os = cs.s;
-                    break;
+                if (clientStrings.hasOwnProperty(id)) {
+                    var cs = clientStrings[id];
+                    if (cs.r.test(nAgt)) {
+                        os = cs.s;
+                        break;
+                    }
                 }
             }
 
@@ -780,7 +787,7 @@ function main() {
 
                 var hasSignature = $.getCookie('prudio-signature');
 
-                if(hasSignature == null) {
+                if(hasSignature === null) {
                     $.checkUserInfo(settings);
                 } else { 
                     $.continueProgram(settings);

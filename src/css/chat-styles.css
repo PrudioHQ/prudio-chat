@@ -108,14 +108,14 @@
 	border-bottom: 1px solid #DADEE2;
 }
 
-.prudio-window h3 span.close {
+.prudio-window h3 .close {
 	font-size: 1em;
 	font-weight: lighter;
 	float: right;
 	cursor: pointer;
 }
 
-.prudio-window h3 span.mute {
+.prudio-window h3 .mute {
 	color: #eee;
 	font-size: 1em;
 	font-weight: lighter;
@@ -123,16 +123,16 @@
 	cursor: pointer;
 }
 
-.prudio-window h3 span.mute:hover {
+.prudio-window h3 .mute:hover {
 	color: #455A64;
 }
 
-.prudio-window div.messages {
+.prudio-window .messages {
     height: 100%; 
     overflow-y: scroll;
 }
 
-.prudio-window img.emoji {
+.prudio-window .emoji {
 	max-width: 20px;
 	max-height: 20px;
 	vertical-align: middle;
@@ -142,7 +142,7 @@
 	display: none;
 }
 
-.prudio-window div.drop-zone div.drop-overlay {
+.prudio-window .drop-zone .drop-overlay {
 	position: absolute;
 	background: rgba(216,216,217,.50);
 	width: 100%;
@@ -150,7 +150,7 @@
 	z-index: 10;
 }
 
-.prudio-window div.drop-zone div.drop-overlay:before {
+.prudio-window .drop-zone .drop-overlay:before {
 	position: absolute;
 	font-family: prudio;
 	color: #455A64;
@@ -180,7 +180,7 @@
     clear: both;
 }
 
-.prudio-window li.server {
+.prudio-window .server {
 	padding: 4px 15px;
 	text-align: center;
 	border: none;
@@ -190,7 +190,7 @@
 	font-style: italic;
 }
 
-.prudio-window li.typing {
+.prudio-window .typing {
 	padding: 4px 15px;
 	text-align: center;
 	border: none;
@@ -200,7 +200,7 @@
 	font-style: italic;
 }
 
-.prudio-window li.error {
+.prudio-window .error {
 	padding: 4px 15px;
 	text-align: center;
 	border: none;
@@ -210,7 +210,7 @@
 	font-style: italic;
 }
 
-.prudio-window li.time {
+.prudio-window .time {
 	margin: 0;
 	padding: 4px 15px;
 	text-align: right;
@@ -220,7 +220,7 @@
 	font-weight: normal;
 }
 
-.prudio-window li.other {
+.prudio-window .other {
 	margin-right: 35px;
 	margin-left: 10px;
 	border: 1px solid #DADEE2;
@@ -229,7 +229,7 @@
 	box-shadow: 1px 1px 1px 1px rgba(10, 10, 10, 0.02);
 }
 
-.prudio-window li.other:after
+.prudio-window .other:after
 {
 	content: '';
 	position: absolute;
@@ -244,7 +244,7 @@
 	top: 50%;
 }
 
-.prudio-window li.other:before
+.prudio-window .other:before
 {
 	content: '';
 	position: absolute;
@@ -259,7 +259,7 @@
 	top: 50%;
 }
 
-.prudio-window li.self {
+.prudio-window .self {
 	margin-right: 10px;
 	margin-left: 35px;
 	background-color: #0072B0;
@@ -268,7 +268,7 @@
 	box-shadow: 1px 1px 1px 1px rgba(10, 10, 10, 0.05);
 }
 
-.prudio-window li.self:after
+.prudio-window .self:after
 {
 	content: '';
 	position: absolute;
@@ -283,7 +283,7 @@
 	top: 50%;
 }
 
-.prudio-window li.self:before
+.prudio-window .self:before
 {
 	content: '';
 	position: absolute;
@@ -299,15 +299,15 @@
 }
 
 
-.prudio-window li.self:hover, .prudio-window li.other:hover {
+.prudio-window .self:hover, .prudio-window .other:hover {
 	box-shadow: 0 0 15px 5px rgba(10, 10, 10, .05);
 }
 
-.prudio-window li.self:active, .prudio-window li.other:active {
+.prudio-window .self:active, .prudio-window .other:active {
 	box-shadow: 0 0 15px 5px rgba(10, 10, 10, .15);
 }
 
-.prudio-window div.file-container {
+.prudio-window .file-container {
 	position: absolute;
 	height: 80px;
 	bottom: 0;
@@ -324,11 +324,11 @@
     transition: all .2s ease-in-out;
 }
 
-.prudio-window div.file-container.open {
+.prudio-window .file-container, .prudio-window .open {
 	height: 130px;
 }
 
-.prudio-window div.file {
+.prudio-window .file {
 	border: 1px solid #DADEE2;
 	border-radius: 4px;
 	margin: 15px;
@@ -338,7 +338,7 @@
 	clear: both;
 }
 
-.prudio-window div.file input {
+.prudio-window .file input {
 	background-color: transparent;
     border: 0 solid;
     color: #60686E;
@@ -347,15 +347,15 @@
     font-weight: normal;
 }
 
-.prudio-window div.file span.icon-plus {
+.prudio-window .file .icon-plus {
 	cursor: pointer;
 }
 
-.prudio-window div.file span.icon-upload {
+.prudio-window .file .icon-upload {
 	cursor: pointer;
 }
 
-.prudio-window div.reply-container {
+.prudio-window .reply-container {
 	position: absolute;
 	height: 80px;
 	bottom: 0;
@@ -369,7 +369,7 @@
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00f9f9fa', endColorstr='#f2f9f9fa',GradientType=0 );
 }
 
-.prudio-window div.reply {
+.prudio-window .reply {
 	border: 1px solid #DADEE2;
 	border-radius: 4px;
 	margin: 15px;
@@ -379,25 +379,26 @@
 	clear: both;
 }
 
-.prudio-window div.reply input {
+.prudio-window .reply input {
 	background-color: transparent;
-    border: 0 solid;
+    box-sizing: border-box;
+    border: 0;
     color: #60686E;
     width: 90%;
     font-size: 0.8em;
     font-weight: normal;
 }
 
-.prudio-window div.reply input:focus {
+.prudio-window .reply input:focus {
     outline: 0;
 }
 
-.prudio-window div.reply span.icon-attach {
+.prudio-window .reply .icon-attach {
 	cursor: pointer;
 	color: #CCCCCC;
 }
 
-.prudio-window div.reply span.icon-attach:hover {
+.prudio-window .reply .icon-attach:hover {
 	color: #333;
 }
 
@@ -442,6 +443,7 @@
 
 .prudio-window,
 .prudio-window-push {
+	-o-transition: all 0.3s ease;
 	-webkit-transition: all 0.3s ease;
 	-moz-transition: all 0.3s ease;
 	transition: all 0.3s ease;

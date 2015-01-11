@@ -1,6 +1,6 @@
 module.exports = function(app, io, slack, models, emoji)
 {
-	var chat = io.of('/chat').on('connection', function(clientSocket)
+	io.of('/chat').on('connection', function(clientSocket)
 	{
 		// each client is put into a chat room restricted to max 2 clients
 		clientSocket.on('joinRoom', function(appid, channel, clientSignature)

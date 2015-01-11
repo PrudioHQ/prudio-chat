@@ -313,7 +313,9 @@ var self = module.exports = {
     disconnectAll: function disconnectAll() {
 
         for (var appid in Bots) {
-            this.disconnect(appid);
+            if (Bots.hasOwnProperty(appid)) {
+                this.disconnect(appid);
+            }
         }
 
         return true;

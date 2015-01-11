@@ -35,11 +35,11 @@ var self = module.exports = {
     onlineUsers: function onlineUsers(appid) {
 
         var users = Users.where(function(obj) {
-            return obj.appid == appid &&
-            obj.user.presence == 'active' &&
-            obj.user.id != 'USLACKBOT' &&
-            obj.user.is_bot == false &&
-            obj.user.deleted == false;
+            return obj.appid === appid &&
+            obj.user.presence === 'active' &&
+            obj.user.id !== 'USLACKBOT' &&
+            obj.user.is_bot === false &&
+            obj.user.deleted === false;
         });
 
         return users;
@@ -48,7 +48,9 @@ var self = module.exports = {
     addChannels: function addChannels(appid, channels) {
 
         for (var channel in channels) {
-            Channels.insert({ appid: appid, channel: channels[channel]});
+            if (channels.hasOwnProperty(channel)) {
+                Channels.insert({ appid: appid, channel: channels[channel]});
+            }
         }
 
         return Channels;
@@ -57,7 +59,9 @@ var self = module.exports = {
     addUsers: function addUsers(appid, users) {
 
         for (var user in users) {
-            Users.insert({ appid: appid, user: users[user]});
+            if (users.hasOwnProperty(user)) {
+                Users.insert({ appid: appid, user: users[user]});
+            }
         }
 
         return Users;
@@ -66,10 +70,10 @@ var self = module.exports = {
     getChannelCode: function getChannelCode(appid, name) {
 
         var channel = Channels.where(function(obj) {
-            return obj.appid == appid && obj.channel.name == name;
+            return obj.appid === appid && obj.channel.name === name;
         });
 
-        if (channel != null && channel.length == 1) {
+        if (channel !== null && channel.length === 1) {
             return channel[0].channel.id;
         } else {
             return false;
@@ -90,10 +94,10 @@ var self = module.exports = {
 
         console.log('Connecting to ' + appid);
 
-        if (typeof Bots[appid] === 'undefined' || Bots[appid].isConnected == false) {
+        if (typeof Bots[appid] === 'undefined' || Bots[appid].isConnected === false) {
 
             request.post('https://slack.com/api/rtm.start', { json: true, form: { token: application.slack_bot_token, t: Date.now() }}, function(error, response, connection) {
-                if (!error && response.statusCode == 200 && typeof connection.ok !== 'undefined' && connection.ok == true) {
+                if (!error && response.statusCode === 200 && typeof connection.ok !== 'undefined' && connection.ok === true) {
 
                     Bots[appid]             = emitter;
                     Bots[appid].websocket   = new WebSocket(connection.url);
@@ -139,43 +143,43 @@ var self = module.exports = {
                         // Gambiarra
                         Bots[appid].msgCount++
                         // Ignore the 2 message (last message)
-                        if (Bots[appid].msgCount == 2) {
+                        if (Bots[appid].msgCount === 2) {
                             return;
                         }
 
-                        if (message.type == 'message' && message.channel.indexOf('C') == 0 && typeof message.subtype === 'undefined') {
+                        if (message.type === 'message' && message.channel.indexOf('C') === 0 && typeof message.subtype === 'undefined') {
 
                             console.log('Channel message %j', message);
                             Bots[appid].emit('message', message);
 
-                        } else if (message.type == 'message' && message.channel.indexOf('C') == 0 && message.subtype === 'file_share') {
+                        } else if (message.type === 'message' && message.channel.indexOf('C') === 0 && message.subtype === 'file_share') {
 
                             console.log('File shared %j', message);
                             var sharedMessage = {text: 'Shared a file: ' + message.file.url , channel: message.channel}
                             Bots[appid].emit('message', sharedMessage);
 
-                        } else if (message.type == 'message' && message.channel.indexOf('D') == 0) {
+                        } else if (message.type === 'message' && message.channel.indexOf('D') === 0) {
 
                             console.log('Direct message %j', message);
                             Bots[appid].emit('direct_message', message);
 
-                        } else if (message.type == 'file_public') {
+                        } else if (message.type === 'file_public') {
 
                             console.log('File public shared  %j', message);
                             //Bots[appid].emit('message', message);
 
-                        } else if (message.type == 'file_shared') {
+                        } else if (message.type === 'file_shared') {
 
                             console.log('File shared  %j', message);
                             //Bots[appid].emit('message', message);
 
-                        } else if (message.type == 'presence_change') {
+                        } else if (message.type === 'presence_change') {
 
                             console.log('Presence changed %s %j', message.type, message);
 
-                            var usr = Users.where(function(usr) { return usr.appid == appid && usr.user.id == message.user; })
+                            var usr = Users.where(function(usr) { return usr.appid === appid && usr.user.id === message.user; })
 
-                            if (usr != null && usr.length == 1) {
+                            if (usr !== null && usr.length === 1) {
                                 usr = usr[0];
                                 usr.user.presence = message.presence;
                                 Users.update(usr);
@@ -199,7 +203,7 @@ var self = module.exports = {
                     Bots[appid].addListener('direct_message', function(message) {
 
                         // If command
-                        if (message.text.indexOf('!') == 0 && message.text.length > 1) {
+                        if (message.text.indexOf('!') === 0 && message.text.length > 1) {
                             var command = message.text.substring(1, message.text.length);
 
                             console.log('It\'s a command: ' + command);
@@ -281,7 +285,7 @@ var self = module.exports = {
                 formData: formData
             }, function(error, response, body) {
 
-            if (!error && response.statusCode == 200 && typeof body.ok !== 'undefined' && body.ok == true) {
+            if (!error && response.statusCode === 200 && typeof body.ok !== 'undefined' && body.ok === true) {
                 console.log('File (' + stream.file.name + ') Uploaded');
             } else {
                 console.log('File (' + stream.file.name + ') Not Uploaded');
@@ -297,7 +301,7 @@ var self = module.exports = {
             return true;
         }
 
-        if (Bots[appid].isConnected == true) {
+        if (Bots[appid].isConnected === true) {
             self.say(appid, self.getChannelCode(appid, 'general'), 'I\'m going offline!');
             Bots[appid].websocket.close();
         }

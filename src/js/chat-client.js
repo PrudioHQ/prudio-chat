@@ -234,9 +234,9 @@ function main() {
                 }
             }
             // trim the version string
-            if ((ix = version.indexOf(';')) !== -1) version = version.substring(0, ix);
-            if ((ix = version.indexOf(' ')) !== -1) version = version.substring(0, ix);
-            if ((ix = version.indexOf(')')) !== -1) version = version.substring(0, ix);
+            if ((ix = version.indexOf(';')) !== -1) { version = version.substring(0, ix); }
+            if ((ix = version.indexOf(' ')) !== -1) { version = version.substring(0, ix); }
+            if ((ix = version.indexOf(')')) !== -1) { version = version.substring(0, ix); }
 
             majorVersion = parseInt('' + version, 10);
             if (isNaN(majorVersion)) {
@@ -680,10 +680,9 @@ function main() {
             var files = event.dataTransfer.files;
 
             // Itterate on files to send them one by one (async)
-            for (var i = 0, file; file = files[i]; i++) {
-
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
                 $.uploadFiles(file);
-            
             }
 
         };
@@ -694,10 +693,9 @@ function main() {
             var files = event.files;
 
             // Itterate on files to send them one by one (async)
-            for (var i = 0, file; file = files[i]; i++) {
-
-                $.uploadFiles(files[i]);
-            
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                $.uploadFiles(file);
             }
 
         };

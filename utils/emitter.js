@@ -2,8 +2,10 @@ var events = require('events'),
     EventEmitter = events.EventEmitter;
 
 var emitter = function() {
-    if ( arguments.callee._singletonInstance )
+    if (arguments.callee._singletonInstance) {
         return arguments.callee._singletonInstance;
+    }
+
     arguments.callee._singletonInstance = this;  
     EventEmitter.call(this);
 };

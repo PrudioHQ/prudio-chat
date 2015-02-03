@@ -459,17 +459,14 @@ function main() {
             }
         };
 
-        $.continueProgram = function(settings) {
-
-            var channel     = $.getCookie('prudio-channel');
-            var signature   = $.getCookie('prudio-signature');
+        $.retriveHistory = function(appid, channel, signature) {
 
             // Recover conversation
             $.ajax({
                 url: baseURL + "/chat/history",
                 method: 'POST',
                 data: {
-                    appid:       settings.appid,
+                    appid:       appid,
                     channel:     channel,
                     signature:   signature
                 },
@@ -496,7 +493,17 @@ function main() {
                 }
             });
 
+        };
+
+        $.continueProgram = function(settings) {
+
+            var channel     = $.getCookie('prudio-channel');
+            var signature   = $.getCookie('prudio-signature');
+
+            $.retriveHistory(settings.appid, channel, signature);
+
             $('#prudio-window div.reply input[name=message]').attr('type', 'text').attr('placeholder', 'Just write...').blur().focus();
+
             $.openSocket(settings);
         };
 

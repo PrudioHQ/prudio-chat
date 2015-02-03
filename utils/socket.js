@@ -11,7 +11,7 @@ module.exports = function(app, io, slack, models, emoji)
 
 				if(application === null) {
 					console.log('Wrong appid.');
-					
+
 					clientSocket.emit('serverMessage', {
 						message: 'Wrong appid.'
 					});
@@ -36,9 +36,9 @@ module.exports = function(app, io, slack, models, emoji)
 					clientSocket.disconnect();
 					return;
 				}
-				
+
 				var bot = slack.connect(application);
-				
+
 				// client joins room specified in URL
 				clientSocket.join(channel);
 
@@ -105,7 +105,7 @@ module.exports = function(app, io, slack, models, emoji)
 						message: 'Error connecting to support.'
 					});
 				});
-		
+
 				// Slack disconnect handler (should not happen often).
 				bot.on('disconnect', function(e) {
 					// Let the user know about the error?
@@ -120,7 +120,7 @@ module.exports = function(app, io, slack, models, emoji)
 					slack.say(appid, channel, "_User disconnected!_");
 				});
 
-			}); 
+			});
 		});
 	});
 };

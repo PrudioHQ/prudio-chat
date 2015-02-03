@@ -1,6 +1,7 @@
 var async   = require('async');
 var request = require('request'); // github.com/mikeal/request
 var formidable = require('formidable');
+var crypto = require('crypto');
 
 module.exports = function(app, io, slack, models) {
 
@@ -22,7 +23,7 @@ module.exports = function(app, io, slack, models) {
             if(app.online === false) {
                 return res.status(503).json({ success: false, message: "Support offline" });
             }
-            
+
             if(app.active === false) {
                 return res.status(404).json({ success: false, message: "Application offline" });
             }
@@ -86,10 +87,77 @@ module.exports = function(app, io, slack, models) {
             return res.status(200).json({ success: true, onlineUsers: onlineUsers.length, message: onlineUsers.length + " users online." });
         });
     });
-    
-    app.post('/chat/create', isAuthorized, function(req, res, next) {
 
-        var crypto = require('crypto');
+    app.post('/chat/history', isAuthorized, function(req, res, next) {
+
+        var appid            = req.param('appid');
+        var channel          = req.param('channel');
+        var channelSignature = req.param('signature');
+
+        async.waterfall(
+            [
+                function(callback) {
+                    models.app.find({ where: { appid: appid, active: true } }).success(function(application) {
+                        return callback(null, application);
+                    });
+                },
+
+                function(application, callback) {
+                    // Verify if the user already has previous support (from cookies)
+                    if(channel !== null && channelSignature !== null) {
+                        // Returning user with cookie
+                        var verify = crypto.createHmac('sha1', application.slack_api_token).update(channel).digest('hex');
+
+                        // Verify signature else it will create a new one!
+                        if(verify === channelSignature) {
+                            return callback(null, application);
+                        } else {
+                            return callback('Could not verify signature');
+                        }
+                    }
+                },
+
+                function(application, callback) {
+                    return slack.history(application, channel, callback);
+                }
+            ],
+
+            function(err, body, application) {
+                if (err) {
+                    return res.status(404).json({ success: false, result: err });
+                }
+
+                body.messages.reverse();
+
+                var messages = [];
+
+                for (var i in body.messages) {
+                    if (body.messages.hasOwnProperty(i)) {
+                        var message = body.messages[i];
+                        if (message.type === 'message' && typeof message.subtype === 'undefined') {
+                            console.log('Channel message: %j', message);
+
+                            if (message.user === application.slack_invite_bot) {
+                                message.sender = 'self';
+                            } else {
+                                message.sender = 'other';
+                            }
+
+                            message.user = undefined;
+                            message.type = undefined;
+
+                            messages.push(message);
+                        }
+                    }
+                }
+
+                return res.status(200).json({ success: true, messages: messages });
+            }
+        );
+
+    });
+
+    app.post('/chat/create', isAuthorized, function(req, res, next) {
 
         var appid            = req.param('appid');
         var channelId        = req.param('channel');
@@ -99,7 +167,7 @@ module.exports = function(app, io, slack, models) {
         var settings         = req.param('settings');
 
         models.app.find({ where: { appid: appid, active: true } }).success(function(application) {
-    
+
             if(application === null) {
                 return res.status(404).json({ success: false, message: "Not found" });
             }
@@ -112,20 +180,20 @@ module.exports = function(app, io, slack, models) {
                         if(channelId !== null && channelSignature !== null) {
                             // Returning user with cookie
                             var verify = crypto.createHmac('sha1', application.slack_api_token).update(channelId).digest('hex');
-                            
+
                             // Verify signature else it will create a new one!
                             if(verify === channelSignature) {
                                 return callback(null, channelName, channelId);
                             }
                         }
-                        
+
                         // No channel or signature, or invalid signature/channel, get the next channel
                         application.increment('room_count').success(function() {
-                            var channelName = application.room_prefix + application.room_count; 
+                            var channelName = application.room_prefix + application.room_count;
                             return callback(null, channelName, null);
                         });
 
-                        
+
                     },
 
                     // Create channel
@@ -168,7 +236,7 @@ module.exports = function(app, io, slack, models) {
                         var topic = "Help!" +
                         "\nName: " + personal.name + " (" + personal.email + ")" +
                         "\nURL: " + info.url + " (" + req.ip + ")" +
-                        "\nBrowser: " + info.browser + " - " + info.browserVersion + 
+                        "\nBrowser: " + info.browser + " - " + info.browserVersion +
                         "\nOS: " + info.os + " - " + info.osVersion +
                         "\nMobile: " + info.mobile +" - Screen resolution: " + info.screen;
 

@@ -244,19 +244,50 @@ var self = module.exports = {
         }
 
         var data = {
-            'type':    'message',
-            'channel': channel, //D... or C....
-            'user':    Bots[appid].nick,
-            'text':    message,
-            'ts':      Date.now() + '.000000',
-            'team':    Bots[appid].team
+            "type":    "message",
+            "channel": channel, //D... or C....
+            "user":    Bots[appid].nick,
+            "text":    message,
+            "ts":      Date.now() + '.000000',
+            "team":    Bots[appid].team
         };
 
         Bots[appid].websocket.send(JSON.stringify(data), function(error) {
-            console.log('Error sending data to socket!');
-            console.log(error);
-            console.log(data);
+            if (error) {
+                console.log('Error sending data to socket!');
+                console.log(error);
+                console.log(data);
+            }
         });
+    },
+
+    // Recover History
+    history: function history(application, channel, callback) {
+
+        var formData = {
+            // Pass Slack token
+            token: application.slack_api_token,
+            // Pass Slack channel
+            channel: channel,
+            // Number of messages to return (max: 100)
+            count: 50
+        };
+
+        // Sending the request
+        request.post(
+            'https://slack.com/api/channels.history',
+            {
+                json: true,
+                formData: formData
+            },
+
+            function(error, response, body) {
+                if (!error && response.statusCode === 200 && typeof body.ok !== 'undefined' && body.ok === true) {
+                    return callback(null, body, application);
+                } else {
+                    return callback("Error fetching history");
+                }
+            });
     },
 
     // Upload a file

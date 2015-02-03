@@ -115,7 +115,7 @@ function main() {
         */
         $.setCookie = function(cookie, value, days) {
             days = days || 730; // 2 years
-           
+
             var date = new Date();
             date.setTime(date.getTime() + (days*24*60*60*1000));
 
@@ -154,10 +154,10 @@ function main() {
                 $.loadJS(baseURL + "/js/uuid.js");
                 var cuuid = uuid.v4();
                 $.setCookie(cookieName, cuuid);
-                
+
                 return cuuid;
             }
-            return $.getCookie(cookieName);            
+            return $.getCookie(cookieName);
         }
         */
 
@@ -169,7 +169,7 @@ function main() {
             * JavaScript Client Detection
             * (C) viazenetti GmbH (Christian Ludwig)
             */
-            
+
             var unknown = '-';
 
             // screen
@@ -342,15 +342,15 @@ function main() {
 
             // override default settings with specified settings
             $.titleAlert._settings = settings = $.extend( {}, $.titleAlert.defaults, settings);
-            
+
             // if it's required that the window doesn't have focus, and it has, just return
             if (settings.requireBlur && $.titleAlert.hasFocus) {
                 return;
             }
-            
+
             // originalTitleInterval defaults to interval if not set
             settings.originalTitleInterval = settings.originalTitleInterval || settings.interval;
-            
+
             $.titleAlert._running = true;
             $.titleAlert._initialText = document.title;
             document.title = text;
@@ -360,21 +360,21 @@ function main() {
                 if (!$.titleAlert._running) {
                     return;
                 }
-                
+
                 showingAlertTitle = !showingAlertTitle;
                 document.title = (showingAlertTitle ? text : $.titleAlert._initialText);
                 $.titleAlert._intervalToken = setTimeout(switchTitle, (showingAlertTitle ? settings.interval : settings.originalTitleInterval));
             };
 
             $.titleAlert._intervalToken = setTimeout(switchTitle, settings.interval);
-            
+
             if (settings.stopOnMouseMove) {
                 $(document).mousemove(function(event) {
                     $(this).unbind(event);
                     $.titleAlert.stop();
                 });
             }
-            
+
             // check if a duration is specified
             if (settings.duration > 0) {
                 $.titleAlert._timeoutToken = setTimeout(function() {
@@ -398,11 +398,11 @@ function main() {
             if (!$.titleAlert._running) {
                 return;
             }
-            
+
             clearTimeout($.titleAlert._intervalToken);
             clearTimeout($.titleAlert._timeoutToken);
             document.title = $.titleAlert._initialText;
-            
+
             $.titleAlert._timeoutToken = null;
             $.titleAlert._intervalToken = null;
             $.titleAlert._initialText = null;
@@ -420,11 +420,11 @@ function main() {
 
         $.titleAlert._focus = function () {
             $.titleAlert.hasFocus = true;
-            
+
             if ($.titleAlert._running && $.titleAlert._settings.stopOnFocus) {
                 var initialText = $.titleAlert._initialText;
                 $.titleAlert.stop();
-                
+
                 // ugly hack because of a bug in Chrome which causes a change of document.title immediately after tab switch
                 // to have no effect on the browser title
                 setTimeout(function() {
@@ -461,9 +461,43 @@ function main() {
 
         $.continueProgram = function(settings) {
 
+            var channel     = $.getCookie('prudio-channel');
+            var signature   = $.getCookie('prudio-signature');
+
+            // Recover conversation
+            $.ajax({
+                url: baseURL + "/chat/history",
+                method: 'POST',
+                data: {
+                    appid:       settings.appid,
+                    channel:     channel,
+                    signature:   signature
+                },
+                error: function(xhr, ajaxOptions, thrownError){
+
+                    $('<li class="error"></li>').text("We got a problem retriving the history!").appendTo($('#prudio-window ul'));
+
+                    console.log(xhr);
+                    console.log(ajaxOptions);
+                    console.log(thrownError);
+                },
+                success: function(data) {
+
+                    for (var i in data.messages) {
+                        if (data.messages.hasOwnProperty(i)) {
+                            var message = data.messages[i];
+                            $('<li class="' + message.sender + '"></li>').text(message.text).appendTo($('#prudio-window ul'));
+                        }
+                    }
+
+                    $('<li class="server"></li>').text("Conversation history").appendTo($('#prudio-window ul'));
+
+                    $.scrollChat('#prudio-window div.messages');
+                }
+            });
+
             $('#prudio-window div.reply input[name=message]').attr('type', 'text').attr('placeholder', 'Just write...').blur().focus();
             $.openSocket(settings);
-
         };
 
 
@@ -471,7 +505,7 @@ function main() {
 
             console.log(settings);
 
-            // No name 
+            // No name
             if(typeof settings.name === 'undefined') {
                 // Ask
                 $('<li class="other"></li>').text("Please type your name in the chatbox below").appendTo($('#prudio-window ul'));
@@ -508,7 +542,7 @@ function main() {
                 $('#prudio-window div.reply input[name=message]').bind('keypress', function(e) {
                     if (e.keyCode === ENTER_KEY_CODE && $(this).val() !== "") {
                         var message = $(this).val();
- 
+
                         console.log("ENTER email");
                         settings.email = message;
 
@@ -566,11 +600,11 @@ function main() {
                         // if enter key
                         if (e.keyCode === ENTER_KEY_CODE && $(this).val() !== "") {
                             var message = $(this).val();
-                            
+
                             socket.emit('sendMessage', {
                                 message: message
                             });
-                            
+
                             $('<li class="self"></li>').text(message).appendTo($('#prudio-window ul'));
 
                             $.scrollChat('#prudio-window div.messages');
@@ -666,8 +700,8 @@ function main() {
             event.preventDefault();
 
             // Explicitly show this is a copy, avoid user to _self with the files.
-            event.dataTransfer.dropEffect = 'copy';     
-            
+            event.dataTransfer.dropEffect = 'copy';
+
         };
 
         $.handleFileSelect = function(event) {
@@ -749,7 +783,7 @@ function main() {
 
         $(document).on('click', '#prudio-window span.icon-attach', function(event) {
             $('input[name=uploads]').trigger('click');
-        }); 
+        });
 
         $(document).on('click', (settings.buttonSelector || '#prudio-button'), function() {
 
@@ -787,7 +821,7 @@ function main() {
 
                 if(hasSignature === null) {
                     $.checkUserInfo(settings);
-                } else { 
+                } else {
                     $.continueProgram(settings);
                 }
             }

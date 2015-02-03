@@ -95,7 +95,7 @@ function main() {
         };
 
         $.createButton = function() {
-            var button = $('<div id="prudio-button" style="background-color: ' + (settings.buttonColor || '') + '" title="Chat with us"><i class="icon-prudio"></i></div><div id="prudio-notification"></div>');
+            var button = $('<div id="prudio-button" style="background-color: ' + (settings.buttonColor || '') + '" title="Chat with us"><i class="icon-prudio"></i></div>');
             $("body").append(button);
         };
 
@@ -844,7 +844,8 @@ function main() {
                     '            </div>',
                     '         </div>',
                     '     </div>',
-                    '</nav>'
+                    '</nav>',
+                    '<div id="prudio-notification"></div>'
                     ].join('');
 
                 $('body').append(domContent);

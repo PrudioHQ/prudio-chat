@@ -459,6 +459,32 @@ function main() {
             }
         };
 
+        $.pingAvailable = function(appid) {
+            // Ping the app
+            $.ajax({
+                url: baseURL + "/app/ping",
+                method: 'POST',
+                data: {
+                    appid: appid
+                },
+                error: function(xhr, ajaxOptions, thrownError){
+                    console.log("We got a problem pinging the app!", thrownError);
+                },
+                success: function(response) {
+                    if (response.success !== 'undefined' && response.success && response.onlineUsers !== 'undefined') {
+                        if (response.onlineUsers <= 0) {
+                            $('<li class="server announcement"></li>').text("Currently there are no users online to help you. Leave a message and we will get back to you ASAP! Sorry!").appendTo($('#prudio-window ul'));
+                            $.scrollChat('#prudio-window div.messages');
+                        }
+                    }
+                }
+            });
+        };
+
+
+        /*
+        * Retrive chat history
+        */
         $.retriveHistory = function(appid, channel, signature) {
 
             // Recover conversation
@@ -624,6 +650,10 @@ function main() {
 
                         // Remove the connecting message
                         $('#prudio-window ul li.connecting').slideUp();
+
+                        // Ping for available users
+                        $.pingAvailable(settings.appid);
+
                     });
 
                     // On Slack message

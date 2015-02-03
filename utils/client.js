@@ -151,7 +151,7 @@ module.exports = function(app, io, slack, models) {
                     }
                 }
 
-                return res.status(200).json({ success: true, messages: messages });
+                return res.status(200).json({ success: true, messages: messages, messagesCount: messages.length });
             }
         );
 

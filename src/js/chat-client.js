@@ -471,25 +471,22 @@ function main() {
                     signature:   signature
                 },
                 error: function(xhr, ajaxOptions, thrownError){
-
-                    $('<li class="error"></li>').text("We got a problem retriving the history!").appendTo($('#prudio-window ul'));
-
-                    console.log(xhr);
-                    console.log(ajaxOptions);
-                    console.log(thrownError);
+                    //$('<li class="error"></li>').text("We got a problem retriving the history!").appendTo($('#prudio-window ul'));
+                    console.log("We got a problem retriving the history!", thrownError);
                 },
                 success: function(data) {
-
-                    for (var i in data.messages) {
-                        if (data.messages.hasOwnProperty(i)) {
-                            var message = data.messages[i];
-                            $('<li class="' + message.sender + '"></li>').text(message.text).appendTo($('#prudio-window ul'));
+                    if (data.success !== 'undefined' && data.success && data.messages !== 'undefined' && data.messages.length > 0) {
+                        for (var i in data.messages) {
+                            if (data.messages.hasOwnProperty(i)) {
+                                var message = data.messages[i];
+                                $('<li class="' + message.sender + '"></li>').text(message.text).appendTo($('#prudio-window ul'));
+                            }
                         }
+
+                        $('<li class="server"></li>').text("Conversation history").appendTo($('#prudio-window ul'));
+
+                        $.scrollChat('#prudio-window div.messages');
                     }
-
-                    $('<li class="server"></li>').text("Conversation history").appendTo($('#prudio-window ul'));
-
-                    $.scrollChat('#prudio-window div.messages');
                 }
             });
 

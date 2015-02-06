@@ -23,8 +23,7 @@ app.set('port', process.env.PORT     || Number(8888));
 app.set('env',  process.env.NODE_ENV || 'development');
 
 // Constants
-app.set('slack_channel_prefix', 'sp-');
-app.set('slack_api_url',        'https://slack.com/api');
+app.set('slack_api_url', 'https://slack.com/api');
 
 // Development only
 if ('development' === app.get('env')) {

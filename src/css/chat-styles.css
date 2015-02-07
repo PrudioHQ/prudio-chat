@@ -325,6 +325,7 @@
 	font-weight: lighter;
 	float: right;
 	cursor: pointer;
+	opacity: 1;
 }
 
 .prudio-window h3 .mute {
@@ -333,10 +334,12 @@
 	font-weight: lighter;
 	float: left;
 	cursor: pointer;
+	opacity: 1;
 }
 
 .prudio-window h3 .mute:hover, .prudio-window h3 .close:hover {
 	color: #455A64;
+	opacity: 1;
 }
 
 .prudio-window .messages {
@@ -637,7 +640,7 @@
 
 .prudio-window-vertical a {
 	border-bottom: 1px solid #258ecd;
-	padding: 100px;
+	padding: 4px;
 }
 
 /* Vertical menu that slides from the left or right */

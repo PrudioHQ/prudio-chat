@@ -95,7 +95,7 @@ function main() {
         };
 
         $.createButton = function() {
-            var button = $('<div id="prudio-button" style="background-color: ' + (settings.buttonColor || '') + '" title="Chat with us"><i class="icon-prudio"></i></div>');
+            var button = $('<div id="prudio-button" class="reset-styles" ' + (settings.buttonColor ? 'style="background-color: ' + settings.buttonColor + '"' : '') + ' title="Chat with us"><i class="icon-prudio"></i></div>');
             $("body").append(button);
         };
 
@@ -830,7 +830,7 @@ function main() {
             if(open === false) {
 
                 var domContent = [
-                    '<nav class="prudio-window prudio-window-vertical prudio-window-right" id="prudio-window">',
+                    '<nav class="reset-styles prudio-window prudio-window-vertical prudio-window-right" id="prudio-window">',
                     '     <h3><span class="mute" title="Mute"><i class="icon-volume-high"></i></span>' + (settings.title || 'Support') + ' <span class="close" title="Close"><i class="icon-cancel"></i></span></h3>',
                     '     <div class="messages drop-zone">',
                     '         <div class="drop-overlay hidden"></div>',

@@ -236,7 +236,7 @@
 
 	display: inline-block;
 	text-decoration: inherit;
-	width: 1em;
+	width: 17px;
 	margin-right: .2em;
 	text-align: center;
 	/* opacity: .8; */
@@ -246,7 +246,7 @@
 	text-transform: none;
 
 	/* fix buttons height, for twitter bootstrap */
-	line-height: 1em;
+	line-height: 17px;
 
 	/* Animation center compensation - margins should be symmetric */
 	/* remove if not needed */
@@ -305,12 +305,12 @@
 	position: fixed;
     z-index: 999;
     opacity: 0.99;
-    line-height: 1em;
+    line-height: 17px;
 }
 
 .prudio-window h3 {
 	color: #455A64;
-	font-size: 1rem;
+	font-size: 16px;
 	padding: 20px;
 	margin: 0;
 	font-weight: bold;
@@ -321,7 +321,7 @@
 
 .prudio-window h3 .close {
 	color: #eee;
-	font-size: 1rem;
+	font-size: 16px;
 	font-weight: lighter;
 	float: right;
 	cursor: pointer;
@@ -329,7 +329,7 @@
 
 .prudio-window h3 .mute {
 	color: #eee;
-	font-size: 1em;
+	font-size: 16px;
 	font-weight: lighter;
 	float: left;
 	cursor: pointer;
@@ -387,7 +387,7 @@
 	padding: 10px 15px;
 	margin: 10px;
 	color: #fff;
-	font-size: 0.9rem;
+	font-size: 14px;
     opacity: 0.9;
     clear: both;
 }
@@ -397,7 +397,7 @@
 	text-align: center;
 	border: none;
 	color: #CCC;
-	font-size: 0.65rem;
+	font-size: 12px;
 	font-weight: normal;
 	font-style: italic;
 }
@@ -407,7 +407,7 @@
 	text-align: center;
 	border: none;
 	color: #CCC;
-	font-size: 0.65rem;
+	font-size: 12px;
 	font-weight: normal;
 	font-style: italic;
 }
@@ -417,7 +417,7 @@
 	text-align: center;
 	border: none;
 	color: #AE3C2E;
-	font-size: 0.65rem;
+	font-size: 12px;
 	font-weight: normal;
 	font-style: italic;
 }
@@ -436,7 +436,7 @@
 	text-align: right;
 	border: none;
 	color: #DDD;
-	font-size: 0.6rem;
+	font-size: 10px;
 	font-weight: normal;
 }
 
@@ -566,7 +566,7 @@
     border: 0 solid;
     color: #60686E;
     width: 86%;
-    font-size: 0.9rem;
+    font-size: 14px;
     font-weight: normal;
 }
 
@@ -609,7 +609,7 @@
     border: 0;
     color: #60686E;
     width: 90%;
-    font-size: 0.9rem;
+    font-size: 14px;
     font-weight: normal;
 }
 
@@ -637,7 +637,7 @@
 
 .prudio-window-vertical a {
 	border-bottom: 1px solid #258ecd;
-	padding: 1rem;
+	padding: 100px;
 }
 
 /* Vertical menu that slides from the left or right */

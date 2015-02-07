@@ -291,14 +291,15 @@
 #prudio-button i {
 	color: white;
 	display: block;
-	font-size: 1.35em;
-	margin: 10px 0;
+	font-size: 21.6px;
+	margin: 9px 0;
 }
 
 /* General styles for all menus */
 .prudio-window {
 	zoom: ;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 17px;
 	background: #f9f9fa;
 	border-left: 1px solid #DADEE2;
 	position: fixed;
@@ -309,7 +310,7 @@
 
 .prudio-window h3 {
 	color: #455A64;
-	font-size: 1em;
+	font-size: 1rem;
 	padding: 20px;
 	margin: 0;
 	font-weight: bold;
@@ -319,7 +320,8 @@
 }
 
 .prudio-window h3 .close {
-	font-size: 1em;
+	color: #eee;
+	font-size: 1rem;
 	font-weight: lighter;
 	float: right;
 	cursor: pointer;
@@ -333,7 +335,7 @@
 	cursor: pointer;
 }
 
-.prudio-window h3 .mute:hover {
+.prudio-window h3 .mute:hover, .prudio-window h3 .close:hover {
 	color: #455A64;
 }
 
@@ -385,7 +387,7 @@
 	padding: 10px 15px;
 	margin: 10px;
 	color: #fff;
-	font-size: 0.9em;
+	font-size: 0.9rem;
     opacity: 0.9;
     clear: both;
 }
@@ -395,7 +397,7 @@
 	text-align: center;
 	border: none;
 	color: #CCC;
-	font-size: 0.7em;
+	font-size: 0.65rem;
 	font-weight: normal;
 	font-style: italic;
 }
@@ -405,7 +407,7 @@
 	text-align: center;
 	border: none;
 	color: #CCC;
-	font-size: 0.7em;
+	font-size: 0.65rem;
 	font-weight: normal;
 	font-style: italic;
 }
@@ -415,7 +417,7 @@
 	text-align: center;
 	border: none;
 	color: #AE3C2E;
-	font-size: 0.7em;
+	font-size: 0.65rem;
 	font-weight: normal;
 	font-style: italic;
 }
@@ -434,7 +436,7 @@
 	text-align: right;
 	border: none;
 	color: #DDD;
-	font-size: 0.6em;
+	font-size: 0.6rem;
 	font-weight: normal;
 }
 
@@ -564,7 +566,7 @@
     border: 0 solid;
     color: #60686E;
     width: 86%;
-    font-size: 0.8em;
+    font-size: 0.9rem;
     font-weight: normal;
 }
 
@@ -607,7 +609,7 @@
     border: 0;
     color: #60686E;
     width: 90%;
-    font-size: 0.8em;
+    font-size: 0.9rem;
     font-weight: normal;
 }
 
@@ -635,7 +637,7 @@
 
 .prudio-window-vertical a {
 	border-bottom: 1px solid #258ecd;
-	padding: 1em;
+	padding: 1rem;
 }
 
 /* Vertical menu that slides from the left or right */

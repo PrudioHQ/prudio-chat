@@ -34,6 +34,35 @@ module.exports = function(app, io, slack, models) {
         });
     }
 
+    function isAdmin(req, res, next) {
+
+        var appid = req.param('appid');
+        var token = req.param('token'); // Private token
+
+        if(appid === null || token === null) {
+            return res.status(401).json({ success: false, message: "Unauthorized" });
+        }
+
+        // TODO: use the real token
+        models.app.find({ where: { appid: appid, token: slack_api_token } }).success(function(app) {
+            if(app === null) {
+                return res.status(401).json({ success: false, message: "Unauthorized" });
+            }
+
+            if(app.online === false) {
+                return res.status(503).json({ success: false, message: "Support offline" });
+            }
+
+            if(app.active === false) {
+                return res.status(404).json({ success: false, message: "Application offline" });
+            }
+
+            application = app;
+
+            return next();
+        });
+    }
+
     app.get('/', function(req, res, next) {
         return res.status(200).json({ success: true, message: "Welcome, nothing here" });
     });
@@ -60,7 +89,7 @@ module.exports = function(app, io, slack, models) {
     });
 
     // TODO: Use diferent method for authorization
-    app.post('/app/connect', isAuthorized, function(req, res, next) {
+    app.post('/app/connect', isAdmin, function(req, res, next) {
         var appid            = req.param('appid');
         models.app.find({ where: { appid: appid, active: true } }).success(function(application) {
             slack.connect(application);
@@ -70,7 +99,7 @@ module.exports = function(app, io, slack, models) {
     });
 
     // TODO: Use diferent method for authorization
-    app.post('/app/disconnect', isAuthorized, function(req, res, next) {
+    app.post('/app/disconnect', isAdmin, function(req, res, next) {
         var appid            = req.param('appid');
         models.app.find({ where: { appid: appid, active: true } }).success(function(application) {
             slack.disconnect(application.id);

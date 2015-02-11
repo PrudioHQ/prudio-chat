@@ -112,7 +112,7 @@ function main() {
             days = days || 730; // 2 years
            
             var date = new Date();
-            date.setTime(date.getTime() + (days*24*60*60*1000));
+            date.setTime(date.getTime() + (days * 86400000));
 
             // Set Cookie
             document.cookie = cookie + "=" + value + "; expires=" + date.toGMTString() + "; path=/";

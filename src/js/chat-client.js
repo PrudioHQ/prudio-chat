@@ -456,10 +456,7 @@ function main() {
 
 
         $.checkUserInfo = function(settings) {
-
-            console.log(settings);
-
-            // No name 
+            // No name
             if(typeof settings.name === 'undefined') {
                 // Ask
                 $('<li class="other"></li>').text("Please type your name in the chatbox below").appendTo($('#prudio-window ul'));
@@ -469,16 +466,9 @@ function main() {
                 // Capture
                 $('#prudio-window div.reply input[name=message]').bind('keypress', function(e) {
                     if (e.keyCode == ENTER_KEY_CODE && $(this).val() != "") {
-                        var message = $(this).val();
-
-                        console.log("ENTER name");
-                        settings.name = message;
-
+                        settings.name = $(this).val();
                         $(this).val('').unbind('keypress');
-
                         $('<li class="self"></li>').text(settings.name).appendTo($('#prudio-window ul'));
-
-                        console.log(settings);
 
                         return $.checkUserInfo(settings);
                     }
@@ -495,13 +485,8 @@ function main() {
                 // Capture
                 $('#prudio-window div.reply input[name=message]').bind('keypress', function(e) {
                     if (e.keyCode == ENTER_KEY_CODE && $(this).val() != "") {
-                        var message = $(this).val();
- 
-                        console.log("ENTER email");
-                        settings.email = message;
-
+                        settings.email = $(this).val();
                         $(this).val('').prop('type', 'text').unbind('keypress');
-
                         $('<li class="self"></li>').text(settings.email).appendTo($('#prudio-window ul'));
 
                         return $.checkUserInfo(settings);
@@ -534,12 +519,7 @@ function main() {
                     userInfo:    JSON.stringify(userInfo)
                 },
                 error: function(xhr, ajaxOptions, thrownError){
-
                     $('<li class="error"></li>').text("We got a problem connecting to the server!").appendTo($('#prudio-window ul'));
-
-                    console.log(xhr);
-                    console.log(ajaxOptions);
-                    console.log(thrownError);
                 },
                 success: function(data) {
 
@@ -626,23 +606,16 @@ function main() {
                 processData: false, // Don't process the files
                 contentType: false // Set content type to false as jQuery will tell the server its a query string request
             })
-            .done(function(data, textStatus, jqXHR)
-            {
-                if(typeof data.error === 'undefined')
-                {
-                    // console.log('SUCCESS: ' + data);
+            .done(function(data, textStatus, jqXHR) {
+                if(typeof data.error === 'undefined') {
                     $('<li class="server"></li>').text("Uploading file").appendTo($('#prudio-window ul'));
                 }
-                else
-                {
-                    // console.log('ERRORS: ' + data.error);
+                else {
                     $('<li class="error"></li>').text("Error uploading the file!").appendTo($('#prudio-window ul'));
 
                 }
             })
-            .fail(function(jqXHR, textStatus, errorThrown)
-            {
-                // console.log('ERRORS: ' + textStatus);
+            .fail(function(jqXHR, textStatus, errorThrown) {
                 $('<li class="error"></li>').text("Error uploading the file! Try again!").appendTo($('#prudio-window ul'));
             })
         };

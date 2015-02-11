@@ -742,9 +742,7 @@ function main() {
 
                 $('#prudio-window').toggleClass('prudio-window-open');
 
-                var hasSignature = $.getCookie('prudio-signature');
-
-                if(hasSignature == null)
+                if(null == $.getCookie('prudio-signature'))
                     $.checkUserInfo(settings);
                 else 
                     $.continueProgram(settings);

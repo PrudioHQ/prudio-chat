@@ -73,7 +73,7 @@ function main() {
         $.getSettings = function() {
             var el = $.findJS();
             var params = ['appid', 'name', 'email'];
-            var settings = new Object();
+            var settings = {};
 
             for(var i = 0; i < params.length; i++) {
                 var p = params[i];
@@ -720,7 +720,6 @@ function main() {
                 $(this).fadeOut('fast');
 
             if(open === false) {
-
                 var domContent = [
                     '<nav class="prudio-window prudio-window-vertical prudio-window-right" id="prudio-window">',
                     '     <h3><span class="mute" title="Mute"><i class="icon-volume-high"></i></span>' + (settings.title || 'Support') + ' <span class="close" title="Close"><i class="icon-cancel"></i></span></h3>',

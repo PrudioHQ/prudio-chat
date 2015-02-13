@@ -44,7 +44,7 @@ module.exports = function(app, io, slack, models) {
         }
 
         // TODO: use the real token
-        models.app.find({ where: { appid: appid, token: slack_api_token } }).success(function(app) {
+        models.app.find({ where: { appid: appid, slack_api_token: token } }).success(function(app) {
             if(app === null) {
                 return res.status(401).json({ success: false, message: "Unauthorized" });
             }

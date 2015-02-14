@@ -26,12 +26,8 @@
     "lokijs": "1.1.*",
     "moment": "^2.8.3",
     "mongoose": "^3.8.23",
-    "mysql": "2.5.1",
     "newrelic": "^1.12.1",
-    "pg": "2.x",
     "request": "latest",
-    "sequelize": "1.7.10",
-    "sequelize-cli": "^0.3.3",
     "socket.io": "1.1",
     "ws": "0.4.x"
   },

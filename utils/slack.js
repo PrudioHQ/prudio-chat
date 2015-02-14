@@ -90,13 +90,22 @@ var self = module.exports = {
 
     connect: function connect(application) {
 
-        var appid = application.id;
+        var appid = application.appid;
 
         console.log('Connecting to ' + appid);
 
         if (typeof Bots[appid] === 'undefined' || Bots[appid].isConnected === false) {
 
-            request.post('https://slack.com/api/rtm.start', { json: true, form: { token: application.slack_bot_token, t: Date.now() }}, function(error, response, connection) {
+            request.post('https://slack.com/api/rtm.start',
+                {
+                    json: true,
+                    form: {
+                        token: application.slack_bot_token,
+                        t: Date.now()
+                    }
+                },
+                function(error, response, connection) {
+
                 if (!error && response.statusCode === 200 && typeof connection.ok !== 'undefined' && connection.ok === true) {
 
                     Bots[appid]             = emitter;

@@ -1,21 +1,11 @@
 {
   "development": {
-    "username": "root",
-    "password": null,
-    "database": "prudio",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
+    "connection": "mongodb://localhost:27017/test"
   },
   "test": {
-    "username": "root",
-    "password": null,
-    "database": "prudio_test",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
+    "connection": "mongodb://localhost:27017/test"
   },
   "production": {
-    "dialect": "postgres",
-    "protocol": "postgres",
-    "logging": true
+    "connection": "mongodb://localhost:27017/test"
   }
 }

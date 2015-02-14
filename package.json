@@ -25,6 +25,7 @@
     "grunt-text-replace": "^0.3.12",
     "lokijs": "1.1.*",
     "moment": "^2.8.3",
+    "mongoose": "^3.8.23",
     "mysql": "2.5.1",
     "newrelic": "^1.12.1",
     "pg": "2.x",
@@ -43,7 +44,7 @@
     "jscs": "^1.8.1",
     "pre-commit": "0.0.9"
   },
-  "pre-commit": [  
+  "pre-commit": [
     "jshint",
     "jscs"
   ],

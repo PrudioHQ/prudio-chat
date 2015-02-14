@@ -1,4 +1,4 @@
-module.exports = function(app, io, slack, models, emoji)
+module.exports = function(app, io, slack, App, emoji)
 {
 	io.of('/chat').on('connection', function(clientSocket)
 	{
@@ -7,7 +7,10 @@ module.exports = function(app, io, slack, models, emoji)
 		{
 			console.log("Socket JOINROOM CH: " + channel);
 
-		  	models.app.find({ where: { appid: appid, active: true } }).success(function(application) {
+		  	App.findOne({ appid: appid, active: true }, function(err, application) {
+				if (err) {
+					console.error(err);
+				}
 
 				if(application === null) {
 					console.log('Wrong appid.');

@@ -3,7 +3,7 @@ var request = require('request'); // github.com/mikeal/request
 var formidable = require('formidable');
 var crypto = require('crypto');
 
-module.exports = function(app, io, slack, models) {
+module.exports = function(app, io, slack, App) {
 
     var application = null;
 
@@ -15,7 +15,12 @@ module.exports = function(app, io, slack, models) {
             return res.status(401).json({ success: false, message: "Unauthorized" });
         }
 
-        models.app.find({ where: { appid: appid } }).success(function(app) {
+        App.findOne({ appid: appid }, function(err, app) {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ success: false, message: "Error" });
+            }
+
             if(app === null) {
                 return res.status(401).json({ success: false, message: "Unauthorized" });
             }
@@ -44,7 +49,12 @@ module.exports = function(app, io, slack, models) {
         }
 
         // TODO: use the real token
-        models.app.find({ where: { appid: appid, slack_api_token: token } }).success(function(app) {
+        App.findOne({ appid: appid, slack_api_token: token }, function(err, app) {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ success: false, message: "Error" });
+            }
+
             if(app === null) {
                 return res.status(401).json({ success: false, message: "Unauthorized" });
             }
@@ -80,8 +90,14 @@ module.exports = function(app, io, slack, models) {
 
         // Parse data from POST
         form.parse(req, function(err, fields, files) {
-            models.app.find({ where: { appid: appid, active: true } }).success(function(application) {
+            App.findOne({ appid: appid, active: true }, function(err, application) {
+                if (err) {
+                    console.error(err);
+                    return res.status(500).json({ success: false, message: "Error" });
+                }
+
                 slack.uploadFile(application.slack_api_token,channel, files);
+
                 return res.status(200).json({ success: true, message: "Uploading" });
             });
         });
@@ -91,7 +107,13 @@ module.exports = function(app, io, slack, models) {
     // TODO: Use diferent method for authorization
     app.post('/app/connect', isAdmin, function(req, res, next) {
         var appid            = req.param('appid');
-        models.app.find({ where: { appid: appid, active: true } }).success(function(application) {
+
+        App.findOne({ appid: appid, active: true }, function(err, application) {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ success: false, message: "Error" });
+            }
+
             slack.connect(application);
 
             return res.status(200).json({ success: true, message: "Initializing" });
@@ -101,7 +123,12 @@ module.exports = function(app, io, slack, models) {
     // TODO: Use diferent method for authorization
     app.post('/app/disconnect', isAdmin, function(req, res, next) {
         var appid            = req.param('appid');
-        models.app.find({ where: { appid: appid, active: true } }).success(function(application) {
+        App.findOne({ appid: appid, active: true }, function(err, application) {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ success: false, message: "Error" });
+            }
+
             slack.disconnect(application.id);
 
             return res.status(200).json({ success: true, message: "Disconnecting" });
@@ -110,7 +137,12 @@ module.exports = function(app, io, slack, models) {
 
     app.post('/app/ping', isAuthorized, function(req, res, next) {
         var appid            = req.param('appid');
-        models.app.find({ where: { appid: appid, active: true } }).success(function(application) {
+        App.findOne({ appid: appid, active: true }, function(err, application) {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ success: false, message: "Error" });
+            }
+
             var onlineUsers = slack.onlineUsers(application.id);
 
             return res.status(200).json({ success: true, onlineUsers: onlineUsers.length, message: onlineUsers.length + " users online." });
@@ -126,7 +158,11 @@ module.exports = function(app, io, slack, models) {
         async.waterfall(
             [
                 function(callback) {
-                    models.app.find({ where: { appid: appid, active: true } }).success(function(application) {
+                    App.findOne({ appid: appid, active: true }, function(err, application) {
+                        if (err) {
+                            return callback(err);
+                        }
+
                         return callback(null, application);
                     });
                 },
@@ -195,7 +231,11 @@ module.exports = function(app, io, slack, models) {
         var userInfo         = req.param('userInfo');
         var settings         = req.param('settings');
 
-        models.app.find({ where: { appid: appid, active: true } }).success(function(application) {
+        App.findOne({ appid: appid, active: true }, function(err, application) {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ success: false, message: "Error" });
+            }
 
             if(application === null) {
                 return res.status(404).json({ success: false, message: "Not found" });

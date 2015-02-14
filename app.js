@@ -6,6 +6,7 @@ var express = require('express');
 var app     = express();
 var server  = require('http').Server(app);
 var io      = require('socket.io')(server);
+var db      = require('./models/connection');
 
 // Body parser & CORS
 var bodyParser = require('body-parser');
@@ -13,13 +14,13 @@ var cors       = require('cors');
 var emoji      = require('emoji-parser');
 
 // Models
-var models    = require('./models');
+var App = require('./models/app');
 
 // Slack logic
 var slack = require('./utils/slack');
 
 // App settings
-app.set('port', process.env.PORT     || Number(8888));
+app.set('port', process.env.PORT     || Number(5000));
 app.set('env',  process.env.NODE_ENV || 'development');
 
 // Constants
@@ -31,7 +32,7 @@ if ('development' === app.get('env')) {
     app.use(errorhandler());
 }
 
-models.sequelize.sync().success(function() {
+db.once('open', function (callback) {
     var listening = server.listen(app.get('port'), function() {
 
         // keep emoji-images in sync with the official repository
@@ -47,7 +48,7 @@ models.sequelize.sync().success(function() {
 });
 
 app.enable('trust proxy');
-app.use(bodyParser.urlencoded({ extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 
 // allow access to /build directories and notification
@@ -59,9 +60,9 @@ if ('development' === app.get('env')) {
 }
 
 // linking
-require('./utils/socket')(app, io, slack, models, emoji); // socketIO logic
-require('./utils/client')(app, io, slack, models); // sets up endpoints
-require('./utils/bot')(slack, models); // Sets bots up
+require('./utils/socket')(app, io, slack, App, emoji); // socketIO logic
+require('./utils/client')(app, io, slack, App); // sets up endpoints
+require('./utils/bot')(slack, App); // Sets bots up
 
 // Catch errors
 app.use(function(err, req, res, next) {

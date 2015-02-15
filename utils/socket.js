@@ -26,7 +26,7 @@ module.exports = function(app, io, slack, App, emoji)
 
 				var crypto      = require('crypto');
 				var signature   = crypto.createHmac('sha1', application.slack_api_token).update(channel).digest('hex');
-				var appid       = application.id;
+				var appid       = application.appid;
 
 				if(signature !== clientSignature) {
 					console.log('Wrong channel signature.');
@@ -79,6 +79,15 @@ module.exports = function(app, io, slack, App, emoji)
 				});
 
 				console.log("Type: " + typeof bot);
+				if (typeof bot === "undefined") {
+					console.error("Bot is undefined!");
+
+					clientSocket.emit('serverMessage', {
+						message: 'Could not connect to server '
+					});
+
+					return;
+				}
 
 				// On Slack message, redirect to socket
 				bot.on('message', function (message) {

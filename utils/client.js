@@ -143,7 +143,7 @@ module.exports = function(app, io, slack, App) {
                 return res.status(500).json({ success: false, message: "Error" });
             }
 
-            var onlineUsers = slack.onlineUsers(application.id);
+            var onlineUsers = slack.onlineUsers(application.appid);
 
             return res.status(200).json({ success: true, onlineUsers: onlineUsers.length, message: onlineUsers.length + " users online." });
         });

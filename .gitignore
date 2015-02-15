@@ -31,6 +31,9 @@ express-angularjs-seed
 bower_components
 .npmignore
 
+# Environment 
+.env
+
 # Builds from grunt
 build/*
 

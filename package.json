@@ -35,7 +35,7 @@
   "main": "app.js",
   "devDependencies": {
     "grunt-contrib-watch": "^0.6.1",
-    "grunt-express-server": "^0.4.19",
+    "grunt-foreman": "0.0.5",
     "grunt-text-replace": "^0.3.12",
     "jscs": "^1.8.1",
     "pre-commit": "0.0.9"

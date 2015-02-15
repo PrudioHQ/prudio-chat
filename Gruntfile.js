@@ -63,15 +63,6 @@ module.exports = function(grunt) {
                 ]
             }
         },
-        express: {
-            development: {
-                options: {
-                    script: './app.js',
-                      hostname: '0.0.0.0',
-                      port: 5000
-                }
-            }
-        },
         watch: {
             scripts: {
                 files: ['src/**/*.js', 'src/**/*.css'],
@@ -86,12 +77,12 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-express-server');
+    grunt.loadNpmTasks("grunt-foreman");
     grunt.loadNpmTasks('grunt-text-replace');
 
     // Default task(s).
     grunt.registerTask('build', ['uglify', 'replace', 'cssmin', 'copy']);
-    grunt.registerTask('server', ['express:development', 'watch']);
+    grunt.registerTask('server', ['foreman', 'watch']);
     grunt.registerTask('default', ['build', 'server']);
 
 };

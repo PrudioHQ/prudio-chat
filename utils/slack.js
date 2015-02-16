@@ -90,7 +90,7 @@ var self = module.exports = {
 
     connect: function connect(application) {
 
-        var appid = application.appid;
+        var appid = application.appId;
 
         console.log('Connecting to ' + appid);
 
@@ -100,7 +100,7 @@ var self = module.exports = {
                 {
                     json: true,
                     form: {
-                        token: application.slack_bot_token,
+                        token: application.slackBotToken,
                         t: Date.now()
                     }
                 },
@@ -275,7 +275,7 @@ var self = module.exports = {
 
         var formData = {
             // Pass Slack token
-            token: application.slack_api_token,
+            token: application.slackApiToken,
             // Pass Slack channel
             channel: channel,
             // Number of messages to return (max: 100)

@@ -3,20 +3,20 @@ module.exports = function(app, io, slack, App, emoji)
 	io.of('/chat').on('connection', function(clientSocket)
 	{
 		// each client is put into a chat room restricted to max 2 clients
-		clientSocket.on('joinRoom', function(appid, channel, clientSignature)
+		clientSocket.on('joinRoom', function(appId, channel, clientSignature)
 		{
 			console.log("Socket JOINROOM CH: " + channel);
 
-		  	App.findOne({ appid: appid, active: true }, function(err, application) {
+		  	App.findOne({ appId: appId, active: true }, function(err, application) {
 				if (err) {
 					console.error(err);
 				}
 
 				if(application === null) {
-					console.log('Wrong appid.');
+					console.log('Wrong appId.');
 
 					clientSocket.emit('serverMessage', {
-						message: 'Wrong appid.'
+						message: 'Wrong appId.'
 					});
 
 					// force client to disconnect
@@ -25,8 +25,8 @@ module.exports = function(app, io, slack, App, emoji)
 				}
 
 				var crypto      = require('crypto');
-				var signature   = crypto.createHmac('sha1', application.slack_api_token).update(channel).digest('hex');
-				var appid       = application.appid;
+				var signature   = crypto.createHmac('sha1', application.slackApiToken).update(channel).digest('hex');
+				var appId       = application.appId;
 
 				if(signature !== clientSignature) {
 					console.log('Wrong channel signature.');
@@ -53,7 +53,7 @@ module.exports = function(app, io, slack, App, emoji)
 				/** sendMessage **/
 				clientSocket.on('sendMessage', function (text) {
 
-					if(slack.isConnected(appid) === false) {
+					if(slack.isConnected(appId) === false) {
 						// Let the user know about the error?
 						clientSocket.emit('serverMessage', {
 							message: 'Could not deliver the message: ' + text.message
@@ -75,7 +75,7 @@ module.exports = function(app, io, slack, App, emoji)
 					});
 
 					// send response to slack
-					slack.say(appid, channel, text.message);
+					slack.say(appId, channel, text.message);
 				});
 
 				console.log("Type: " + typeof bot);
@@ -129,7 +129,7 @@ module.exports = function(app, io, slack, App, emoji)
 
 				// Socket disconnect listener, notify Slack that user left the chat
 				clientSocket.on('disconnect', function() {
-					slack.say(appid, channel, "_User disconnected!_");
+					slack.say(appId, channel, "_User disconnected!_");
 				});
 
 			});

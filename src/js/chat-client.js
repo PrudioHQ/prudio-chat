@@ -680,13 +680,8 @@ function main() {
                 $('#prudio-button').fadeIn();
         });
 
-        $(document).on('click', '#prudio-window span.mute', function() {
-            muted = !muted;
-            if(muted) {
-                $('#prudio-window span.mute i').removeClass('icon-volume-high').addClass('icon-volume-off');
-            } else {
-                $('#prudio-window span.mute i').removeClass('icon-volume-off').addClass('icon-volume-high');
-            }
+        $(document).on('click', '#prudio-window .mute', function() {
+            $('#prudio-window span.mute i').toggleClass('icon-volume-high').toggleClass('icon-volume-off');
         });
 
         $(document).on('dragover', '#prudio-window div.drop-zone, #prudio-window div.drop-overlay', function(event) {

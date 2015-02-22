@@ -108,14 +108,16 @@
 	border-bottom: 1px solid #DADEE2;
 }
 
-.prudio-window h3 span.close {
+.prudio-window h3 .minimize,
+.prudio-window h3 .close {
 	font-size: 1em;
 	font-weight: lighter;
 	float: right;
 	cursor: pointer;
+    margin-left:0.25em;
 }
 
-.prudio-window h3 span.mute {
+.prudio-window h3 .mute {
 	color: #eee;
 	font-size: 1em;
 	font-weight: lighter;
@@ -123,7 +125,7 @@
 	cursor: pointer;
 }
 
-.prudio-window h3 span.mute:hover {
+.prudio-window h3 .mute:hover {
 	color: #455A64;
 }
 

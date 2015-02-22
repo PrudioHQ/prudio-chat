@@ -677,22 +677,21 @@ function main() {
 
         var prudioButtonSelector = settings.buttonSelector || '#prudio-button';
 
-        var open = $.getCookie('prudio-status') == 'open';
         var muted = false;
 
-        $(document).on('click', '#prudio-window .close', function() {
-            $.setCookie('prudio-status', 'closed');
+        $(document).on('click', '#prudio-window .status', function() {
+            $.setCookie('prudio-status', $(this).data('status'));
             $('#prudio-window').toggleClass('prudio-window-open');
             if(!settings.buttonSelector)
                 $('#prudio-button').fadeIn();
         });
 
-        $(document).on('click', '#prudio-window span.mute', function() {
+        $(document).on('click', '#prudio-window .mute', function() {
             muted = !muted;
             if(muted) {
-                $('#prudio-window span.mute i').removeClass('icon-volume-high').addClass('icon-volume-off');
+                $('#prudio-window .mute i').removeClass('icon-volume-high').addClass('icon-volume-off');
             } else {
-                $('#prudio-window span.mute i').removeClass('icon-volume-off').addClass('icon-volume-high');
+                $('#prudio-window .mute i').removeClass('icon-volume-off').addClass('icon-volume-high');
             }
         });
 
@@ -723,22 +722,24 @@ function main() {
             if(!settings.buttonSelector)
                 $(this).fadeOut('fast');
 
-            if(open === false) {
-                if(null == $.getCookie('prudio-signature'))
-                    $.checkUserInfo(settings);
-                else
-                    $.continueProgram(settings);
-            }
+            if(null == $.getCookie('prudio-signature'))
+                $.checkUserInfo(settings);
+            else
+                $.continueProgram(settings);
 
             $('#prudio-window').toggleClass('prudio-window-open');
-            open = true;
         });
 
         // Add prudio chat window to the DOM
         $('body').append(
             [
                 '<nav class="prudio-window prudio-window-vertical prudio-window-right" id="prudio-window">',
-                '     <h3><span class="mute" title="Mute"><i class="icon-volume-high"></i></span>' + (settings.title || 'Support') + ' <span class="close" title="Close"><i class="icon-cancel"></i></span></h3>',
+                '     <h3>',
+                '       <span class="mute" title="Mute"><i class="icon-volume-high"></i></span>',
+                        (settings.title || 'Support'),
+                '       <span class="status close" title="Close" data-status="closed"><i class="icon-cancel"></i></span>',
+                '       <span class="status minimize" title="Minimize" data-status="minimized">_</span>',
+                '     </h3>',
                 '     <div class="messages drop-zone">',
                 '         <div class="drop-overlay hidden"></div>',
                 '         <ul>',
@@ -755,12 +756,20 @@ function main() {
             ].join('')
         );
 
+        switch ($.getCookie('prudio-status')) {
+            case 'open':
+                $.continueProgram(settings);
+                $('#prudio-window').toggleClass('prudio-window-open');
+                break;
 
-        if (open) {
-            $.continueProgram(settings);
-            $('#prudio-window').toggleClass('prudio-window-open');
-        } else {
-            $(prudioButtonSelector).fadeIn();
+            case 'minimized':
+                $.continueProgram(settings);
+                $(prudioButtonSelector).fadeIn();
+                break;
+
+            case 'closed':
+                $(prudioButtonSelector).fadeIn();
+                break;
         }
     });
 }

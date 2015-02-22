@@ -723,27 +723,7 @@ function main() {
             if(!settings.buttonSelector)
                 $(this).fadeOut('fast');
 
-            if(open === false || $.getCookie('prudio-status') === 'open') {
-                var domContent = [
-                    '<nav class="prudio-window prudio-window-vertical prudio-window-right" id="prudio-window">',
-                    '     <h3><span class="mute" title="Mute"><i class="icon-volume-high"></i></span>' + (settings.title || 'Support') + ' <span class="close" title="Close"><i class="icon-cancel"></i></span></h3>',
-                    '     <div class="messages drop-zone">',
-                    '         <div class="drop-overlay hidden"></div>',
-                    '         <ul>',
-                    '         </ul>',
-                    '         <div class="reply-container">',
-                    '            <div class="reply">',
-                    '                <input type="file" name="uploads" class="hidden" multiple>',
-                    '                <input type="text" name="message" placeholder="Just write..." autofocus="autofocus">',
-                    '                <span class="icon-attach" title="Attach a file"></span>',
-                    '            </div>',
-                    '         </div>',
-                    '     </div>',
-                    '</nav>'
-                    ].join('');
-
-                $('body').append(domContent);
-
+            if(open === false) {
                 if(null == $.getCookie('prudio-signature'))
                     $.checkUserInfo(settings);
                 else
@@ -754,17 +734,34 @@ function main() {
             open = true;
         });
 
+        // Add prudio chat window to the DOM
+        $('body').append(
+            [
+                '<nav class="prudio-window prudio-window-vertical prudio-window-right" id="prudio-window">',
+                '     <h3><span class="mute" title="Mute"><i class="icon-volume-high"></i></span>' + (settings.title || 'Support') + ' <span class="close" title="Close"><i class="icon-cancel"></i></span></h3>',
+                '     <div class="messages drop-zone">',
+                '         <div class="drop-overlay hidden"></div>',
+                '         <ul>',
+                '         </ul>',
+                '         <div class="reply-container">',
+                '            <div class="reply">',
+                '                <input type="file" name="uploads" class="hidden" multiple>',
+                '                <input type="text" name="message" placeholder="Just write..." autofocus="autofocus">',
+                '                <span class="icon-attach" title="Attach a file"></span>',
+                '            </div>',
+                '         </div>',
+                '     </div>',
+                '</nav>'
+            ].join('')
+        );
+
+
         if (open) {
-            $(prudioButtonSelector).trigger('click');
+            $.continueProgram(settings);
+            $('#prudio-window').toggleClass('prudio-window-open');
         } else {
             $(prudioButtonSelector).fadeIn();
         }
-
-
     });
 }
-
-
-
-
 })(); // We call our anonymous function immediately

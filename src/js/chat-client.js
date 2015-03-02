@@ -76,7 +76,7 @@ function main() {
         $.getSettings = function() {
             var el = $.findJS();
             var params = ['appid', 'name', 'email'];
-            var settings = new Object();
+            var settings = {};
 
             for(var i = 0; i < params.length; i++) {
                 var p = params[i];
@@ -117,7 +117,7 @@ function main() {
             days = days || 730; // 2 years
 
             var date = new Date();
-            date.setTime(date.getTime() + (days*24*60*60*1000));
+            date.setTime(date.getTime() + (days * 86400000));
 
             // Set Cookie
             document.cookie = cookie + "=" + value + "; expires=" + date.toGMTString() + "; path=/";
@@ -533,8 +533,6 @@ function main() {
 
         $.checkUserInfo = function(settings) {
 
-            console.log(settings);
-
             // No name
             if(typeof settings.name === 'undefined') {
                 // Ask
@@ -545,16 +543,10 @@ function main() {
                 // Capture
                 $('#prudio-window div.reply input[name=message]').bind('keypress', function(e) {
                     if (e.keyCode === ENTER_KEY_CODE && $(this).val() !== "") {
-                        var message = $(this).val();
-
-                        console.log("ENTER name");
-                        settings.name = message;
+                        settings.name = $(this).val();
 
                         $(this).val('').unbind('keypress');
-
                         $('<li class="self"></li>').text(settings.name).appendTo($('#prudio-window ul'));
-
-                        console.log(settings);
 
                         return $.checkUserInfo(settings);
                     }
@@ -571,13 +563,8 @@ function main() {
                 // Capture
                 $('#prudio-window div.reply input[name=message]').bind('keypress', function(e) {
                     if (e.keyCode === ENTER_KEY_CODE && $(this).val() !== "") {
-                        var message = $(this).val();
-
-                        console.log("ENTER email");
-                        settings.email = message;
-
+                        settings.email = $(this).val();
                         $(this).val('').prop('type', 'text').unbind('keypress');
-
                         $('<li class="self"></li>').text(settings.email).appendTo($('#prudio-window ul'));
 
                         return $.checkUserInfo(settings);
@@ -610,12 +597,7 @@ function main() {
                     userInfo:    JSON.stringify(userInfo)
                 },
                 error: function(xhr, ajaxOptions, thrownError){
-
                     $('<li class="error"></li>').text("We got a problem connecting to the server!").appendTo($('#prudio-window ul'));
-
-                    console.log(xhr);
-                    console.log(ajaxOptions);
-                    console.log(thrownError);
                 },
                 success: function(data) {
 
@@ -706,23 +688,16 @@ function main() {
                 processData: false, // Don't process the files
                 contentType: false // Set content type to false as jQuery will tell the server its a query string request
             })
-            .done(function(data, textStatus, jqXHR)
-            {
-                if(typeof data.error === 'undefined')
-                {
-                    // console.log('SUCCESS: ' + data);
+            .done(function(data, textStatus, jqXHR) {
+                if(typeof data.error === 'undefined') {
                     $('<li class="server"></li>').text("Uploading file").appendTo($('#prudio-window ul'));
                 }
-                else
-                {
-                    // console.log('ERRORS: ' + data.error);
+                else {
                     $('<li class="error"></li>').text("Error uploading the file!").appendTo($('#prudio-window ul'));
 
                 }
             })
-            .fail(function(jqXHR, textStatus, errorThrown)
-            {
-                // console.log('ERRORS: ' + textStatus);
+            .fail(function(jqXHR, textStatus, errorThrown) {
                 $('<li class="error"></li>').text("Error uploading the file! Try again!").appendTo($('#prudio-window ul'));
             })
         };
@@ -787,13 +762,8 @@ function main() {
             }
         });
 
-        $(document).on('click', '#prudio-window span.mute', function() {
-            muted = !muted;
-            if(muted) {
-                $('#prudio-window span.mute i').removeClass('icon-volume-high').addClass('icon-volume-off');
-            } else {
-                $('#prudio-window span.mute i').removeClass('icon-volume-off').addClass('icon-volume-high');
-            }
+        $(document).on('click', '#prudio-window .mute', function() {
+            $('#prudio-window span.mute i').toggleClass('icon-volume-high').toggleClass('icon-volume-off');
         });
 
         $(document).on('dragover', '#prudio-window div.drop-zone, #prudio-window div.drop-overlay', function(event) {
@@ -828,7 +798,6 @@ function main() {
             }
 
             if(open === false) {
-
                 var domContent = [
                     '<nav class="reset-styles prudio-window prudio-window-vertical prudio-window-right" id="prudio-window">',
                     '     <h3><span class="mute" title="Mute"><i class="icon-volume-high"></i></span>' + (settings.title || 'Support') + ' <span class="close" title="Close"><i class="icon-cancel"></i></span></h3>',
@@ -852,9 +821,7 @@ function main() {
 
                 $('#prudio-window').toggleClass('prudio-window-open');
 
-                var hasSignature = $.getCookie('prudio-signature');
-
-                if(hasSignature === null) {
+                if(null == $.getCookie('prudio-signature')) {
                     $.checkUserInfo(settings);
                 } else {
                     $.continueProgram(settings);

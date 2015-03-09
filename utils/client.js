@@ -290,7 +290,7 @@ module.exports = function(app, io, slack, App) {
 
                     // Invite user to channel
                     function(channelName, channelId, returning, callback) {
-                        request.post(app.get('slack_api_url') + '/channels.invite', { json: true, form: { token: application.slackApiToken, channel: channelId, user: application.slack_invite_bot }}, function (error, response, body) {
+                        request.post(app.get('slack_api_url') + '/channels.invite', { json: true, form: { token: application.slackApiToken, channel: channelId, user: application.slackInviteBot }}, function (error, response, body) {
                             if (!error && response.statusCode === 200) {
                                 return callback(null, channelName, channelId, returning);
                             }

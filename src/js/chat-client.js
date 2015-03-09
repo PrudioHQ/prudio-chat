@@ -3,7 +3,7 @@
 // Localize jQuery variable
 var jQuery;
 
-var baseURL = "https://prudio-chat-dev.herokuapp.com:443";  //"http://chat.prud.io:80";
+var baseURL = "https://prudio-chat.herokuapp.com:443";  //"http://chat.prud.io:80";
 var ENTER_KEY_CODE = 13;
 
 /******** Load jQuery if not present *********/
@@ -62,8 +62,7 @@ function main() {
 
         $.findJS = function() {
             var elems = document.getElementsByTagName('script');
-            //var re = /chat\.prud\.io\/client/;
-            var re = /prudio-chat-dev\.herokuapp.com\/client/;
+            var re = /chat\.prud\.io\/client/;
 
             for(var i = 0; i < elems.length; i++) {
                 if(elems[i].src.match(re)) {

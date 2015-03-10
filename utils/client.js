@@ -257,18 +257,15 @@ module.exports = function(app, io, slack, App) {
                         }
 
                         // No channel or signature, or invalid signature/channel, get the next channel
-                        App.update({ id: application.id }, {'$inc': { roomCount: 1}});
-
-                        application.save(function(err, application) {
+                        application.update({ $inc: { roomCount: 1}}, function(err, affected) {
                             if (err) {
                                 return callback(err);
                             }
 
                             var channelName = application.roomPrefix + application.roomCount;
                             return callback(null, channelName, null);
+
                         });
-
-
                     },
 
                     // Create channel

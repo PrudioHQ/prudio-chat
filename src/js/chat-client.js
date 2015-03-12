@@ -95,7 +95,7 @@ function main() {
         };
 
         $.createButton = function() {
-            var button = $('<div id="prudio-button" style="display:none;background-color: ' + (settings.buttonColor || '') + '" title="Chat with us"><i class="icon-prudio"></i></div><div id="prudio-notification"></div>');
+            var button = $('<div id="prudio-button" style="display: none;' + (settings.buttonColor !== undefined ?  ' background-color: ' + settings.buttonColor : '') + '" title="Chat with us"><i class="icon-prudio"></i></div><div id="prudio-notification"></div>');
             $("body").append(button);
         };
 
@@ -844,6 +844,10 @@ function main() {
                 break;
 
             case 'closed':
+                $(prudioButtonSelector).fadeIn();
+                break;
+
+            default:
                 $(prudioButtonSelector).fadeIn();
                 break;
         }

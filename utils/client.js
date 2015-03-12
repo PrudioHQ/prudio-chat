@@ -295,6 +295,27 @@ module.exports = function(app, io, slack, App) {
                         });
                     },
 
+                    // Set topic of channel
+                    function(channelName, channelId, returning, callback) {
+
+                        if(returning) {
+                            return callback(null, channelName, channelId);
+                        }
+
+                        var personal = JSON.parse(settings);
+
+                        var topic = personal.name + " (" + personal.email + ")";
+
+                        request.post(app.get('slack_api_url') + '/channels.setTopic', { json: true, form: { token: application.slackApiToken, channel: channelId, topic: topic }}, function (error, response, body) {
+                            if (!error && response.statusCode === 200) {
+                                return callback(null, channelName, channelId);
+                            }
+
+                            return callback('Set topic of channel');
+                        });
+                    },
+
+
                     // Set purpose of channel
                     function(channelName, channelId, returning, callback) {
 
@@ -305,14 +326,13 @@ module.exports = function(app, io, slack, App) {
                         var info     = JSON.parse(userInfo);
                         var personal = JSON.parse(settings);
 
-                        var topic = "Help!" +
-                        "\nName: " + personal.name + " (" + personal.email + ")" +
+                        var purpose = "Help!" +
                         "\nURL: " + info.url + " (" + req.ip + ")" +
                         "\nBrowser: " + info.browser + " - " + info.browserVersion +
                         "\nOS: " + info.os + " - " + info.osVersion +
                         "\nMobile: " + info.mobile +" - Screen resolution: " + info.screen;
 
-                        request.post(app.get('slack_api_url') + '/channels.setPurpose', { json: true, form: { token: application.slackApiToken, channel: channelId, purpose: topic }}, function (error, response, body) {
+                        request.post(app.get('slack_api_url') + '/channels.setPurpose', { json: true, form: { token: application.slackApiToken, channel: channelId, purpose: purpose }}, function (error, response, body) {
                             if (!error && response.statusCode === 200) {
                                 return callback(null, channelName, channelId);
                             }

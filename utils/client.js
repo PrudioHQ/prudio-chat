@@ -299,7 +299,7 @@ module.exports = function(app, io, slack, App) {
                     function(channelName, channelId, returning, callback) {
 
                         if(returning) {
-                            return callback(null, channelName, channelId);
+                            return callback(null, channelName, channelId, returning);
                         }
 
                         var personal = JSON.parse(settings);
@@ -308,7 +308,7 @@ module.exports = function(app, io, slack, App) {
 
                         request.post(app.get('slack_api_url') + '/channels.setTopic', { json: true, form: { token: application.slackApiToken, channel: channelId, topic: topic }}, function (error, response, body) {
                             if (!error && response.statusCode === 200) {
-                                return callback(null, channelName, channelId);
+                                return callback(null, channelName, channelId, returning);
                             }
 
                             return callback('Set topic of channel');

@@ -205,7 +205,7 @@ var self = module.exports = {
                     });
 
                     Bots[appid].addListener('error', function(e) {
-                        console.log(appid + ' had an error');
+                        console.error(appid + ' had an error');
                     });
 
                     // Direct message
@@ -263,8 +263,7 @@ var self = module.exports = {
 
         Bots[appid].websocket.send(JSON.stringify(data), function(error) {
             if (error) {
-                console.log('Error sending data to socket!');
-                console.log(error);
+                console.error('Error sending data to socket!', error);
                 console.log(data);
             }
         });

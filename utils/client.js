@@ -373,7 +373,7 @@ module.exports = function(app, io, slack, App) {
                 ],
                 function(err, channelName, channelId) {
                     if(err) {
-                        console.log("ERROR: " + err);
+                        console.error(err);
                         return res.status(404).json({ error: "Error: " + err});
                     }
 

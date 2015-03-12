@@ -13,6 +13,9 @@ var bodyParser = require('body-parser');
 var cors       = require('cors');
 var emoji      = require('emoji-parser');
 
+// Debug
+var DEBUG = app.get('DEBUG');
+
 // Models
 var App = require('./models/app');
 
@@ -43,6 +46,12 @@ db.once('open', function (callback) {
         // If in heroku inform which DYNO is running
         if (process.env.DYNO) {
             console.log('I\'m running at ' + process.env.DYNO);
+        }
+
+        // Hide the console.log() function in production
+        if ('production' === app.get('env')) {
+            console = console || {};
+            console.log = function(){};
         }
     });
 });

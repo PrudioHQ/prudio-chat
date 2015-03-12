@@ -11,7 +11,7 @@ module.exports = function(app, io, slack, App, emoji)
 				}
 
 				if(application === null) {
-					console.log('Wrong appId.');
+					console.error('Wrong appId.');
 
 					clientSocket.emit('serverMessage', {
 						message: 'Wrong appId.'
@@ -109,7 +109,7 @@ module.exports = function(app, io, slack, App, emoji)
 
 				// Error handler
 				bot.on('error', function(err) {
-					console.log("Error message: %j", err);
+					console.error("Error message: %j", err);
 					console.log("Channel: %j", channel);
 					// Let the user know about the error?
 					clientSocket.emit('serverMessage', {

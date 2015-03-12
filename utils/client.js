@@ -122,7 +122,7 @@ module.exports = function(app, io, slack, App) {
 
     // TODO: Use diferent method for authorization
     app.post('/app/disconnect', isAdmin, function(req, res, next) {
-        var appid            = req.param('appid');
+        var appid = req.param('appid');
         App.findOne({ appId: appid, active: true }, function(err, application) {
             if (err) {
                 console.error(err);
@@ -136,14 +136,14 @@ module.exports = function(app, io, slack, App) {
     });
 
     app.post('/app/ping', isAuthorized, function(req, res, next) {
-        var appid            = req.param('appid');
+        var appid = req.param('appid');
         App.findOne({ appId: appid, active: true }, function(err, application) {
             if (err) {
                 console.error(err);
                 return res.status(500).json({ success: false, message: "Error" });
             }
 
-            var onlineUsers = slack.onlineUsers(application.appid);
+            var onlineUsers = slack.onlineUsers(application.appId);
 
             return res.status(200).json({ success: true, onlineUsers: onlineUsers.length, message: onlineUsers.length + " users online." });
         });

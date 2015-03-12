@@ -5,8 +5,6 @@ module.exports = function(app, io, slack, App, emoji)
 		// each client is put into a chat room restricted to max 2 clients
 		clientSocket.on('joinRoom', function(appId, channel, clientSignature)
 		{
-			console.log("Socket JOINROOM CH: " + channel);
-
 		  	App.findOne({ appId: appId, active: true }, function(err, application) {
 				if (err) {
 					console.error(err);
@@ -63,10 +61,10 @@ module.exports = function(app, io, slack, App, emoji)
 					}
 
 					// all data sent by client is sent to room
-					clientSocket.broadcast.to(channel).emit('message', {
-						message: text.message,
-						sender: 'Other'
-					});
+					// clientSocket.broadcast.to(channel).emit('message', {
+					// 	message: text.message,
+					// 	sender: 'Other'
+					// });
 
 					// and then shown to client
 					clientSocket.emit('message', {
@@ -83,7 +81,7 @@ module.exports = function(app, io, slack, App, emoji)
 					console.error("Bot is undefined!");
 
 					clientSocket.emit('serverMessage', {
-						message: 'Could not connect to server '
+						message: 'Still connecting'
 					});
 
 					return;

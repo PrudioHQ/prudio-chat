@@ -1,5 +1,5 @@
 var WebSocket = require('ws');
-var emitter   = require('./emitter');
+var events    = require('events');
 var moment    = require('moment');
 var fs        = require('fs');
 var request   = require('request'); // github.com/mikeal/request
@@ -108,7 +108,7 @@ var self = module.exports = {
 
                 if (!error && response.statusCode === 200 && typeof connection.ok !== 'undefined' && connection.ok === true) {
 
-                    Bots[appid]             = emitter;
+                    Bots[appid]             = new events.EventEmitter();
                     Bots[appid].websocket   = new WebSocket(connection.url);
                     Bots[appid].application = application;
                     Bots[appid].isConnected = false;

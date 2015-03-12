@@ -76,7 +76,7 @@ function main() {
         $.getSettings = function() {
             var el = $.findJS();
             var params = ['appid', 'name', 'email'];
-            var settings = new Object();
+            var settings = {};
 
             for(var i = 0; i < params.length; i++) {
                 var p = params[i];
@@ -95,7 +95,7 @@ function main() {
         };
 
         $.createButton = function() {
-            var button = $('<div id="prudio-button" class="reset-styles" ' + (settings.buttonColor ? 'style="background-color: ' + settings.buttonColor + '"' : '') + ' title="Chat with us"><i class="icon-prudio"></i></div>');
+            var button = $('<div id="prudio-button" style="display:none;background-color: ' + (settings.buttonColor || '') + '" title="Chat with us"><i class="icon-prudio"></i></div><div id="prudio-notification"></div>');
             $("body").append(button);
         };
 
@@ -117,7 +117,7 @@ function main() {
             days = days || 730; // 2 years
 
             var date = new Date();
-            date.setTime(date.getTime() + (days*24*60*60*1000));
+            date.setTime(date.getTime() + (days * 86400000));
 
             // Set Cookie
             document.cookie = cookie + "=" + value + "; expires=" + date.toGMTString() + "; path=/";
@@ -519,9 +519,8 @@ function main() {
         };
 
         $.continueProgram = function(settings) {
-
-            var channel     = $.getCookie('prudio-channel');
-            var signature   = $.getCookie('prudio-signature');
+            var channel   = $.getCookie('prudio-channel');
+            var signature = $.getCookie('prudio-signature');
 
             $.retriveHistory(settings.appid, channel, signature);
 
@@ -533,10 +532,8 @@ function main() {
 
         $.checkUserInfo = function(settings) {
 
-            console.log(settings);
-
             // No name
-            if(typeof settings.name === 'undefined') {
+            if (typeof settings.name === 'undefined') {
                 // Ask
                 $('<li class="other"></li>').text("Please type your name in the chatbox below").appendTo($('#prudio-window ul'));
 
@@ -545,16 +542,10 @@ function main() {
                 // Capture
                 $('#prudio-window div.reply input[name=message]').bind('keypress', function(e) {
                     if (e.keyCode === ENTER_KEY_CODE && $(this).val() !== "") {
-                        var message = $(this).val();
-
-                        console.log("ENTER name");
-                        settings.name = message;
+                        settings.name = $(this).val();
 
                         $(this).val('').unbind('keypress');
-
                         $('<li class="self"></li>').text(settings.name).appendTo($('#prudio-window ul'));
-
-                        console.log(settings);
 
                         return $.checkUserInfo(settings);
                     }
@@ -562,7 +553,7 @@ function main() {
             }
 
             // No e-mail
-            else if(typeof settings.email === 'undefined') {
+            else if (typeof settings.email === 'undefined') {
                 // Ask
                 $('<li class="other"></li>').text("Please type your e-mail in the chatbox below").appendTo($('#prudio-window ul'));
 
@@ -571,13 +562,8 @@ function main() {
                 // Capture
                 $('#prudio-window div.reply input[name=message]').bind('keypress', function(e) {
                     if (e.keyCode === ENTER_KEY_CODE && $(this).val() !== "") {
-                        var message = $(this).val();
-
-                        console.log("ENTER email");
-                        settings.email = message;
-
+                        settings.email = $(this).val();
                         $(this).val('').prop('type', 'text').unbind('keypress');
-
                         $('<li class="self"></li>').text(settings.email).appendTo($('#prudio-window ul'));
 
                         return $.checkUserInfo(settings);
@@ -589,12 +575,16 @@ function main() {
         };
 
         $.openSocket = function(settings) {
+            var channel = null,
+                channelName = null,
+                signature = null,
+                userInfo = $.getUserSystemInfo();
 
-            // If they exist.
-            var channel     = $.getCookie('prudio-channel');
-            var channelName = $.getCookie('prudio-channel-name');
-            var signature   = $.getCookie('prudio-signature');
-            var userInfo    = $.getUserSystemInfo();
+            if ($.getCookie('prudio-status') != 'closed') {
+                channel     = $.getCookie('prudio-channel');
+                channelName = $.getCookie('prudio-channel-name');
+                signature   = $.getCookie('prudio-signature');
+            }
 
             $('<li class="server connecting"></li>').html('<i class="icon-flash-outline"></i> Connecting to the server...').appendTo($('#prudio-window ul'));
 
@@ -610,12 +600,7 @@ function main() {
                     userInfo:    JSON.stringify(userInfo)
                 },
                 error: function(xhr, ajaxOptions, thrownError){
-
                     $('<li class="error"></li>').text("We got a problem connecting to the server!").appendTo($('#prudio-window ul'));
-
-                    console.log(xhr);
-                    console.log(ajaxOptions);
-                    console.log(thrownError);
                 },
                 success: function(data) {
 
@@ -623,6 +608,7 @@ function main() {
                     $.setCookie('prudio-channel',      data.channel);
                     $.setCookie('prudio-channel-name', data.channelName);
                     $.setCookie('prudio-signature',    data.signature);
+                    $.setCookie('prudio-status',       'open');
 
                     var socket = io.connect(baseURL + '/chat');
 
@@ -658,7 +644,7 @@ function main() {
 
                     // On Slack message
                     socket.on('message', function (data) {
-                        if(data.sender === "Other") {
+                        if (data.sender === "Other") {
                             $('#prudio-window ul li.typing').remove();
                             $('<li class="other"></li>').html(data.message).appendTo($('#prudio-window ul'));
                             $.scrollChat('#prudio-window div.messages');
@@ -706,23 +692,14 @@ function main() {
                 processData: false, // Don't process the files
                 contentType: false // Set content type to false as jQuery will tell the server its a query string request
             })
-            .done(function(data, textStatus, jqXHR)
-            {
-                if(typeof data.error === 'undefined')
-                {
-                    // console.log('SUCCESS: ' + data);
+            .done(function(data, textStatus, jqXHR) {
+                if (typeof data.error === 'undefined') {
                     $('<li class="server"></li>').text("Uploading file").appendTo($('#prudio-window ul'));
-                }
-                else
-                {
-                    // console.log('ERRORS: ' + data.error);
+                } else {
                     $('<li class="error"></li>').text("Error uploading the file!").appendTo($('#prudio-window ul'));
-
                 }
             })
-            .fail(function(jqXHR, textStatus, errorThrown)
-            {
-                // console.log('ERRORS: ' + textStatus);
+            .fail(function(jqXHR, textStatus, errorThrown) {
                 $('<li class="error"></li>').text("Error uploading the file! Try again!").appendTo($('#prudio-window ul'));
             })
         };
@@ -773,27 +750,22 @@ function main() {
 
         var settings  = $.getSettings();
 
-        if(!settings.buttonSelector) {
+        if (!settings.buttonSelector) {
             $.createButton(settings);
         }
 
-        var open = false;
-        var muted = false;
+        var prudioButtonSelector = settings.buttonSelector || '#prudio-button';
 
-        $(document).on('click', '#prudio-window span.close', function() {
+        $(document).on('click', '#prudio-window .status', function() {
+            $.setCookie('prudio-status', $(this).data('status'));
             $('#prudio-window').toggleClass('prudio-window-open');
-            if(!settings.buttonSelector) {
+            if (!settings.buttonSelector) {
                 $('#prudio-button').fadeIn();
             }
         });
 
-        $(document).on('click', '#prudio-window span.mute', function() {
-            muted = !muted;
-            if(muted) {
-                $('#prudio-window span.mute i').removeClass('icon-volume-high').addClass('icon-volume-off');
-            } else {
-                $('#prudio-window span.mute i').removeClass('icon-volume-off').addClass('icon-volume-high');
-            }
+        $(document).on('click', '#prudio-window .mute', function() {
+            $('#prudio-window span.mute i').toggleClass('icon-volume-high').toggleClass('icon-volume-off');
         });
 
         $(document).on('dragover', '#prudio-window div.drop-zone, #prudio-window div.drop-overlay', function(event) {
@@ -819,55 +791,62 @@ function main() {
             $('input[name=uploads]').trigger('click');
         });
 
-        $(document).on('click', (settings.buttonSelector || '#prudio-button'), function() {
 
-            $('#prudio-window').toggleClass('prudio-window-open');
-
-            if(!settings.buttonSelector) {
+        $(document).on('click', prudioButtonSelector, function() {
+            if (!settings.buttonSelector) {
                 $(this).fadeOut('fast');
             }
 
-            if(open === false) {
-
-                var domContent = [
-                    '<nav class="reset-styles prudio-window prudio-window-vertical prudio-window-right" id="prudio-window">',
-                    '     <h3><span class="mute" title="Mute"><i class="icon-volume-high"></i></span>' + (settings.title || 'Support') + ' <span class="close" title="Close"><i class="icon-cancel"></i></span></h3>',
-                    '     <div class="messages drop-zone">',
-                    '         <div class="drop-overlay hidden"></div>',
-                    '         <ul>',
-                    '         </ul>',
-                    '         <div class="reply-container">',
-                    '            <div class="reply">',
-                    '                <input type="file" name="uploads" class="hidden" multiple>',
-                    '                <input type="text" name="message" placeholder="Just write..." autofocus="autofocus">',
-                    '                <span class="icon-attach" title="Attach a file"></span>',
-                    '            </div>',
-                    '         </div>',
-                    '     </div>',
-                    '</nav>',
-                    '<div id="prudio-notification"></div>'
-                    ].join('');
-
-                $('body').append(domContent);
-
-                $('#prudio-window').toggleClass('prudio-window-open');
-
-                var hasSignature = $.getCookie('prudio-signature');
-
-                if(hasSignature === null) {
-                    $.checkUserInfo(settings);
-                } else {
-                    $.continueProgram(settings);
-                }
+            if (null == $.getCookie('prudio-signature')) {
+                $.checkUserInfo(settings);
+            } else {
+                $.continueProgram(settings);
             }
 
-            open = true;
+            $('#prudio-window').toggleClass('prudio-window-open');
         });
 
+        // Add prudio chat window to the DOM
+        $('body').append(
+            [
+                '<nav class="prudio-window prudio-window-vertical prudio-window-right" id="prudio-window">',
+                '     <h3>',
+                '       <span class="mute" title="Mute"><i class="icon-volume-high"></i></span>',
+                        (settings.title || 'Support'),
+                '       <span class="status close" title="Close conversation" data-status="closed"><i class="icon-cancel"></i></span>',
+                '       <span class="status minimize" title="Minimize conversation" data-status="minimized"><i class="icon-minimize"></i></span>',
+                '     </h3>',
+                '     <div class="messages drop-zone">',
+                '         <div class="drop-overlay hidden"></div>',
+                '         <ul>',
+                '         </ul>',
+                '         <div class="reply-container">',
+                '            <div class="reply">',
+                '                <input type="file" name="uploads" class="hidden" multiple>',
+                '                <input type="text" name="message" placeholder="Just write..." autofocus="autofocus">',
+                '                <span class="icon-attach" title="Attach a file"></span>',
+                '            </div>',
+                '         </div>',
+                '     </div>',
+                '</nav>'
+            ].join('')
+        );
+
+        switch ($.getCookie('prudio-status')) {
+            case 'open':
+                $.continueProgram(settings);
+                $('#prudio-window').toggleClass('prudio-window-open');
+                break;
+
+            case 'minimized':
+                $.continueProgram(settings);
+                $(prudioButtonSelector).fadeIn();
+                break;
+
+            case 'closed':
+                $(prudioButtonSelector).fadeIn();
+                break;
+        }
     });
 }
-
-
-
-
 })(); // We call our anonymous function immediately

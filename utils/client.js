@@ -199,7 +199,7 @@ module.exports = function(app, io, slack, App) {
                 for (var i in body.messages) {
                     if (body.messages.hasOwnProperty(i)) {
                         var message = body.messages[i];
-                        if (message.type === 'message' && typeof message.subtype === 'undefined') {
+                        if (message.type === 'message' && typeof message.subtype === 'undefined' && message.text !== '_User disconnected!_') {
                             console.log('Channel message: %j', message);
 
                             if (message.user === application.slack_invite_bot) {

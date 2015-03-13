@@ -791,6 +791,16 @@ function main() {
             $('input[name=uploads]').trigger('click');
         });
 
+        $(window).on('offline', function () {
+            $('<li class="error offline"></li>').text("Looks like internet is gone!").appendTo($('#prudio-window ul'));
+            $('#prudio-window div.reply input[name=message]').prop('disabled', true);
+        });
+
+        $(window).on('online', function () {
+            $('#prudio-window ul li.offline').remove();
+            $('<li class="server"></li>').text("We are back!").appendTo($('#prudio-window ul')).show().delay(5000).slideUp();
+            $('#prudio-window div.reply input[name=message]').prop('disabled', false);
+        });
 
         $(document).on('click', prudioButtonSelector, function() {
             if (!settings.buttonSelector) {

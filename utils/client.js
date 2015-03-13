@@ -362,11 +362,11 @@ module.exports = function(app, io, slack, App) {
 
                         var text = "New help request at channel <#" + channelId + "|" + channelName + ">. Join now!";
 
-                        request.post(app.get('slack_api_url') + '/chat.postMessage', { json: true, form: { token: application.slackApiToken, channel: '#general', text: text, username: 'Prud.io', icon_url: 'http://chat.prud.io/prudio-notification-icon.png' }}, function (error, response, body) {
+                        request.post(app.get('slack_api_url') + '/chat.postMessage', { json: true, form: { token: application.slackApiToken, channel: application.notifyChannel, text: text, username: 'Prud.io', icon_url: 'http://chat.prud.io/prudio-notification-icon.png' }}, function (error, response, body) {
                             if (!error && response.statusCode === 200) {
                                 return callback(null, channelName, channelId);
                             }
-                            return callback('Leave the channel');
+                            return callback('Notification message');
                         });
                     },
 

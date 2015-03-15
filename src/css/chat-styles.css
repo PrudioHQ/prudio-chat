@@ -584,6 +584,8 @@
 
 .prudio-window .reply-container {
 	position: absolute;
+	float: left;
+	width: 100%;
 	height: 80px;
 	bottom: 0;
 	background: rgba(249,249,250,0.95);
@@ -603,7 +605,7 @@
 	margin: 15px;
 	padding: 6px 10px;
 	background: #FFFFFF;
-	width: 340px;
+	width: auto;
 	clear: both;
 }
 
@@ -612,7 +614,7 @@
     box-sizing: border-box;
     border: 0;
     color: #60686E;
-    width: 90%;
+    width: 100%;
     font-size: 14px;
     font-weight: normal;
 }
@@ -622,6 +624,9 @@
 }
 
 .prudio-window .reply .icon-attach {
+	position: absolute;
+	right: 20px;
+	top: 23px;
 	cursor: pointer;
 	color: #CCCCCC;
 }
@@ -646,9 +651,8 @@
 
 /* Vertical menu that slides from the left or right */
 
-
 .prudio-window-right {
-	right: -370px;
+	right: -100%;
 }
 
 .prudio-window-open {
@@ -679,23 +683,13 @@
 
 /* Example media queries */
 
-@media screen and (max-width: 55.1875em){
-
-	.prudio-window-horizontal {
-		font-size: 75%;
-		height: 110px;
+@media only screen and (max-width: 550px) {
+	.prudio-window {
+		width: 100%;
 	}
-
-	.prudio-window-top {
-		top: -110px;
-	}
-
-	.prudio-window-bottom {
-		bottom: -110px;
-	}
-
 }
 
+/*
 @media screen and (max-height: 26.375em){
 
 	.prudio-window-vertical {
@@ -716,3 +710,4 @@
 		left: 190px;
 	}
 }
+*/

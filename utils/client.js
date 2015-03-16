@@ -202,7 +202,7 @@ module.exports = function(app, io, slack, App) {
                         if (message.type === 'message' && typeof message.subtype === 'undefined' && message.text !== '_User disconnected!_') {
                             console.log('Channel message: %j', message);
 
-                            if (message.user === application.slack_invite_bot) {
+                            if (message.user === application.slackInviteBot) {
                                 message.sender = 'self';
                             } else {
                                 message.sender = 'other';

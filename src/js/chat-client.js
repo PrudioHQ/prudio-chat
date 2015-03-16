@@ -459,6 +459,33 @@ function main() {
             }
         };
 
+        /*
+        * Send browser notification
+        */
+        $.browserNotification = function(text) {
+            var options = {
+                body: text,
+                icon: "/favicon.ico",
+                dir : "ltr"
+            };
+
+            if (!("Notification" in window) || $.titleAlert.hasFocus) {
+                return;
+            } else if (Notification.permission === "granted") {
+                var notification = new Notification("New message", options);
+            } else if (Notification.permission !== 'denied') {
+                Notification.requestPermission(function (permission) {
+                    if (!('permission' in Notification)) {
+                        Notification.permission = permission;
+                    }
+
+                    if (permission === "granted") {
+                        var notification = new Notification("New message", options);
+                    }
+                });
+            }
+        };
+
         $.pingAvailable = function(appid) {
             // Ping the app
             $.ajax({
@@ -649,6 +676,7 @@ function main() {
                             $('<li class="other"></li>').html(data.message).appendTo($('#prudio-window ul'));
                             $.scrollChat('#prudio-window div.messages');
                             $.titleAlert("New message", { stopOnMouseMove:true, stopOnFocus:true, requireBlur: true});
+                            $.browserNotification(data.message);
                             $.playSound();
                         }
                     });

@@ -560,7 +560,7 @@ function main() {
                             $('#userInfoInput').remove();
                             return $.continueProgram(settings);
                         } else{
-                            $('#prudio-empty-msg').html('Please fill with valid name and email values');
+                            $('#prudio-empty-msg').html('<span>Please fill the fields with valid name and email values</span>');
                         }
                     });
                 }

@@ -532,43 +532,38 @@ function main() {
 
         $.checkUserInfo = function(settings) {
 
-            // No name
-            if (typeof settings.name === 'undefined') {
-                // Ask
-                $('<li class="other"></li>').text("Please type your name in the chatbox below").appendTo($('#prudio-window ul'));
+            // No name or email
+            if (typeof settings.name === 'undefined' || typeof settings.email === 'undefined') {
 
-                $('#prudio-window div.reply input[name=message]').prop('placeholder', 'Your name').blur().focus();
+                //Ask for name and email
+                if ( $('#userInfoInput').length === 0){
 
-                // Capture
-                $('#prudio-window div.reply input[name=message]').bind('keypress', function(e) {
-                    if (e.keyCode === ENTER_KEY_CODE && $(this).val() !== "") {
-                        settings.name = $(this).val();
+                    var userInfoInput = $('<div id="userInfoInput" class="user-info"><div id="prudio-empty-msg"></div></div>');
+                    var userInfoForm = $('<form id="userInfoForm"></form>');
 
-                        $(this).val('').unbind('keypress');
-                        $('<li class="self"></li>').text(settings.name).appendTo($('#prudio-window ul'));
+                    userInfoForm.append('<label>Name:<br/></label><p class="reply"><input id="prudio-name-input" type="text"/></p>');
+                    userInfoForm.append('<label>Email:<br/></label><p class="reply"><input id="prudio-email-input" type="text"/></p>');
+                    userInfoForm.append('<input type="button" id="prudio-submit-name" value="Start Conversation"/>');
 
-                        return $.checkUserInfo(settings);
-                    }
-                });
-            }
+                    //Added it to The DOM
+                    userInfoInput.append(userInfoForm);
+                    $('.messages').append(userInfoInput);
 
-            // No e-mail
-            else if (typeof settings.email === 'undefined') {
-                // Ask
-                $('<li class="other"></li>').text("Please type your e-mail in the chatbox below").appendTo($('#prudio-window ul'));
+                    // Check if all if is there
+                    $('#prudio-submit-name').on('click', function(){
+                        var name = $('#prudio-name-input').val();
+                        var email = $('#prudio-email-input').val();
 
-                $('#prudio-window div.reply input[name=message]').prop('placeholder', "Your e-mail").prop('type','email').blur().focus();
-
-                // Capture
-                $('#prudio-window div.reply input[name=message]').bind('keypress', function(e) {
-                    if (e.keyCode === ENTER_KEY_CODE && $(this).val() !== "") {
-                        settings.email = $(this).val();
-                        $(this).val('').prop('type', 'text').unbind('keypress');
-                        $('<li class="self"></li>').text(settings.email).appendTo($('#prudio-window ul'));
-
-                        return $.checkUserInfo(settings);
-                    }
-                });
+                        if (name != "" && email != ""){//!isValid(email)){
+                            settings.name = name;
+                            settings.email = email;
+                            $('#userInfoInput').remove();
+                            return $.continueProgram(settings);
+                        } else{
+                            $('#prudio-empty-msg').html('Please fill with valid name and email values');
+                        }
+                    });
+                }
             } else {
                 return $.continueProgram(settings);
             }

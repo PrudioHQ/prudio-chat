@@ -598,11 +598,18 @@
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00f9f9fa', endColorstr='#f2f9f9fa',GradientType=0 );
 }
 
+.prudio-window .start-conversation {
+	box-sizing: border-box;
+	margin: 5px 15px 15px 15px;
+	width: auto;
+	clear: both;
+}
+
 .prudio-window .reply {
 	box-sizing: border-box;
 	border: 1px solid #DADEE2;
 	border-radius: 4px;
-	margin: 15px;
+	margin: 5px 15px 15px 15px;
 	padding: 6px 10px;
 	background: #FFFFFF;
 	width: auto;
@@ -681,41 +688,42 @@
 	transition: all 0.3s ease;
 }
 
-.prudio-window .user-info{
+.prudio-window .user-info {
     position: absolute;
     top: 58px;
     left: 0px;
     width: 100%;
     height: 100%;
     z-index: 15;
-    background-color: #DADBDC;
+	background: #f9f9fa;
     font-size: 14px;
     font-weight: normal;
 }
 
-.prudio-window .user-info label{
+.prudio-window .user-info label {
+	color: #333333;
     padding-left: 15px;
 }
 
-.prudio-window .user-info input{
+.prudio-window .user-info input {
+	color: #333333;
     border: 1px;
-    border-color: black;
+    border-color: #DADEE2;
+	margin: auto;
 }
 
 .prudio-window .user-info #prudio-empty-msg {
     height: 50px;
     padding-top: 15px;
     padding-left: 15px;
-    color: #C24C4C;
+	background: #f9f9fa;
     vertical-align: middle;
     line-height: 20px;
 }
 
 .prudio-window .user-info #prudio-submit-name{
     display: inline-block;
-    padding: 6px 12px;
-    margin-bottom: 0px;
-    margin-left: 15px;
+    padding: 10px 12px;
     font-size: 14px;
     font-weight: 400;
     line-height: 1.42857;
@@ -727,11 +735,10 @@
     background-image: none;
     border: 1px solid transparent;
     border-radius: 4px;
-
     color: #FFF;
     background-color: #2B3E50;
     border-color: #2B3E50;
-    width:340px;
+    width: 100%;
 }
 
 /* Example media queries */

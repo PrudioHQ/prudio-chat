@@ -568,9 +568,9 @@ function main() {
                     var userInfoInput = $('<div id="userInfoInput" class="user-info"><div id="prudio-empty-msg"></div></div>');
                     var userInfoForm = $('<form id="userInfoForm"></form>');
 
-                    userInfoForm.append('<label>Name:<br/></label><p class="reply"><input id="prudio-name-input" type="text"/></p>');
-                    userInfoForm.append('<label>Email:<br/></label><p class="reply"><input id="prudio-email-input" type="text"/></p>');
-                    userInfoForm.append('<input type="button" id="prudio-submit-name" value="Start Conversation"/>');
+                    userInfoForm.append('<label>Name:<br/></label><div class="reply"><input id="prudio-name-input" type="text"/></div>');
+                    userInfoForm.append('<label>Email:<br/></label><div class="reply"><input id="prudio-email-input" type="text"/></div>');
+                    userInfoForm.append('<div class="start-conversation"><input type="button" id="prudio-submit-name" value="Start Conversation"/></div>');
 
                     //Added it to The DOM
                     userInfoInput.append(userInfoForm);

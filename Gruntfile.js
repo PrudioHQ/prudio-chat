@@ -36,7 +36,7 @@ module.exports = function(grunt) {
                 }]
             },
             development: {
-                src: ['build/<%= pkg.exportName %>.js'],      // source files array (supports minimatch)
+                src: ['src/js/chat-client.js'],      // source files array (supports minimatch)
                 dest: 'build/<%= pkg.exportName %>.development.js', // destination directory or file
                 replacements: [{
                     from: 'prudio-chat.herokuapp.com', // string replacement

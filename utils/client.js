@@ -1,7 +1,7 @@
-var async   = require('async');
-var request = require('request'); // github.com/mikeal/request
+var async      = require('async');
+var request    = require('request'); // github.com/mikeal/request
 var formidable = require('formidable');
-var crypto = require('crypto');
+var crypto     = require('crypto');
 
 module.exports = function(app, io, slack, App) {
 
@@ -171,7 +171,7 @@ module.exports = function(app, io, slack, App) {
                     // Verify if the user already has previous support (from cookies)
                     if(channel !== null && channelSignature !== null) {
                         // Returning user with cookie
-                        var verify = crypto.createHmac('sha1', application.slackApiToken).update(channel).digest('hex');
+                        var verify = crypto.createHmac('sha1', application.slackApiToken).update(channel.concat(appid)).digest('hex');
 
                         // Verify signature else it will create a new one!
                         if(verify === channelSignature) {
@@ -248,7 +248,7 @@ module.exports = function(app, io, slack, App) {
                         // Verify if the user already has previous support (from cookies)
                         if(channelId !== null && channelSignature !== null) {
                             // Returning user with cookie
-                            var verify = crypto.createHmac('sha1', application.slackApiToken).update(channelId).digest('hex');
+                            var verify = crypto.createHmac('sha1', application.slackApiToken).update(channelId.concat(appid)).digest('hex');
 
                             // Verify signature else it will create a new one!
                             if(verify === channelSignature) {
@@ -377,7 +377,7 @@ module.exports = function(app, io, slack, App) {
                         return res.status(404).json({ error: "Error: " + err});
                     }
 
-                    var signature = crypto.createHmac('sha1', application.slackApiToken).update(channelId).digest('hex');
+                    var signature = crypto.createHmac('sha1', application.slackApiToken).update(channelId.concat(appid)).digest('hex');
 
                     return res.status(200).json({ success: true, channel: channelId, channelName: channelName, signature: signature });
                 }

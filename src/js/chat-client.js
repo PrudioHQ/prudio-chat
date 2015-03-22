@@ -6,6 +6,8 @@ var jQuery;
 var baseURL = "https://prudio-chat.herokuapp.com:443";  //"http://chat.prud.io:80";
 var ENTER_KEY_CODE = 13;
 var muted = false;
+var emoji = window.emojiParser;
+
 
 /******** Load jQuery if not present *********/
 if (window.jQuery === undefined || window.jQuery.fn.jquery !== '2.1.1') {
@@ -644,7 +646,7 @@ function main() {
                                 message: message
                             });
 
-                            $('<li class="self"></li>').text(message).appendTo($('#prudio-window ul'));
+                            $('<li class="self"></li>').html(emoji(message, baseURL + '/emoji/images')).appendTo($('#prudio-window ul'));
 
                             $.scrollChat('#prudio-window div.messages');
 

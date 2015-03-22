@@ -18,6 +18,7 @@
     "formidable": "1.0.*",
     "grunt": "latest",
     "grunt-cli": "latest",
+    "grunt-contrib-concat": "^0.5.1",
     "grunt-contrib-copy": "^0.7.0",
     "grunt-contrib-cssmin": "latest",
     "grunt-contrib-uglify": "latest",

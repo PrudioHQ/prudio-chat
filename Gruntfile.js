@@ -8,7 +8,7 @@ module.exports = function(grunt) {
                 banner: '/*! JS <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
             },
             build: {
-                src:  'src/js/chat-client.js',
+                src:  ['src/js/chat-client.js', 'bower_components/emoji-parser/main.min.js'],
                 dest: 'build/<%= pkg.exportName %>.js'
             }
         },
@@ -36,7 +36,7 @@ module.exports = function(grunt) {
                 }]
             },
             development: {
-                src: ['src/js/chat-client.js'],      // source files array (supports minimatch)
+                src: ['src/js/chat-client.js'], // source files array (supports minimatch)
                 dest: 'build/<%= pkg.exportName %>.development.js', // destination directory or file
                 replacements: [{
                     from: 'prudio-chat.herokuapp.com', // string replacement
@@ -47,6 +47,15 @@ module.exports = function(grunt) {
                     to:   '/prudio-chat-dev\\\.herokuapp\\\.com\\/client/', //
                 }]
             }
+        },
+        concat: {
+            options: {
+                separator: '\n//CONCAT\n',
+            },
+            dist: {
+                src: ['build/<%= pkg.exportName %>.development.js', 'bower_components/emoji-parser/main.js'],
+                dest: 'build/<%= pkg.exportName %>.development.js',
+            },
         },
         copy: {
             main: {
@@ -91,9 +100,10 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks("grunt-foreman");
     grunt.loadNpmTasks('grunt-text-replace');
+    grunt.loadNpmTasks('grunt-contrib-concat');
 
     // Default task(s).
-    grunt.registerTask('build', ['uglify', 'replace', 'cssmin', 'copy']);
+    grunt.registerTask('build', ['uglify', 'replace', 'cssmin', 'concat', 'copy']);
     grunt.registerTask('server', ['foreman', 'watch']);
     grunt.registerTask('default', ['build', 'server']);
 

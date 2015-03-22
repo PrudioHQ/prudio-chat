@@ -8,7 +8,7 @@ module.exports = function(grunt) {
                 banner: '/*! JS <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
             },
             build: {
-                src:  ['src/js/chat-client.js', 'bower_components/emoji-parser/main.min.js'],
+                src:  ['bower_components/emoji-parser/main.min.js', 'src/js/chat-client.js'],
                 dest: 'build/<%= pkg.exportName %>.js'
             }
         },
@@ -53,7 +53,7 @@ module.exports = function(grunt) {
                 separator: '\n//CONCAT\n',
             },
             dist: {
-                src: ['build/<%= pkg.exportName %>.development.js', 'bower_components/emoji-parser/main.js'],
+                src: ['bower_components/emoji-parser/main.js', 'build/<%= pkg.exportName %>.development.js'],
                 dest: 'build/<%= pkg.exportName %>.development.js',
             },
         },

@@ -6,8 +6,6 @@ var jQuery;
 var baseURL = "https://prudio-chat.herokuapp.com:443";  //"http://chat.prud.io:80";
 var ENTER_KEY_CODE = 13;
 var muted = false;
-
-$.emojiMapper(message);
 var emoji = window.emojiParser;
 
 // https://github.com/iamcal/js-emoji/blob/master/emoji.js#L1201-L1248

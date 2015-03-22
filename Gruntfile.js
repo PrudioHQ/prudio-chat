@@ -68,7 +68,7 @@ module.exports = function(grunt) {
                     {
                         expand: true,
                         flatten: true,
-                        src: ['src/img/emojis/*'],
+                        src: ['bower_components/emoji-parser/emoji/*'],
                         dest: 'build/emojis/',
                         filter: 'isFile'
                     }

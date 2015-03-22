@@ -93,7 +93,7 @@ module.exports = function(app, io, slack, App, emoji)
 
 				    if(message.channel === channel) {
 				    	clientSocket.emit('message', {
-							message: emoji.parse(message.text, "//chat.prud.io/emojis"),
+							message: emoji.parse(message.text, "//prudio-chat.herokuapp.com/emojis"),
 							sender: 'Other'
 						});
 					}

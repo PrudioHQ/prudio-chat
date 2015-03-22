@@ -6,8 +6,59 @@ var jQuery;
 var baseURL = "https://prudio-chat.herokuapp.com:443";  //"http://chat.prud.io:80";
 var ENTER_KEY_CODE = 13;
 var muted = false;
+
+$.emojiMapper(message);
 var emoji = window.emojiParser;
 
+// https://github.com/iamcal/js-emoji/blob/master/emoji.js#L1201-L1248
+var emoticons = {
+    "<3":"heart",
+    ":o)":"monkey_face",
+    ":*":"kiss",
+    ":-*":"kiss",
+    "<\/3":"broken_heart",
+    "=)":"smiley",
+    "=-)":"smiley",
+    "C:":"smile",
+    "c:":"smile",
+    ":D":"smile",
+    ":-D":"smile",
+    ":>":"laughing",
+    ":->":"laughing",
+    ";)":"wink",
+    ";-)":"wink",
+    ":)":"blush",
+    "(:":"blush",
+    ":-)":"blush",
+    "8)":"sunglasses",
+    ":|":"neutral_face",
+    ":-|":"neutral_face",
+    ":\\\\":"confused",
+    ":-\\\\":"confused",
+    ":\/":"confused",
+    ":-\/":"confused",
+    ":p":"stuck_out_tongue",
+    ":-p":"stuck_out_tongue",
+    ":P":"stuck_out_tongue",
+    ":-P":"stuck_out_tongue",
+    ":b":"stuck_out_tongue",
+    ":-b":"stuck_out_tongue",
+    ";p":"stuck_out_tongue_winking_eye",
+    ";-p":"stuck_out_tongue_winking_eye",
+    ";b":"stuck_out_tongue_winking_eye",
+    ";-b":"stuck_out_tongue_winking_eye",
+    ";P":"stuck_out_tongue_winking_eye",
+    ";-P":"stuck_out_tongue_winking_eye",
+    "):":"disappointed",
+    ":(":"disappointed",
+    ":-(":"disappointed",
+    ">:(":"angry",
+    ">:-(":"angry",
+    ":'(":"cry",
+    "D:":"anguished",
+    ":o":"open_mouth",
+    ":-o":"open_mouth"
+};
 
 /******** Load jQuery if not present *********/
 if (window.jQuery === undefined || window.jQuery.fn.jquery !== '2.1.1') {
@@ -599,6 +650,16 @@ function main() {
             }
         };
 
+        $.emojiMapper = function(message) {
+            message.replace(/\&/g, '&amp;').replace(/\</g, '&lt;').replace(/\>/g, '&gt;');
+
+            for (var emo in emoticons){
+                message = message.replace(emo, ':' + emoticons[emo] + ':');
+            }
+
+            return message;
+        }
+
         $.openSocket = function(settings) {
             var channel = null,
                 channelName = null,
@@ -642,11 +703,14 @@ function main() {
                         if (e.keyCode === ENTER_KEY_CODE && $(this).val() !== "") {
                             var message = $(this).val();
 
+                            // Parse :) => :smile:
+                            message = $.emojiMapper(message);
+
                             socket.emit('sendMessage', {
                                 message: message
                             });
 
-                            $('<li class="self"></li>').html(emoji(message, baseURL + '/emoji/images')).appendTo($('#prudio-window ul'));
+                            $('<li class="self"></li>').html(emoji(message, baseURL + '/emojis')).appendTo($('#prudio-window ul'));
 
                             $.scrollChat('#prudio-window div.messages');
 

@@ -23,14 +23,14 @@ module.exports = function(app, io, slack, App, emoji)
 				}
 
 				var crypto      = require('crypto');
-				var signature   = crypto.createHmac('sha1', application.slackApiToken).update(channel).digest('hex');
 				var appId       = application.appId;
+				var signature   = crypto.createHmac('sha1', application.slackApiToken).update(channel.concat(appId)).digest('hex');
 
 				if(signature !== clientSignature) {
-					console.log('Wrong channel signature.');
+					console.log('Wrong signature.');
 
 					clientSocket.emit('serverMessage', {
-						message: 'Wrong channel signature.'
+						message: 'Wrong signature.'
 					});
 
 					// force client to disconnect

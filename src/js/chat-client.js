@@ -3,8 +3,11 @@
 // Localize jQuery variable
 var jQuery;
 
-var baseURL = "https://prudio-chat.herokuapp.com:443";  //"http://chat.prud.io:80";
+var baseURL   = "https://prudio-chat.herokuapp.com";  //"http://chat.prud.io:80";
+var assetsURL = "https://prudio-chat.herokuapp.com";  //"http://chat.prud.io:80";
+var socketURL = "";
 var ENTER_KEY_CODE = 13;
+var online = false;
 var muted = false;
 var emoji = window.emojiParser;
 
@@ -203,7 +206,7 @@ function main() {
             var cookieName = "prudio-uuid";
             if($.getCookie(cookieName) === null) {
                 // Does not exists; Lets create a UUID for this user
-                $.loadJS(baseURL + "/js/uuid.js");
+                $.loadJS(assetsURL + "/js/uuid.js");
                 var cuuid = uuid.v4();
                 $.setCookie(cookieName, cuuid);
 
@@ -504,7 +507,7 @@ function main() {
         * Play Notification
         */
         $.playSound = function() {
-            var filename = baseURL + "/notification";
+            var filename = assetsURL + "/notification";
 
             if(!muted) {
                 $('#prudio-notification').html('<audio autoplay="autoplay"><source src="' + filename + '.mp3" type="audio/mpeg" /><source src="' + filename + '.ogg" type="audio/ogg" /><embed hidden="true" autostart="true" loop="false" src="' + filename + '.mp3" /></audio>');
@@ -538,6 +541,34 @@ function main() {
             }
         };
 
+
+        /*
+        * Check this app status
+        */
+        $.checkStatus = function(appid) {
+            $.ajax({
+                url: baseURL + "/app/status",
+                method: 'POST',
+                async: false,
+                data: {
+                    appid: appid
+                },
+                error: function(xhr, ajaxOptions, thrownError){
+                    console.log("We got a problem checking the app status!", thrownError);
+                    online = false;
+                },
+                success: function(response) {
+                    if (response.success !== 'undefined' && response.success) {
+                        socketURL = response.socketURL;
+                        online = true;
+                    }
+                }
+            });
+        };
+
+        /*
+        * Ping for available people in Slack
+        */
         $.pingAvailable = function(appid) {
             // Ping the app
             $.ajax({
@@ -568,7 +599,7 @@ function main() {
 
             // Recover conversation
             $.ajax({
-                url: baseURL + "/chat/history",
+                url: socketURL + "/chat/history",
                 method: 'POST',
                 data: {
                     appid:       appid,
@@ -673,7 +704,7 @@ function main() {
             $('<li class="server connecting"></li>').html('<i class="icon-flash-outline"></i> Connecting to the server...').appendTo($('#prudio-window ul'));
 
             $.ajax({
-                url: baseURL + "/chat/create",
+                url: socketURL + "/chat/create",
                 method: 'POST',
                 data: {
                     appid:       settings.appid,
@@ -694,7 +725,7 @@ function main() {
                     $.setCookie('prudio-signature',    data.signature);
                     $.setCookie('prudio-status',       'open');
 
-                    var socket = io.connect(baseURL + '/chat');
+                    var socket = io.connect(socketURL + '/chat');
 
                     $('#prudio-window div.reply input[name=message]').bind('keypress', function(e){
                         // if enter key
@@ -708,7 +739,7 @@ function main() {
                                 message: message
                             });
 
-                            $('<li class="self"></li>').html(emoji(message, baseURL + '/emojis')).appendTo($('#prudio-window ul'));
+                            $('<li class="self"></li>').html(emoji(message, assetsURL + '/emojis')).appendTo($('#prudio-window ul'));
 
                             $.scrollChat('#prudio-window div.messages');
 
@@ -772,7 +803,7 @@ function main() {
 
             // Perform the request
             $.ajax({
-                url: baseURL + '/app/file-upload?appid=' + settings.appid + '&channel=' + settings.joinedChannel,
+                url: socketURL + '/app/file-upload?appid=' + settings.appid + '&channel=' + settings.joinedChannel,
                 type: 'POST',
                 data: data,
                 cache: false,
@@ -833,8 +864,8 @@ function main() {
 
         };
 
-        $.loadCSS(baseURL + "/client.css");
-        $.loadJS(baseURL + "/socket.io/socket.io.js");
+        $.loadCSS(assetsURL + "/client.css");
+        $.loadJS(assetsURL + "/socket.io/socket.io.js");
 
         var settings  = $.getSettings();
 
@@ -891,7 +922,49 @@ function main() {
             $('#prudio-window div.reply input[name=message]').prop('disabled', false);
         });
 
+        $(document).ready(function() {
+            $.checkStatus(settings.appid);
+
+            if (online) {
+
+                switch ($.getCookie('prudio-status')) {
+                    case 'open':
+                        $.continueProgram(settings);
+                        $('#prudio-window').toggleClass('prudio-window-open');
+                        break;
+
+                    case 'minimized':
+                        $.continueProgram(settings);
+                        $(prudioButtonSelector).fadeIn();
+                        break;
+
+                    case 'closed':
+                        $(prudioButtonSelector).fadeIn();
+                        break;
+
+                    default:
+                        $(prudioButtonSelector).fadeIn();
+                        break;
+                }
+
+            } else {
+
+                if ($('#prudio-window').hasClass('prudio-window-open')) {
+                    $('#prudio-window').toggleClass('prudio-window-open');
+                }
+
+                if (!settings.buttonSelector) {
+                    $(prudioButtonSelector).fadeOut();
+                }
+            }
+        });
+
         $(document).on('click', prudioButtonSelector, function() {
+
+            if (!online) {
+                return;
+            }
+
             if (!settings.buttonSelector) {
                 $(this).fadeOut('fast');
             }
@@ -908,7 +981,7 @@ function main() {
         // Add prudio chat window to the DOM
         $('body').append(
             [
-                '<nav class="prudio-window prudio-window-vertical prudio-window-right" id="prudio-window">',
+                '<nav style="display:none" class="prudio-window prudio-window-vertical prudio-window-right" id="prudio-window">',
                 '     <h3>',
                 '       <span class="mute" title="Mute"><i class="icon-volume-high"></i></span>',
                         (settings.title || 'Support'),
@@ -930,26 +1003,6 @@ function main() {
                 '</nav>'
             ].join('')
         );
-
-        switch ($.getCookie('prudio-status')) {
-            case 'open':
-                $.continueProgram(settings);
-                $('#prudio-window').toggleClass('prudio-window-open');
-                break;
-
-            case 'minimized':
-                $.continueProgram(settings);
-                $(prudioButtonSelector).fadeIn();
-                break;
-
-            case 'closed':
-                $(prudioButtonSelector).fadeIn();
-                break;
-
-            default:
-                $(prudioButtonSelector).fadeIn();
-                break;
-        }
     });
 }
 })(); // We call our anonymous function immediately

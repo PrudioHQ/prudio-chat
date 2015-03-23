@@ -135,6 +135,18 @@ module.exports = function(app, io, slack, App) {
         });
     });
 
+    app.post('/app/status', isAuthorized, function(req, res, next) {
+        var appid = req.param('appid');
+        App.findOne({ appId: appid, active: true }, function(err, application) {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ success: false, message: "Error" });
+            }
+
+            return res.status(200).json({ success: true, active: true, socketURL: application.socketURL });
+        });
+    });
+
     app.post('/app/ping', isAuthorized, function(req, res, next) {
         var appid = req.param('appid');
         App.findOne({ appId: appid, active: true }, function(err, application) {

@@ -143,7 +143,7 @@ module.exports = function(app, io, slack, App) {
                 return res.status(500).json({ success: false, message: "Error" });
             }
 
-            return res.status(200).json({ success: true, active: true, socketURL: application.socketURL });
+            return res.status(200).json({ success: true, active: true, socket: application.socketURL });
         });
     });
 

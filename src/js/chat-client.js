@@ -4,7 +4,7 @@
 var jQuery;
 
 var baseURL   = "https://prudio-chat.herokuapp.com";
-var assetsURL = "https://prudio-chat.herokuapp.com"; 
+var assetsURL = "https://prudio-chat.herokuapp.com";
 var socketURL = "";
 var ENTER_KEY_CODE = 13;
 var online = false;
@@ -926,6 +926,9 @@ function main() {
             $.checkStatus(settings.appid);
 
             if (online) {
+
+                // Remove style="display:none" from #prudio-window
+                $('#prudio-window').removeAttr('style');
 
                 switch ($.getCookie('prudio-status')) {
                     case 'open':

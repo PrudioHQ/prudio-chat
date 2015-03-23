@@ -3,8 +3,8 @@
 // Localize jQuery variable
 var jQuery;
 
-var baseURL   = "https://prudio-chat.herokuapp.com";  //"http://chat.prud.io:80";
-var assetsURL = "https://prudio-chat.herokuapp.com";  //"http://chat.prud.io:80";
+var baseURL   = "https://prudio-chat.herokuapp.com";
+var assetsURL = "https://prudio-chat.herokuapp.com"; 
 var socketURL = "";
 var ENTER_KEY_CODE = 13;
 var online = false;

@@ -12,7 +12,9 @@ module.exports = mongoose.model('App',
         slackInviteUser: String,
         slackInviteBot: String,
         roomPrefix: String,
-        roomCount: Number
+        roomCount: Number,
+        socketURL: String,
+        server: String
     },
     {
         collection: 'App' // to match with prudio-app

@@ -1,9 +1,4 @@
-var async      = require('async');
-var request    = require('request'); // github.com/mikeal/request
-var formidable = require('formidable');
-var crypto     = require('crypto');
-
-module.exports = function(app, io, slack, App) {
+module.exports = function(app, App) {
 
     var application = null;
 

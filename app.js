@@ -5,13 +5,11 @@ require('./utils/newrelic');
 var express = require('express');
 var app     = express();
 var server  = require('http').Server(app);
-var io      = require('socket.io')(server);
 var db      = require('./utils/connection');
 
 // Body parser & CORS
 var bodyParser = require('body-parser');
 var cors       = require('cors');
-var emoji      = require('emoji-parser');
 
 // Debug
 var DEBUG = app.get('DEBUG');
@@ -19,15 +17,9 @@ var DEBUG = app.get('DEBUG');
 // Models
 var App = require('./models/app');
 
-// Slack logic
-var slack = require('./utils/slack');
-
 // App settings
 app.set('port', process.env.PORT     || Number(5000));
 app.set('env',  process.env.NODE_ENV || 'development');
-
-// Constants
-app.set('slack_api_url', 'https://slack.com/api');
 
 // Development only
 if ('development' === app.get('env')) {
@@ -37,9 +29,6 @@ if ('development' === app.get('env')) {
 
 db.once('open', function (callback) {
     var listening = server.listen(app.get('port'), function() {
-
-        // keep emoji-images in sync with the official repository
-        emoji.init().update();
 
         console.log('Express server listening on port ' + listening.address().port);
 
@@ -69,9 +58,7 @@ if ('development' === app.get('env')) {
 }
 
 // linking
-//require('./utils/socket')(app, io, slack, App, emoji); // socketIO logic
-require('./utils/client')(app, io, slack, App); // sets up endpoints
-//require('./utils/bot')(slack, App); // Sets bots up
+require('./utils/client')(app, App); // sets up endpoints
 
 // Catch errors
 app.use(function(err, req, res, next) {

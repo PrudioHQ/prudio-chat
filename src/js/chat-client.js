@@ -561,6 +561,7 @@ function main() {
                     if (response.success !== 'undefined' && response.success) {
                         socketURL = response.socketURL;
                         online = true;
+                        $.loadJS(socketURL + "/socket.io/socket.io.js");
                     }
                 }
             });
@@ -865,7 +866,6 @@ function main() {
         };
 
         $.loadCSS(assetsURL + "/client.css");
-        $.loadJS(assetsURL + "/socket.io/socket.io.js");
 
         var settings  = $.getSettings();
 

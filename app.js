@@ -1,7 +1,7 @@
 // New Relic Monitor
 require('./utils/newrelic');
 
-// Express and SocketIO
+// Express
 var express = require('express');
 var app     = express();
 var server  = require('http').Server(app);

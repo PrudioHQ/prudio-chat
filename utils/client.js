@@ -68,6 +68,16 @@ module.exports = function(app, App, Servers) {
             }
         });
 
+        // APP
+        request.get("http://prudio-app.herokuapp.com", { json: true }, function (error, response, body) {
+            console.log("Ping ", body);
+        });
+
+        // Chat
+        request.get("http://prudio-chat.herokuapp.com", { json: true }, function (error, response, body) {
+            console.log("Ping ", body);
+        });
+
         return res.status(200).json({ success: true });
     });
 

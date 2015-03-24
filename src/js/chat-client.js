@@ -572,7 +572,7 @@ function main() {
         $.pingAvailable = function(appid) {
             // Ping the app
             $.ajax({
-                url: baseURL + "/app/ping",
+                url: socketURL + "/app/ping",
                 method: 'POST',
                 data: {
                     appid: appid

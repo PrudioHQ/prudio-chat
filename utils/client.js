@@ -1,4 +1,6 @@
-module.exports = function(app, App) {
+var request    = require('request'); // github.com/mikeal/request
+
+module.exports = function(app, App, Servers) {
 
     var application = null;
 
@@ -51,6 +53,22 @@ module.exports = function(app, App) {
 
             return res.status(200).json({ success: true, active: true, socketURL: application.socketURL });
         });
+    });
+
+    /*
+    * Ping all servers
+    */
+    app.head('/servers/ping', function(req, res, next) {
+        Servers.find({ active: true }, function(err, servers) {
+            for (var i in servers) {
+                var server = servers[i];
+                request.get(server.address, { json: true }, function (error, response, body) {
+                    console.log("Ping ", body);
+                });
+            }
+        });
+
+        return res.status(200).json({ success: true });
     });
 
 };

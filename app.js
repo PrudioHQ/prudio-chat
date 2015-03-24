@@ -15,7 +15,8 @@ var cors       = require('cors');
 var DEBUG = app.get('DEBUG');
 
 // Models
-var App = require('./models/app');
+var App     = require('./models/app');
+var Servers = require('./models/server');
 
 // App settings
 app.set('port', process.env.PORT     || Number(5000));
@@ -58,7 +59,7 @@ if ('development' === app.get('env')) {
 }
 
 // linking
-require('./utils/client')(app, App); // sets up endpoints
+require('./utils/client')(app, App, Servers); // sets up endpoints
 
 // Catch errors
 app.use(function(err, req, res, next) {

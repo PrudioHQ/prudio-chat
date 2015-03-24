@@ -633,7 +633,9 @@ function main() {
             var channel   = $.getCookie('prudio-channel');
             var signature = $.getCookie('prudio-signature');
 
-            $.retriveHistory(settings.appid, channel, signature);
+            if (channel !== '' && signature !== '') {
+                $.retriveHistory(settings.appid, channel, signature);
+            }
 
             $('#prudio-window div.reply input[name=message]').attr('type', 'text').attr('placeholder', 'Just write...').blur().focus();
 

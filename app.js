@@ -69,9 +69,9 @@ if ('development' === app.get('env')) {
 }
 
 // linking
-require('./utils/socket')(app, io, slack, App, emoji); // socketIO logic
+//require('./utils/socket')(app, io, slack, App, emoji); // socketIO logic
 require('./utils/client')(app, io, slack, App); // sets up endpoints
-require('./utils/bot')(slack, App); // Sets bots up
+//require('./utils/bot')(slack, App); // Sets bots up
 
 // Catch errors
 app.use(function(err, req, res, next) {

@@ -70,7 +70,6 @@ app.use(function(err, req, res, next) {
 // On SIGTERM app
 process.on('SIGTERM', function() {
     console.log('Got a SIGTERM');
-    slack.disconnectAll();
     server.close.bind(server);
     process.exit(0);
 });
@@ -78,7 +77,6 @@ process.on('SIGTERM', function() {
 // On SIGINT app
 process.on('SIGINT', function() {
     console.log('Got a SIGINT');
-    slack.disconnectAll();
     server.close.bind(server);
     process.exit(0);
 });

@@ -10,6 +10,7 @@ var db      = require('./utils/connection');
 // Body parser & CORS
 var bodyParser = require('body-parser');
 var cors       = require('cors');
+var rollbar    = require('rollbar');
 
 // Debug
 var DEBUG = app.get('DEBUG');
@@ -61,11 +62,8 @@ if ('development' === app.get('env')) {
 // linking
 require('./utils/client')(app, App, Servers); // sets up endpoints
 
-// Catch errors
-app.use(function(err, req, res, next) {
-    console.error(err.stack);
-    res.status(500).send('Something broke!');
-});
+// Rollbar Error Handling
+app.use(rollbar.errorHandler(process.env.ROLLBAR_ACCESS_TOKEN));
 
 // On SIGTERM app
 process.on('SIGTERM', function() {

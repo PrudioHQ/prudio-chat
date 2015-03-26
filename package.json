@@ -23,7 +23,8 @@
     "grunt-text-replace": "^0.3.12",
     "mongoose": "^3.8.23",
     "newrelic": "^1.12.1",
-    "request": "latest"
+    "request": "latest",
+    "rollbar": "^0.4.5"
   },
   "author": "Hélder Duarte",
   "main": "app.js",

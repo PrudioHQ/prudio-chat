@@ -293,11 +293,39 @@
     z-index: 9999;
 }
 
-#prudio-button i {
+#prudio-button .icon-btn-bubble {
+	color: white;
+	display: block;
+	font-size: 23px;
+	margin: 11px 3px;
+}
+
+#prudio-button .icon-btn-chat {
+	color: white;
+	display: block;
+	font-size: 24px;
+	margin: 13px 5.4px;
+}
+
+#prudio-button .icon-btn-prudio {
 	color: white;
 	display: block;
 	font-size: 21.6px;
 	margin: 9px 0;
+}
+
+#prudio-button .icon-btn-chats {
+	color: white;
+	display: block;
+	font-size: 19px;
+	margin: 11px 3px;
+}
+
+#prudio-button .icon-btn-help {
+	color: white;
+	display: block;
+	font-size: 21.6px;
+	margin: 11px 5.5px;
 }
 
 /* General styles for all menus */

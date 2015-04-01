@@ -150,7 +150,7 @@ function main() {
         };
 
         $.createButton = function() {
-            var button = $('<div id="prudio-button" style="display: none;' + (settings.buttonColor !== undefined ?  ' background-color: ' + settings.buttonColor : '') + '" title="Chat with us"><i class="icon-prudio"></i></div><div id="prudio-notification"></div>');
+            var button = $('<div id="prudio-button" style="display: none;' + (settings.buttonColor !== undefined ?  ' background-color: ' + settings.buttonColor : '') + '" title="Chat with us"><i class="' + (settings.icon !== undefined ?  settings.icon : 'icon-btn-help') + '"></i></div><div id="prudio-notification"></div>');
             $("body").append(button);
         };
 
@@ -789,7 +789,7 @@ function main() {
 
                     socket.on('typingMessage', function () {
                         $('#prudio-window ul li.typing').remove();
-                        $('<li class="typing"></li>').html('<i class="icon-chat"></i> User is typing...').appendTo($('#prudio-window ul')).show().delay(7000).slideUp();
+                        $('<li class="typing"></li>').html('<i class="icon-typing"></i> User is typing...').appendTo($('#prudio-window ul')).show().delay(7000).slideUp();
                         $.scrollChat('#prudio-window div.messages');
                     });
                 }

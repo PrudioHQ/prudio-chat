@@ -264,14 +264,18 @@
 .icon-cancel-outline:before { content: '\e800'; } /* '' */
 .icon-volume-off:before { content: '\e801'; } /* '' */
 .icon-volume-high:before { content: '\e802'; } /* '' */
+.icon-btn-bubble:before { content: '\e803'; } /* '' */
 .icon-flash-outline:before { content: '\e804'; } /* '' */
-.icon-chat:before { content: '\e805'; } /* '' */
+.icon-typing:before { content: '\e805'; } /* '' */
 .icon-comment:before { content: '\e806'; } /* '' */
+.icon-btn-chat:before { content: '\e807'; } /* '' */
 .icon-forward-outline:before { content: '\e808'; } /* '' */
-.icon-prudio:before { content: '\e809'; } /* '' */
+.icon-btn-prudio:before { content: '\e809'; } /* '' */
 .icon-attach:before { content: '\e80a'; } /* '' */
 .icon-attach-outline:before { content: '\e80b'; } /* '' */
 .icon-upload:before { content: '\e80c'; } /* '' */
+.icon-btn-chats:before { content: '\e80d'; } /* '' */
+.icon-btn-help:before { content: '\e80e'; } /* '' */
 
 #prudio-button {
     background: rgba(0, 114, 176, 0.9);

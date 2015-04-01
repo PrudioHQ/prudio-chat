@@ -3,8 +3,63 @@
 // Localize jQuery variable
 var jQuery;
 
-var baseURL = "https://prudio-chat.herokuapp.com:443";  //"http://chat.prud.io:80";
+var baseURL   = "https://prudio-chat.herokuapp.com";
+var assetsURL = "https://prudio-chat.herokuapp.com";
+var socketURL = "";
 var ENTER_KEY_CODE = 13;
+var online = false;
+var muted = false;
+var emoji = window.emojiParser;
+
+// https://github.com/iamcal/js-emoji/blob/master/emoji.js#L1201-L1248
+var emoticons = {
+    "<3":"heart",
+    ":o)":"monkey_face",
+    ":*":"kiss",
+    ":-*":"kiss",
+    "<\/3":"broken_heart",
+    "=)":"smiley",
+    "=-)":"smiley",
+    "C:":"smile",
+    "c:":"smile",
+    ":D":"smile",
+    ":-D":"smile",
+    ":>":"laughing",
+    ":->":"laughing",
+    ";)":"wink",
+    ";-)":"wink",
+    ":)":"blush",
+    "(:":"blush",
+    ":-)":"blush",
+    "8)":"sunglasses",
+    ":|":"neutral_face",
+    ":-|":"neutral_face",
+    ":\\\\":"confused",
+    ":-\\\\":"confused",
+    ":\/":"confused",
+    ":-\/":"confused",
+    ":p":"stuck_out_tongue",
+    ":-p":"stuck_out_tongue",
+    ":P":"stuck_out_tongue",
+    ":-P":"stuck_out_tongue",
+    ":b":"stuck_out_tongue",
+    ":-b":"stuck_out_tongue",
+    ";p":"stuck_out_tongue_winking_eye",
+    ";-p":"stuck_out_tongue_winking_eye",
+    ";b":"stuck_out_tongue_winking_eye",
+    ";-b":"stuck_out_tongue_winking_eye",
+    ";P":"stuck_out_tongue_winking_eye",
+    ";-P":"stuck_out_tongue_winking_eye",
+    "):":"disappointed",
+    ":(":"disappointed",
+    ":-(":"disappointed",
+    ">:(":"angry",
+    ">:-(":"angry",
+    ":'(":"cry",
+    "D:":"anguished",
+    ":o":"open_mouth",
+    ":-o":"open_mouth"
+};
 
 /******** Load jQuery if not present *********/
 if (window.jQuery === undefined || window.jQuery.fn.jquery !== '2.1.1') {
@@ -95,7 +150,7 @@ function main() {
         };
 
         $.createButton = function() {
-            var button = $('<div id="prudio-button" style="display:none;background-color: ' + (settings.buttonColor || '') + '" title="Chat with us"><i class="icon-prudio"></i></div><div id="prudio-notification"></div>');
+            var button = $('<div id="prudio-button" style="display: none;' + (settings.buttonColor !== undefined ?  ' background-color: ' + settings.buttonColor : '') + '" title="Chat with us"><i class="' + (settings.icon !== undefined ?  settings.icon : 'icon-btn-help') + '"></i></div><div id="prudio-notification"></div>');
             $("body").append(button);
         };
 
@@ -151,7 +206,7 @@ function main() {
             var cookieName = "prudio-uuid";
             if($.getCookie(cookieName) === null) {
                 // Does not exists; Lets create a UUID for this user
-                $.loadJS(baseURL + "/js/uuid.js");
+                $.loadJS(assetsURL + "/js/uuid.js");
                 var cuuid = uuid.v4();
                 $.setCookie(cookieName, cuuid);
 
@@ -452,17 +507,73 @@ function main() {
         * Play Notification
         */
         $.playSound = function() {
-            var filename = baseURL + "/notification";
+            var filename = assetsURL + "/notification";
 
             if(!muted) {
                 $('#prudio-notification').html('<audio autoplay="autoplay"><source src="' + filename + '.mp3" type="audio/mpeg" /><source src="' + filename + '.ogg" type="audio/ogg" /><embed hidden="true" autostart="true" loop="false" src="' + filename + '.mp3" /></audio>');
             }
         };
 
+        /*
+        * Send browser notification
+        */
+        $.browserNotification = function(text) {
+            var options = {
+                body: text,
+                icon: "/favicon.ico",
+                dir : "ltr"
+            };
+
+            if (!("Notification" in window) || $.titleAlert.hasFocus) {
+                return;
+            } else if (Notification.permission === "granted") {
+                var notification = new Notification("New message", options);
+            } else if (Notification.permission !== 'denied') {
+                Notification.requestPermission(function (permission) {
+                    if (!('permission' in Notification)) {
+                        Notification.permission = permission;
+                    }
+
+                    if (permission === "granted") {
+                        var notification = new Notification("New message", options);
+                    }
+                });
+            }
+        };
+
+
+        /*
+        * Check this app status
+        */
+        $.checkStatus = function(appid) {
+            $.ajax({
+                url: baseURL + "/app/status",
+                method: 'POST',
+                async: false,
+                data: {
+                    appid: appid
+                },
+                error: function(xhr, ajaxOptions, thrownError){
+                    console.log("We got a problem checking the app status!", thrownError);
+                    online = false;
+                },
+                success: function(response) {
+                    if (response.success !== 'undefined' && response.success) {
+                        socketURL = response.socketURL;
+                        online = true;
+                        $.loadJS(socketURL + "/socket.io/socket.io.js");
+                    }
+                }
+            });
+        };
+
+        /*
+        * Ping for available people in Slack
+        */
         $.pingAvailable = function(appid) {
             // Ping the app
             $.ajax({
-                url: baseURL + "/app/ping",
+                url: socketURL + "/app/ping",
                 method: 'POST',
                 data: {
                     appid: appid
@@ -489,7 +600,7 @@ function main() {
 
             // Recover conversation
             $.ajax({
-                url: baseURL + "/chat/history",
+                url: socketURL + "/chat/history",
                 method: 'POST',
                 data: {
                     appid:       appid,
@@ -522,7 +633,9 @@ function main() {
             var channel   = $.getCookie('prudio-channel');
             var signature = $.getCookie('prudio-signature');
 
-            $.retriveHistory(settings.appid, channel, signature);
+            if (channel !== '' && signature !== '') {
+                $.retriveHistory(settings.appid, channel, signature);
+            }
 
             $('#prudio-window div.reply input[name=message]').attr('type', 'text').attr('placeholder', 'Just write...').blur().focus();
 
@@ -532,47 +645,52 @@ function main() {
 
         $.checkUserInfo = function(settings) {
 
-            // No name
-            if (typeof settings.name === 'undefined') {
-                // Ask
-                $('<li class="other"></li>').text("Please type your name in the chatbox below").appendTo($('#prudio-window ul'));
+            // No name or email
+            if (typeof settings.name === 'undefined' || typeof settings.email === 'undefined') {
 
-                $('#prudio-window div.reply input[name=message]').prop('placeholder', 'Your name').blur().focus();
+                //Ask for name and email
+                if ( $('#userInfoInput').length === 0){
 
-                // Capture
-                $('#prudio-window div.reply input[name=message]').bind('keypress', function(e) {
-                    if (e.keyCode === ENTER_KEY_CODE && $(this).val() !== "") {
-                        settings.name = $(this).val();
+                    var userInfoInput = $('<div id="userInfoInput" class="user-info"><div id="prudio-empty-msg"></div></div>');
+                    var userInfoForm = $('<form id="userInfoForm"></form>');
 
-                        $(this).val('').unbind('keypress');
-                        $('<li class="self"></li>').text(settings.name).appendTo($('#prudio-window ul'));
+                    userInfoForm.append('<label>Name:<br/></label><div class="reply"><input id="prudio-name-input" type="text"/></div>');
+                    userInfoForm.append('<label>Email:<br/></label><div class="reply"><input id="prudio-email-input" type="text"/></div>');
+                    userInfoForm.append('<div class="start-conversation"><input type="button" id="prudio-submit-name" value="Start Conversation"/></div>');
 
-                        return $.checkUserInfo(settings);
-                    }
-                });
-            }
+                    //Added it to The DOM
+                    userInfoInput.append(userInfoForm);
+                    $('.messages').append(userInfoInput);
 
-            // No e-mail
-            else if (typeof settings.email === 'undefined') {
-                // Ask
-                $('<li class="other"></li>').text("Please type your e-mail in the chatbox below").appendTo($('#prudio-window ul'));
+                    // Check if all if is there
+                    $('#prudio-submit-name').on('click', function(){
+                        var name = $('#prudio-name-input').val();
+                        var email = $('#prudio-email-input').val();
 
-                $('#prudio-window div.reply input[name=message]').prop('placeholder', "Your e-mail").prop('type','email').blur().focus();
-
-                // Capture
-                $('#prudio-window div.reply input[name=message]').bind('keypress', function(e) {
-                    if (e.keyCode === ENTER_KEY_CODE && $(this).val() !== "") {
-                        settings.email = $(this).val();
-                        $(this).val('').prop('type', 'text').unbind('keypress');
-                        $('<li class="self"></li>').text(settings.email).appendTo($('#prudio-window ul'));
-
-                        return $.checkUserInfo(settings);
-                    }
-                });
+                        if (name != "" && email != ""){//!isValid(email)){
+                            settings.name = name;
+                            settings.email = email;
+                            $('#userInfoInput').remove();
+                            return $.continueProgram(settings);
+                        } else{
+                            $('#prudio-empty-msg').html('<span>Please fill the fields with valid name and email values</span>');
+                        }
+                    });
+                }
             } else {
                 return $.continueProgram(settings);
             }
         };
+
+        $.emojiMapper = function(message) {
+            message.replace(/\&/g, '&amp;').replace(/\</g, '&lt;').replace(/\>/g, '&gt;');
+
+            for (var emo in emoticons){
+                message = message.replace(emo, ':' + emoticons[emo] + ':');
+            }
+
+            return message;
+        }
 
         $.openSocket = function(settings) {
             var channel = null,
@@ -589,7 +707,7 @@ function main() {
             $('<li class="server connecting"></li>').html('<i class="icon-flash-outline"></i> Connecting to the server...').appendTo($('#prudio-window ul'));
 
             $.ajax({
-                url: baseURL + "/chat/create",
+                url: socketURL + "/chat/create",
                 method: 'POST',
                 data: {
                     appid:       settings.appid,
@@ -610,18 +728,21 @@ function main() {
                     $.setCookie('prudio-signature',    data.signature);
                     $.setCookie('prudio-status',       'open');
 
-                    var socket = io.connect(baseURL + '/chat');
+                    var socket = io.connect(socketURL + '/chat');
 
                     $('#prudio-window div.reply input[name=message]').bind('keypress', function(e){
                         // if enter key
                         if (e.keyCode === ENTER_KEY_CODE && $(this).val() !== "") {
                             var message = $(this).val();
 
+                            // Parse :) => :smile:
+                            message = $.emojiMapper(message);
+
                             socket.emit('sendMessage', {
                                 message: message
                             });
 
-                            $('<li class="self"></li>').text(message).appendTo($('#prudio-window ul'));
+                            $('<li class="self"></li>').html(emoji(message, assetsURL + '/emojis')).appendTo($('#prudio-window ul'));
 
                             $.scrollChat('#prudio-window div.messages');
 
@@ -649,6 +770,7 @@ function main() {
                             $('<li class="other"></li>').html(data.message).appendTo($('#prudio-window ul'));
                             $.scrollChat('#prudio-window div.messages');
                             $.titleAlert("New message", { stopOnMouseMove:true, stopOnFocus:true, requireBlur: true});
+                            $.browserNotification(data.message);
                             $.playSound();
                         }
                     });
@@ -667,7 +789,7 @@ function main() {
 
                     socket.on('typingMessage', function () {
                         $('#prudio-window ul li.typing').remove();
-                        $('<li class="typing"></li>').html('<i class="icon-chat"></i> User is typing...').appendTo($('#prudio-window ul')).show().delay(7000).slideUp();
+                        $('<li class="typing"></li>').html('<i class="icon-typing"></i> User is typing...').appendTo($('#prudio-window ul')).show().delay(7000).slideUp();
                         $.scrollChat('#prudio-window div.messages');
                     });
                 }
@@ -684,7 +806,7 @@ function main() {
 
             // Perform the request
             $.ajax({
-                url: baseURL + '/app/file-upload?appid=' + settings.appid + '&channel=' + settings.joinedChannel,
+                url: socketURL + '/app/file-upload?appid=' + settings.appid + '&channel=' + settings.joinedChannel,
                 type: 'POST',
                 data: data,
                 cache: false,
@@ -745,8 +867,7 @@ function main() {
 
         };
 
-        $.loadCSS(baseURL + "/client.css");
-        $.loadJS(baseURL + "/socket.io/socket.io.js");
+        $.loadCSS(assetsURL + "/client.css");
 
         var settings  = $.getSettings();
 
@@ -765,6 +886,7 @@ function main() {
         });
 
         $(document).on('click', '#prudio-window .mute', function() {
+            muted = !muted;
             $('#prudio-window span.mute i').toggleClass('icon-volume-high').toggleClass('icon-volume-off');
         });
 
@@ -791,8 +913,63 @@ function main() {
             $('input[name=uploads]').trigger('click');
         });
 
+        $(window).on('offline', function () {
+            $('<li class="error offline"></li>').text("Looks like internet is gone!").appendTo($('#prudio-window ul'));
+            $('#prudio-window div.reply input[name=message]').prop('disabled', true);
+        });
+
+        $(window).on('online', function () {
+            $('#prudio-window ul li.offline').remove();
+            $('<li class="server"></li>').text("We are back!").appendTo($('#prudio-window ul')).show().delay(5000).slideUp();
+            $('#prudio-window div.reply input[name=message]').prop('disabled', false);
+        });
+
+        $(document).ready(function() {
+            $.checkStatus(settings.appid);
+
+            if (online) {
+
+                // Remove style="display:none" from #prudio-window
+                $('#prudio-window').removeAttr('style');
+
+                switch ($.getCookie('prudio-status')) {
+                    case 'open':
+                        $.continueProgram(settings);
+                        $('#prudio-window').toggleClass('prudio-window-open');
+                        break;
+
+                    case 'minimized':
+                        $.continueProgram(settings);
+                        $(prudioButtonSelector).fadeIn();
+                        break;
+
+                    case 'closed':
+                        $(prudioButtonSelector).fadeIn();
+                        break;
+
+                    default:
+                        $(prudioButtonSelector).fadeIn();
+                        break;
+                }
+
+            } else {
+
+                if ($('#prudio-window').hasClass('prudio-window-open')) {
+                    $('#prudio-window').toggleClass('prudio-window-open');
+                }
+
+                if (!settings.buttonSelector) {
+                    $(prudioButtonSelector).fadeOut();
+                }
+            }
+        });
 
         $(document).on('click', prudioButtonSelector, function() {
+
+            if (!online) {
+                return;
+            }
+
             if (!settings.buttonSelector) {
                 $(this).fadeOut('fast');
             }
@@ -809,7 +986,7 @@ function main() {
         // Add prudio chat window to the DOM
         $('body').append(
             [
-                '<nav class="prudio-window prudio-window-vertical prudio-window-right" id="prudio-window">',
+                '<nav style="display:none" class="prudio-window prudio-window-vertical prudio-window-right" id="prudio-window">',
                 '     <h3>',
                 '       <span class="mute" title="Mute"><i class="icon-volume-high"></i></span>',
                         (settings.title || 'Support'),
@@ -831,22 +1008,6 @@ function main() {
                 '</nav>'
             ].join('')
         );
-
-        switch ($.getCookie('prudio-status')) {
-            case 'open':
-                $.continueProgram(settings);
-                $('#prudio-window').toggleClass('prudio-window-open');
-                break;
-
-            case 'minimized':
-                $.continueProgram(settings);
-                $(prudioButtonSelector).fadeIn();
-                break;
-
-            case 'closed':
-                $(prudioButtonSelector).fadeIn();
-                break;
-        }
     });
 }
 })(); // We call our anonymous function immediately

@@ -264,14 +264,18 @@
 .icon-cancel-outline:before { content: '\e800'; } /* '' */
 .icon-volume-off:before { content: '\e801'; } /* '' */
 .icon-volume-high:before { content: '\e802'; } /* '' */
+.icon-btn-bubble:before { content: '\e803'; } /* '' */
 .icon-flash-outline:before { content: '\e804'; } /* '' */
-.icon-chat:before { content: '\e805'; } /* '' */
+.icon-typing:before { content: '\e805'; } /* '' */
 .icon-comment:before { content: '\e806'; } /* '' */
+.icon-btn-chat:before { content: '\e807'; } /* '' */
 .icon-forward-outline:before { content: '\e808'; } /* '' */
-.icon-prudio:before { content: '\e809'; } /* '' */
+.icon-btn-prudio:before { content: '\e809'; } /* '' */
 .icon-attach:before { content: '\e80a'; } /* '' */
 .icon-attach-outline:before { content: '\e80b'; } /* '' */
 .icon-upload:before { content: '\e80c'; } /* '' */
+.icon-btn-chats:before { content: '\e80d'; } /* '' */
+.icon-btn-help:before { content: '\e80e'; } /* '' */
 
 #prudio-button {
     background: rgba(0, 114, 176, 0.9);
@@ -289,11 +293,39 @@
     z-index: 9999;
 }
 
-#prudio-button i {
+#prudio-button .icon-btn-bubble {
+	color: white;
+	display: block;
+	font-size: 23px;
+	margin: 11px 3px;
+}
+
+#prudio-button .icon-btn-chat {
+	color: white;
+	display: block;
+	font-size: 24px;
+	margin: 13px 5.4px;
+}
+
+#prudio-button .icon-btn-prudio {
 	color: white;
 	display: block;
 	font-size: 21.6px;
 	margin: 9px 0;
+}
+
+#prudio-button .icon-btn-chats {
+	color: white;
+	display: block;
+	font-size: 19px;
+	margin: 11px 3px;
+}
+
+#prudio-button .icon-btn-help {
+	color: white;
+	display: block;
+	font-size: 21.6px;
+	margin: 11px 5.5px;
 }
 
 /* General styles for all menus */
@@ -584,6 +616,8 @@
 
 .prudio-window .reply-container {
 	position: absolute;
+	float: left;
+	width: 100%;
 	height: 80px;
 	bottom: 0;
 	background: rgba(249,249,250,0.95);
@@ -596,14 +630,21 @@
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00f9f9fa', endColorstr='#f2f9f9fa',GradientType=0 );
 }
 
+.prudio-window .start-conversation {
+	box-sizing: border-box;
+	margin: 5px 15px 15px 15px;
+	width: auto;
+	clear: both;
+}
+
 .prudio-window .reply {
 	box-sizing: border-box;
 	border: 1px solid #DADEE2;
 	border-radius: 4px;
-	margin: 15px;
+	margin: 5px 15px 15px 15px;
 	padding: 6px 10px;
 	background: #FFFFFF;
-	width: 340px;
+	width: auto;
 	clear: both;
 }
 
@@ -612,7 +653,7 @@
     box-sizing: border-box;
     border: 0;
     color: #60686E;
-    width: 90%;
+    width: 100%;
     font-size: 14px;
     font-weight: normal;
 }
@@ -622,6 +663,9 @@
 }
 
 .prudio-window .reply .icon-attach {
+	position: absolute;
+	right: 20px;
+	top: 15px;
 	cursor: pointer;
 	color: #CCCCCC;
 }
@@ -646,9 +690,8 @@
 
 /* Vertical menu that slides from the left or right */
 
-
 .prudio-window-right {
-	right: -370px;
+	right: -100%;
 }
 
 .prudio-window-open {
@@ -677,25 +720,68 @@
 	transition: all 0.3s ease;
 }
 
-/* Example media queries */
-
-@media screen and (max-width: 55.1875em){
-
-	.prudio-window-horizontal {
-		font-size: 75%;
-		height: 110px;
-	}
-
-	.prudio-window-top {
-		top: -110px;
-	}
-
-	.prudio-window-bottom {
-		bottom: -110px;
-	}
-
+.prudio-window .user-info {
+    position: absolute;
+    top: 58px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 15;
+	background: #f9f9fa;
+    font-size: 14px;
+    font-weight: normal;
 }
 
+.prudio-window .user-info label {
+	color: #333333;
+    padding-left: 15px;
+}
+
+.prudio-window .user-info input {
+	color: #333333;
+    border: 1px;
+    border-color: #DADEE2;
+	margin: auto;
+}
+
+.prudio-window .user-info #prudio-empty-msg {
+    height: 50px;
+    padding-top: 15px;
+    padding-left: 15px;
+	background: #f9f9fa;
+    vertical-align: middle;
+    line-height: 20px;
+}
+
+.prudio-window .user-info #prudio-submit-name{
+    display: inline-block;
+    padding: 10px 12px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    -moz-user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: #FFF;
+    background-color: #2B3E50;
+    border-color: #2B3E50;
+    width: 100%;
+}
+
+/* Example media queries */
+
+@media only screen and (max-width: 550px) {
+	.prudio-window {
+		width: 100%;
+	}
+}
+
+/*
 @media screen and (max-height: 26.375em){
 
 	.prudio-window-vertical {
@@ -716,3 +802,4 @@
 		left: 190px;
 	}
 }
+*/

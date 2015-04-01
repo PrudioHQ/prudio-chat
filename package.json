@@ -1,55 +1,47 @@
 {
   "name": "Prudio",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "exportName": "client",
   "description": "Slack Instant Messaging Widget",
   "engines": {
     "node": "0.10.x"
   },
   "dependencies": {
-    "async": "0.9.0",
-    "bcrypt": "0.8.0",
     "body-parser": "1.9.0",
+    "bower": "^1.3.9",
     "cors": "2.4.2",
-    "emoji-parser": "^0.1.1",
     "errorhandler": "1.2.0",
     "express": "4.9.4",
-    "formidable": "1.0.*",
     "grunt": "latest",
     "grunt-cli": "latest",
+    "grunt-contrib-concat": "^0.5.1",
     "grunt-contrib-copy": "^0.7.0",
     "grunt-contrib-cssmin": "latest",
     "grunt-contrib-uglify": "latest",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-express-server": "^0.4.19",
     "grunt-text-replace": "^0.3.12",
-    "lokijs": "1.1.*",
-    "moment": "^2.8.3",
-    "mysql": "2.5.1",
+    "mongoose": "^3.8.23",
     "newrelic": "^1.12.1",
-    "pg": "2.x",
     "request": "latest",
-    "sequelize": "1.7.10",
-    "sequelize-cli": "^0.3.3",
-    "socket.io": "1.1",
-    "ws": "0.4.x"
+    "rollbar": "^0.4.5"
   },
   "author": "Hélder Duarte",
   "main": "app.js",
   "devDependencies": {
     "grunt-contrib-watch": "^0.6.1",
-    "grunt-express-server": "^0.4.19",
+    "grunt-foreman": "0.0.5",
     "grunt-text-replace": "^0.3.12",
     "jscs": "^1.8.1",
     "pre-commit": "0.0.9"
   },
-  "pre-commit": [  
+  "pre-commit": [
     "jshint",
     "jscs"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "grunt build",
+    "postinstall": "bower install && grunt build",
     "jscs": "jscs *.js utils/*.js src/js/*.js models/*.js"
   },
   "repository": {

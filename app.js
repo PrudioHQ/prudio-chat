@@ -57,6 +57,24 @@ app.use('/', express.static(__dirname + '/build'));
 if ('development' === app.get('env')) {
     // HTML client
     app.use('/client-html',  express.static(__dirname + '/client-html'));
+} else if ('production' === app.get('env')) {
+    // Redirect all GET to HTTPS
+	app.get('*', function(req, res, next) {
+		if (req.headers['x-forwarded-proto'] !== 'https') {
+			res.redirect('https://chat.prud.io' + req.url);
+		} else {
+			next();
+		}
+	});
+
+    // Send 403 to all POSTs that are not over HTTPS
+	app.post('*', function(req, res, next) {
+		if (req.headers['x-forwarded-proto'] !== 'https') {
+			res.status(403).send('403.4 - SSL required.');
+		} else {
+			next();
+		}
+	});
 }
 
 // linking

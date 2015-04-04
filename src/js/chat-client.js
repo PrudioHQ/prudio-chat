@@ -3,9 +3,9 @@
 // Localize jQuery variable
 var jQuery;
 
-var baseURL   = "https://chat.prud.io";
-var assetsURL = "https://chat.prud.io";
-var socketURL = "";
+var baseURL   = 'https://chat.prud.io';
+var assetsURL = 'https://chat.prud.io';
+var socketURL = '';
 var ENTER_KEY_CODE = 13;
 var online = false;
 var muted = false;
@@ -64,9 +64,9 @@ var emoticons = {
 /******** Load jQuery if not present *********/
 if (window.jQuery === undefined || window.jQuery.fn.jquery !== '2.1.1') {
     var scriptTag = document.createElement('script');
-    scriptTag.setAttribute("type","text/javascript");
-    scriptTag.setAttribute("src",
-        "//code.jquery.com/jquery-2.1.1.min.js");
+    scriptTag.setAttribute('type','text/javascript');
+    scriptTag.setAttribute('src',
+        '//code.jquery.com/jquery-2.1.1.min.js');
     if (scriptTag.readyState) {
       scriptTag.onreadystatechange = function () { // For old versions of IE
           if (this.readyState === 'complete' || this.readyState === 'loaded') {
@@ -77,7 +77,7 @@ if (window.jQuery === undefined || window.jQuery.fn.jquery !== '2.1.1') {
       scriptTag.onload = scriptLoadHandler;
     }
     // Try to find the head, otherwise default to the documentElement
-    (document.getElementsByTagName("head")[0] || document.documentElement).appendChild(scriptTag);
+    (document.getElementsByTagName('head')[0] || document.documentElement).appendChild(scriptTag);
 } else {
     // The jQuery version on the window is the one we want to use
     jQuery = window.jQuery;
@@ -98,7 +98,7 @@ function scriptLoadHandler() {
 function main() {
 
     // Adding the proprety dataTransfer to jQuery events
-    jQuery.event.props.push( "dataTransfer" );
+    jQuery.event.props.push('dataTransfer');
 
     jQuery(document).ready(function($)
     {
@@ -111,8 +111,8 @@ function main() {
         };
 
         $.loadCSS = function(href) {
-            var cssLink = $("<link rel='stylesheet' type='text/css' href='"+href+"'>");
-            $("head").append(cssLink);
+            var cssLink = $('<link rel="stylesheet" type="text/css" href="' + href + '">');
+            $('head').append(cssLink);
         };
 
         $.findJS = function() {
@@ -125,7 +125,7 @@ function main() {
                 }
             }
 
-            throw "Could not find the script from Prudio.";
+            throw 'Could not find the script from Prudio.';
         };
 
         $.getSettings = function() {
@@ -151,17 +151,17 @@ function main() {
 
         $.createButton = function() {
             var button = $('<div id="prudio-button" style="display: none;' + (settings.buttonColor !== undefined ?  ' background-color: ' + settings.buttonColor : '') + '" title="Chat with us"><i class="' + (settings.icon !== undefined ?  settings.icon : 'icon-btn-help') + '"></i></div><div id="prudio-notification"></div>');
-            $("body").append(button);
+            $('body').append(button);
         };
 
         $.loadJS = function(href) {
-            var jsLink = $("<script src='" + href + "'></script>");
-            $("head").append(jsLink);
+            var jsLink = $('<script src="' + href + '"></script>');
+            $('head').append(jsLink);
         };
 
         $.scrollChat = function(to) {
             $(to).stop().animate({
-                scrollTop: $(to).prop("scrollHeight")
+                scrollTop: $(to).prop('scrollHeight')
             }, 'slow');
         };
 
@@ -175,21 +175,21 @@ function main() {
             date.setTime(date.getTime() + (days * 86400000));
 
             // Set Cookie
-            document.cookie = cookie + "=" + value + "; expires=" + date.toGMTString() + "; path=/";
+            document.cookie = cookie + '=' + value + '; expires=' + date.toGMTString() + '; path=/';
         };
 
         /**
         * Get a cookie named @var cookie
         */
         $.getCookie = function(name) {
-            var value = " " + document.cookie;
-            var start = value.indexOf(" " + name + "=");
+            var value = ' ' + document.cookie;
+            var start = value.indexOf(' ' + name + '=');
             if (start === -1) {
                 value = null;
             }
             else {
-                start = value.indexOf("=", start) + 1;
-                var end = value.indexOf(";", start);
+                start = value.indexOf('=', start) + 1;
+                var end = value.indexOf(';', start);
                 if (end === -1) {
                     end = value.length;
                 }
@@ -203,7 +203,7 @@ function main() {
         */
         /*
         $.getUUID = function() {
-            var cookieName = "prudio-uuid";
+            var cookieName = 'prudio-uuid';
             if($.getCookie(cookieName) === null) {
                 // Does not exists; Lets create a UUID for this user
                 $.loadJS(assetsURL + "/js/uuid.js");
@@ -486,7 +486,7 @@ function main() {
                     if ($.titleAlert._running) {
                         return;
                     }
-                    document.title = ".";
+                    document.title = '.';
                     document.title = initialText;
                 }, 1000);
             }
@@ -496,8 +496,8 @@ function main() {
         };
 
         // bind focus and blur event handlers
-        $(window).bind("focus", $.titleAlert._focus);
-        $(window).bind("blur", $.titleAlert._blur);
+        $(window).bind('focus', $.titleAlert._focus);
+        $(window).bind('blur', $.titleAlert._blur);
 
         /**
         * END titleAlert
@@ -507,7 +507,7 @@ function main() {
         * Play Notification
         */
         $.playSound = function() {
-            var filename = assetsURL + "/notification";
+            var filename = assetsURL + '/notification';
 
             if(!muted) {
                 $('#prudio-notification').html('<audio autoplay="autoplay"><source src="' + filename + '.mp3" type="audio/mpeg" /><source src="' + filename + '.ogg" type="audio/ogg" /><embed hidden="true" autostart="true" loop="false" src="' + filename + '.mp3" /></audio>');
@@ -520,22 +520,22 @@ function main() {
         $.browserNotification = function(text) {
             var options = {
                 body: text,
-                icon: "/favicon.ico",
-                dir : "ltr"
+                icon: '/favicon.ico',
+                dir : 'ltr'
             };
 
-            if (!("Notification" in window) || $.titleAlert.hasFocus) {
+            if (!('Notification' in window) || $.titleAlert.hasFocus) {
                 return;
-            } else if (Notification.permission === "granted") {
-                var notification = new Notification("New message", options);
+            } else if (Notification.permission === 'granted') {
+                var notification = new Notification('New message', options);
             } else if (Notification.permission !== 'denied') {
                 Notification.requestPermission(function (permission) {
                     if (!('permission' in Notification)) {
                         Notification.permission = permission;
                     }
 
-                    if (permission === "granted") {
-                        var notification = new Notification("New message", options);
+                    if (permission === 'granted') {
+                        var notification = new Notification('New message', options);
                     }
                 });
             }
@@ -547,21 +547,21 @@ function main() {
         */
         $.checkStatus = function(appid) {
             $.ajax({
-                url: baseURL + "/app/status",
+                url: baseURL + '/app/status',
                 method: 'POST',
                 async: false,
                 data: {
                     appid: appid
                 },
                 error: function(xhr, ajaxOptions, thrownError){
-                    console.log("We got a problem checking the app status!", thrownError);
+                    console.log('We got a problem checking the app status!', thrownError);
                     online = false;
                 },
                 success: function(response) {
                     if (response.success !== 'undefined' && response.success) {
                         socketURL = response.socketURL;
                         online = true;
-                        $.loadJS(socketURL + "/socket.io/socket.io.js");
+                        $.loadJS(socketURL + '/socket.io/socket.io.js');
                     }
                 }
             });
@@ -573,18 +573,18 @@ function main() {
         $.pingAvailable = function(appid) {
             // Ping the app
             $.ajax({
-                url: socketURL + "/app/ping",
+                url: socketURL + '/app/ping',
                 method: 'POST',
                 data: {
                     appid: appid
                 },
                 error: function(xhr, ajaxOptions, thrownError){
-                    console.log("We got a problem pinging the app!", thrownError);
+                    console.log('We got a problem pinging the app!', thrownError);
                 },
                 success: function(response) {
                     if (response.success !== 'undefined' && response.success && response.onlineUsers !== 'undefined') {
                         if (response.onlineUsers <= 0) {
-                            $('<li class="server announcement"></li>').text("Currently there are no users online to help you. Leave a message and we will get back to you ASAP! Sorry!").appendTo($('#prudio-window ul'));
+                            $('<li class="server announcement"></li>').text('Currently there are no users online to help you. Leave a message and we will get back to you ASAP! Sorry!').appendTo($('#prudio-window ul'));
                             $.scrollChat('#prudio-window div.messages');
                         }
                     }
@@ -600,7 +600,7 @@ function main() {
 
             // Recover conversation
             $.ajax({
-                url: socketURL + "/chat/history",
+                url: socketURL + '/chat/history',
                 method: 'POST',
                 data: {
                     appid:       appid,
@@ -609,7 +609,7 @@ function main() {
                 },
                 error: function(xhr, ajaxOptions, thrownError){
                     //$('<li class="error"></li>').text("We got a problem retriving the history!").appendTo($('#prudio-window ul'));
-                    console.log("We got a problem retriving the history!", thrownError);
+                    console.log('We got a problem retriving the history!', thrownError);
                 },
                 success: function(data) {
                     if (data.success !== 'undefined' && data.success && data.messages !== 'undefined' && data.messages.length > 0) {
@@ -652,7 +652,7 @@ function main() {
                 if ( $('#userInfoInput').length === 0){
 
                     var userInfoInput = $('<div id="userInfoInput" class="user-info"><div id="prudio-empty-msg"></div></div>');
-                    var userInfoForm = $('<form id="userInfoForm"></form>');
+                    var userInfoForm  = $('<form id="userInfoForm"></form>');
 
                     userInfoForm.append('<label>Name:<br/></label><div class="reply"><input id="prudio-name-input" type="text"/></div>');
                     userInfoForm.append('<label>Email:<br/></label><div class="reply"><input id="prudio-email-input" type="text"/></div>');
@@ -664,16 +664,16 @@ function main() {
 
                     // Check if all if is there
                     $('#prudio-submit-name').on('click', function(){
-                        var name = $('#prudio-name-input').val();
+                        var name  = $('#prudio-name-input').val();
                         var email = $('#prudio-email-input').val();
 
-                        if (name != "" && email != ""){//!isValid(email)){
+                        if (name != '' && email != ''){//!isValid(email)){
                             settings.name = name;
                             settings.email = email;
                             $('#userInfoInput').remove();
                             return $.continueProgram(settings);
                         } else{
-                            $('#prudio-empty-msg').html('<span>Please fill the fields with valid name and email values</span>');
+                            $('#prudio-empty-msg').html('<span>Please fill the fields with valid name and email.</span>');
                         }
                     });
                 }
@@ -718,7 +718,7 @@ function main() {
                     userInfo:    JSON.stringify(userInfo)
                 },
                 error: function(xhr, ajaxOptions, thrownError){
-                    $('<li class="error"></li>').text("We got a problem connecting to the server!").appendTo($('#prudio-window ul'));
+                    $('<li class="error"></li>').text('We got a problem connecting to the server!').appendTo($('#prudio-window ul'));
                 },
                 success: function(data) {
 
@@ -816,13 +816,13 @@ function main() {
             })
             .done(function(data, textStatus, jqXHR) {
                 if (typeof data.error === 'undefined') {
-                    $('<li class="server"></li>').text("Uploading file").appendTo($('#prudio-window ul'));
+                    $('<li class="server"></li>').text('Uploading file').appendTo($('#prudio-window ul'));
                 } else {
-                    $('<li class="error"></li>').text("Error uploading the file!").appendTo($('#prudio-window ul'));
+                    $('<li class="error"></li>').text('Error uploading the file!').appendTo($('#prudio-window ul'));
                 }
             })
             .fail(function(jqXHR, textStatus, errorThrown) {
-                $('<li class="error"></li>').text("Error uploading the file! Try again!").appendTo($('#prudio-window ul'));
+                $('<li class="error"></li>').text('Error uploading the file! Try again!').appendTo($('#prudio-window ul'));
             })
         };
 
@@ -867,7 +867,7 @@ function main() {
 
         };
 
-        $.loadCSS(assetsURL + "/client.css");
+        $.loadCSS(assetsURL + '/client.css');
 
         var settings  = $.getSettings();
 

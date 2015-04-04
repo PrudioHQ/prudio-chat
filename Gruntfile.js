@@ -27,7 +27,7 @@ module.exports = function(grunt) {
                 src: ['build/<%= pkg.exportName %>.js'],      // source files array (supports minimatch)
                 dest: 'build/<%= pkg.exportName %>.local.js', // destination directory or file
                 replacements: [{
-                    from: 'https://prudio-chat.herokuapp.com:443', // string replacement
+                    from: 'https://chat.prud.io', // string replacement
                     to:   'http://localhost:5000'                // your server url with port (80 or 443)
                 },
                 {
@@ -39,7 +39,7 @@ module.exports = function(grunt) {
                 src: ['src/js/chat-client.js'], // source files array (supports minimatch)
                 dest: 'build/<%= pkg.exportName %>.development.js', // destination directory or file
                 replacements: [{
-                    from: 'prudio-chat.herokuapp.com', // string replacement
+                    from: 'chat.prud.io', // string replacement
                     to:   'prudio-chat-dev.herokuapp.com', // string replacement
                 },
                 {

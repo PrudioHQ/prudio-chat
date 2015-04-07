@@ -560,7 +560,6 @@
                         if (response.success !== 'undefined' && response.success) {
                             socketURL = response.socketURL;
                             online = true;
-                            $.loadJS(socketURL + '/socket.io/socket.io.js');
                         }
                     }
                 });
@@ -694,6 +693,8 @@
                 var signature   = null;
                 var userInfo    = $.getUserSystemInfo();
                 var postURL     = socketURL + '/chat/create';
+
+                $.loadJS(socketURL + '/socket.io/socket.io.js');
 
                 // If it's not closed, override
                 if ($.getCookie('prudio-status') !== 'closed') {

@@ -21,17 +21,17 @@
         "<\/3":"broken_heart",
         "=)":"smiley",
         "=-)":"smiley",
-        "C:":"simple_smile",
-        "c:":"simple_smile",
-        ":D":"simple_smile",
-        ":-D":"simple_smile",
+        "C:":"smile",
+        "c:":"smile",
+        ":D":"smile",
+        ":-D":"smile",
         ":>":"laughing",
         ":->":"laughing",
         ";)":"wink",
         ";-)":"wink",
-        ":)":"simple_smile",
-        "(:":"simple_smile",
-        ":-)":"simple_smile",
+        ":)":"smile",
+        "(:":"smile",
+        ":-)":"smile",
         "8)":"sunglasses",
         ":|":"neutral_face",
         ":-|":"neutral_face",
@@ -680,12 +680,13 @@
 
             $.emojiMapper = function(message) {
                 message.replace(/\&/g, '&amp;').replace(/\</g, '&lt;').replace(/\>/g, '&gt;');
+                message = ' ' + message + ' ';
 
                 for (var emo in emoticons) {
                     message = message.replace(' ' + emo + ' ', ':' + emoticons[emo] + ':');
                 }
 
-                return message;
+                return message.trim();
             }
 
             $.openSocket = function(settings) {

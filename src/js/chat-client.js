@@ -694,8 +694,6 @@
                 var userInfo    = $.getUserSystemInfo();
                 var postURL     = socketURL + '/chat/create';
 
-                $.loadJS(socketURL + '/socket.io/socket.io.js');
-
                 // If it's not closed, override
                 if ($.getCookie('prudio-status') !== 'closed') {
                     channel     = $.getCookie('prudio-channel');
@@ -928,6 +926,7 @@
 
             $(document).ready(function() {
                 $.checkStatus(settings.appid);
+                $.loadJS(socketURL + '/socket.io/socket.io.js');
 
                 if (online) {
 

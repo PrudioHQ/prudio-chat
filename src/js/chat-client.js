@@ -884,11 +884,14 @@
 
                 $.setCookie('prudio-status', $(this).data('status'));
 
-                // If close, remove all the cookie info.
+                // If close, remove all the cookie info and disconnect.
                 if ($(this).data('status') === 'close') {
-                    $.setCookie('prudio-channel',      null);
-                    $.setCookie('prudio-channel-name', null);
-                    $.setCookie('prudio-signature',    null);
+                    $.setCookie('prudio-channel',      '');
+                    $.setCookie('prudio-channel-name', '');
+                    $.setCookie('prudio-signature',    '');
+
+                    // Disconnect the socket
+                    socket.disconnect();
                 }
 
                 if (!settings.buttonSelector) {

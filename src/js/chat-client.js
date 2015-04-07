@@ -153,11 +153,6 @@
                 $('body').append(button);
             };
 
-            $.loadJS = function(href) {
-                var jsLink = $('<script src="' + href + '"></script>');
-                $('head').append(jsLink);
-            };
-
             $.scrollChat = function(to) {
                 $(to).stop().animate({
                     scrollTop: $(to).prop('scrollHeight')
@@ -205,7 +200,7 @@
                 var cookieName = 'prudio-uuid';
                 if ($.getCookie(cookieName) === null) {
                     // Does not exists; Lets create a UUID for this user
-                    $.loadJS(assetsURL + "/js/uuid.js");
+                    $.getScript(assetsURL + "/js/uuid.js");
                     var cuuid = uuid.v4();
                     $.setCookie(cookieName, cuuid);
 
@@ -926,7 +921,7 @@
 
             $(document).ready(function() {
                 $.checkStatus(settings.appid);
-                $.loadJS(socketURL + '/socket.io/socket.io.js');
+                $.getScript(socketURL + '/socket.io/socket.io.js');
 
                 if (online) {
 

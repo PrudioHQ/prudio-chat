@@ -6,10 +6,11 @@
     var baseURL   = 'https://chat.prud.io';
     var assetsURL = 'https://chat.prud.io';
     var socketURL = '';
+    var socket    = null;
+    var online    = false;
+    var muted     = false;
+    var emoji     = window.emojiParser;
     var ENTER_KEY_CODE = 13;
-    var online = false;
-    var muted = false;
-    var emoji = window.emojiParser;
 
     // https://github.com/iamcal/js-emoji/blob/master/emoji.js#L1201-L1248
     var emoticons = {
@@ -64,17 +65,16 @@
     /******** Load jQuery if not present *********/
     if (window.jQuery === undefined || window.jQuery.fn.jquery !== '2.1.1') {
         var scriptTag = document.createElement('script');
-        scriptTag.setAttribute('type','text/javascript');
-        scriptTag.setAttribute('src',
-            '//code.jquery.com/jquery-2.1.1.min.js');
+        scriptTag.setAttribute('type', 'text/javascript');
+        scriptTag.setAttribute('src', '//code.jquery.com/jquery-2.1.1.min.js');
         if (scriptTag.readyState) {
-          scriptTag.onreadystatechange = function() { // For old versions of IE
-              if (this.readyState === 'complete' || this.readyState === 'loaded') {
-                  scriptLoadHandler();
-              }
-          };
+            scriptTag.onreadystatechange = function() { // For old versions of IE
+                if (this.readyState === 'complete' || this.readyState === 'loaded') {
+                    scriptLoadHandler();
+                }
+            };
         } else { // Other browsers
-          scriptTag.onload = scriptLoadHandler;
+            scriptTag.onload = scriptLoadHandler;
         }
         // Try to find the head, otherwise default to the documentElement
         (document.getElementsByTagName('head')[0] || document.documentElement).appendChild(scriptTag);
@@ -240,7 +240,9 @@
                 var browser = navigator.appName;
                 var version = '' + parseFloat(navigator.appVersion);
                 var majorVersion = parseInt(navigator.appVersion, 10);
-                var nameOffset, verOffset, ix;
+                var nameOffset;
+                var verOffset;
+                var ix;
                 var url = document.URL;
 
                 // Opera
@@ -687,21 +689,24 @@
             }
 
             $.openSocket = function(settings) {
-                var channel = null,
-                    channelName = null,
-                    signature = null,
-                    userInfo = $.getUserSystemInfo();
+                var channel     = null;
+                var channelName = null;
+                var signature   = null;
+                var userInfo    = $.getUserSystemInfo();
+                var postURL     = socketURL + '/chat/create';
 
-                if ($.getCookie('prudio-status') != 'closed') {
+                // If it's not closed, override
+                if ($.getCookie('prudio-status') !== 'closed') {
                     channel     = $.getCookie('prudio-channel');
                     channelName = $.getCookie('prudio-channel-name');
                     signature   = $.getCookie('prudio-signature');
+                    postURL     = socketURL + '/chat/continue';
                 }
 
                 $('<li class="server connecting"></li>').html('<i class="icon-flash-outline"></i> Connecting to the server...').appendTo($('#prudio-window ul'));
 
                 $.ajax({
-                    url: socketURL + '/chat/create',
+                    url: postURL,
                     method: 'POST',
                     data: {
                         appid:       settings.appid,
@@ -722,7 +727,9 @@
                         $.setCookie('prudio-signature',    data.signature);
                         $.setCookie('prudio-status',       'open');
 
-                        var socket = io.connect(socketURL + '/chat');
+                        if (socket === null) {
+                            socket = io.connect(socketURL + '/chat');
+                        }
 
                         $('#prudio-window div.reply input[name=message]').bind('keypress', function(e) {
                             // if enter key

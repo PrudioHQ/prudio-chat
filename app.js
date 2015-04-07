@@ -29,7 +29,7 @@ if ('development' === app.get('env')) {
     app.use(errorhandler());
 }
 
-db.once('open', function (callback) {
+db.once('open', function(callback) {
     var listening = server.listen(app.get('port'), function() {
 
         console.log('Express server listening on port ' + listening.address().port);
@@ -42,7 +42,7 @@ db.once('open', function (callback) {
         // Hide the console.log() function in production
         if ('production' === app.get('env')) {
             console = console || {};
-            console.log = function(){};
+            console.log = function() {};
         }
     });
 });
@@ -59,22 +59,22 @@ if ('development' === app.get('env')) {
     app.use('/client-html',  express.static(__dirname + '/client-html'));
 } else if ('production' === app.get('env')) {
     // Redirect all GET to HTTPS
-	app.get('*', function(req, res, next) {
-		if (req.headers['x-forwarded-proto'] !== 'https') {
-			res.redirect('https://chat.prud.io' + req.url);
-		} else {
-			next();
-		}
-	});
+    app.get('*', function(req, res, next) {
+        if (req.headers['x-forwarded-proto'] !== 'https') {
+            res.redirect('https://chat.prud.io' + req.url);
+        } else {
+            next();
+        }
+    });
 
     // Send 403 to all POSTs that are not over HTTPS
-	app.post('*', function(req, res, next) {
-		if (req.headers['x-forwarded-proto'] !== 'https') {
-			res.status(403).send('403.4 - SSL required.');
-		} else {
-			next();
-		}
-	});
+    app.post('*', function(req, res, next) {
+        if (req.headers['x-forwarded-proto'] !== 'https') {
+            res.status(403).send('403.4 - SSL required.');
+        } else {
+            next();
+        }
+    });
 }
 
 // linking

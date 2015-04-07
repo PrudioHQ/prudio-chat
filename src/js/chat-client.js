@@ -892,6 +892,10 @@
 
                     // Disconnect the socket
                     socket.disconnect();
+
+                    // Remove all messages from the window
+                    $('#prudio-window ul li').remove();
+
                 }
 
                 if (!settings.buttonSelector) {

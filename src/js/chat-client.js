@@ -630,7 +630,13 @@
 
                 $('#prudio-window div.reply input[name=message]').attr('type', 'text').attr('placeholder', 'Just write...').blur().focus();
 
-                $.openSocket(settings);
+                $.getScript(socketURL + '/socket.io/socket.io.js')
+                    .done(function() {
+                        $.openSocket(settings);
+                    })
+                    .fail(function() {
+                        $('<li class="error"></li>').text('We got a problem connecting to the server!').appendTo($('#prudio-window ul'));
+                    });
             };
 
             $.checkUserInfo = function(settings) {
@@ -921,7 +927,6 @@
 
             $(document).ready(function() {
                 $.checkStatus(settings.appid);
-                $.getScript(socketURL + '/socket.io/socket.io.js');
 
                 if (online) {
 

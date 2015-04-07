@@ -747,7 +747,6 @@
 
                                 // Parse :) => :smile:
                                 message = $.emojiMapper(message);
-                                message = $.linkParser(message);
 
                                 socket.emit('sendMessage', {
                                     message: message
@@ -777,11 +776,18 @@
                         // On Slack message
                         socket.on('message', function(data) {
                             if (data.sender === 'Other') {
+                                var message = $.linkParser(data.message);
+
                                 $('#prudio-window ul li.typing').remove();
-                                $('<li class="other"></li>').html(data.message).appendTo($('#prudio-window ul'));
+
+                                $('<li class="other"></li>').html(message).appendTo($('#prudio-window ul'));
+
                                 $.scrollChat('#prudio-window div.messages');
+
                                 $.titleAlert('New message', { stopOnMouseMove:true, stopOnFocus:true, requireBlur: true});
+
                                 $.browserNotification(data.message);
+
                                 $.playSound();
                             }
                         });

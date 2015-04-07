@@ -483,6 +483,7 @@
 	background: #FFFFFF;
 	color: #60686E;
 	box-shadow: 1px 1px 1px 1px rgba(10, 10, 10, 0.02);
+	min-height: 16px;
 }
 
 .prudio-window .other:after
@@ -522,6 +523,7 @@
 	border-color: #0072B0;
 	color: #fff;
 	box-shadow: 1px 1px 1px 1px rgba(10, 10, 10, 0.05);
+	min-height: 16px;
 }
 
 .prudio-window .self:after

@@ -885,7 +885,7 @@
                 $.setCookie('prudio-status', $(this).data('status'));
 
                 // If close, remove all the cookie info and disconnect.
-                if ($(this).data('status') === 'close') {
+                if ($(this).data('status') === 'closed') {
                     $.setCookie('prudio-channel',      '');
                     $.setCookie('prudio-channel-name', '');
                     $.setCookie('prudio-signature',    '');

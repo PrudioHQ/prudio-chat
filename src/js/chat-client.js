@@ -879,8 +879,18 @@
             var prudioButtonSelector = settings.buttonSelector || '#prudio-button';
 
             $(document).on('click', '#prudio-window .status', function() {
-                $.setCookie('prudio-status', $(this).data('status'));
+
                 $('#prudio-window').toggleClass('prudio-window-open');
+
+                $.setCookie('prudio-status', $(this).data('status'));
+
+                // If close, remove all the cookie info.
+                if ($(this).data('status') === 'close') {
+                    $.setCookie('prudio-channel',      null);
+                    $.setCookie('prudio-channel-name', null);
+                    $.setCookie('prudio-signature',    null);
+                }
+
                 if (!settings.buttonSelector) {
                     $('#prudio-button').fadeIn();
                 }

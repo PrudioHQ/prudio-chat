@@ -988,9 +988,11 @@
                     $(this).fadeOut('fast');
                 }
 
+                // If there is no signature then is a new request, ask for user info.
                 if (null == $.getCookie('prudio-signature') || $.getCookie('prudio-signature') === '') {
                     $.checkUserInfo(settings);
-                } else {
+                } else if ($.getCookie('prudio-status') !== 'minimized') {
+                    // If the window was minimized then just toggle it opened.
                     $.continueProgram(settings);
                 }
 

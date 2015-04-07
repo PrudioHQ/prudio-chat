@@ -695,8 +695,8 @@
                 var userInfo    = $.getUserSystemInfo();
                 var postURL     = socketURL + '/chat/create';
 
-                // If it's not closed, override
-                if ($.getCookie('prudio-status') !== 'closed') {
+                // If it's minimized or open, override
+                if ($.getCookie('prudio-status') === 'minimized' || $.getCookie('prudio-status') === 'open') {
                     channel     = $.getCookie('prudio-channel');
                     channelName = $.getCookie('prudio-channel-name');
                     signature   = $.getCookie('prudio-signature');
@@ -988,7 +988,7 @@
                     $(this).fadeOut('fast');
                 }
 
-                if (null == $.getCookie('prudio-signature')) {
+                if (null == $.getCookie('prudio-signature') || $.getCookie('prudio-signature') === '') {
                     $.checkUserInfo(settings);
                 } else {
                     $.continueProgram(settings);

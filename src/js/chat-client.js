@@ -608,7 +608,9 @@
                             for (var i in data.messages) {
                                 if (data.messages.hasOwnProperty(i)) {
                                     var message = data.messages[i];
-                                    $('<li class="' + message.sender + '"></li>').text(message.text).appendTo($('#prudio-window ul'));
+                                    message.text = $.emojiMapper(message.text);
+                                    message.text = $.linkParser(message.text);
+                                    $('<li class="' + message.sender + '"></li>').html(emoji(message.text, assetsURL + '/emojis')).appendTo($('#prudio-window ul'));
                                 }
                             }
 

@@ -686,8 +686,7 @@
 }
 
 .prudio-window-vertical a {
-	border-bottom: 1px solid #258ecd;
-	padding: 4px;
+	color: #258ecd;
 }
 
 /* Vertical menu that slides from the left or right */

@@ -689,6 +689,10 @@
                 return message.trim();
             }
 
+            $.linkParser = function(message) {
+                return message.replace(/\<(.*?)\|(.*?)\>/, '<a target="_blank" href="$1">$2</a>')
+            }
+
             $.openSocket = function(settings) {
                 var channel     = null;
                 var channelName = null;
@@ -743,6 +747,7 @@
 
                                 // Parse :) => :smile:
                                 message = $.emojiMapper(message);
+                                message = $.linkParser(message);
 
                                 socket.emit('sendMessage', {
                                     message: message

@@ -682,7 +682,7 @@
                 message.replace(/\&/g, '&amp;').replace(/\</g, '&lt;').replace(/\>/g, '&gt;');
 
                 for (var emo in emoticons) {
-                    message = message.replace(emo, ':' + emoticons[emo] + ':');
+                    message = message.replace(' ' + emo + ' ', ':' + emoticons[emo] + ':');
                 }
 
                 return message;

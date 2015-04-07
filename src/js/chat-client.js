@@ -729,6 +729,10 @@
 
                         if (socket === null) {
                             socket = io.connect(socketURL + '/chat');
+                        } else {
+                            // Re-connect socket
+                            socket.disconnect();
+                            socket = io.connect(socketURL + '/chat');
                         }
 
                         $('#prudio-window div.reply input[name=message]').bind('keypress', function(e) {

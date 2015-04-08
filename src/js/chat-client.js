@@ -14,52 +14,52 @@
 
     // https://github.com/iamcal/js-emoji/blob/master/emoji.js#L1201-L1248
     var emoticons = {
-        "<3":"heart",
-        ":o)":"monkey_face",
-        ":*":"kiss",
-        ":-*":"kiss",
-        "<\/3":"broken_heart",
-        "=)":"smiley",
-        "=-)":"smiley",
-        "C:":"smile",
-        "c:":"smile",
-        ":D":"smile",
-        ":-D":"smile",
-        ":>":"laughing",
-        ":->":"laughing",
-        ";)":"wink",
-        ";-)":"wink",
-        ":)":"smile",
-        "(:":"smile",
-        ":-)":"smile",
-        "8)":"sunglasses",
-        ":|":"neutral_face",
-        ":-|":"neutral_face",
-        ":\\\\":"confused",
-        ":-\\\\":"confused",
-        ":\/":"confused",
-        ":-\/":"confused",
-        ":p":"stuck_out_tongue",
-        ":-p":"stuck_out_tongue",
-        ":P":"stuck_out_tongue",
-        ":-P":"stuck_out_tongue",
-        ":b":"stuck_out_tongue",
-        ":-b":"stuck_out_tongue",
-        ";p":"stuck_out_tongue_winking_eye",
-        ";-p":"stuck_out_tongue_winking_eye",
-        ";b":"stuck_out_tongue_winking_eye",
-        ";-b":"stuck_out_tongue_winking_eye",
-        ";P":"stuck_out_tongue_winking_eye",
-        ";-P":"stuck_out_tongue_winking_eye",
-        "):":"disappointed",
-        ":(":"disappointed",
-        ":-(":"disappointed",
-        ">:(":"angry",
-        ">:-(":"angry",
-        ":'(":"cry",
-        "D:":"anguished",
-        ":o":"open_mouth",
-        ":-o":"open_mouth"
+        '<3':'heart',
+        ':o)':'monkey_face',
+        ':*':'kiss',
+        ':-*':'kiss',
+        '<\/3':'broken_heart',
+        '=)':'smiley',
+        '=-)':'smiley',
+        'C:':'smile',
+        'c:':'smile',
+        ':D':'smile',
+        ':-D':'smile',
+        ':>':'laughing',
+        ':->':'laughing',
+        ';)':'wink',
+        ';-)':'wink',
+        ':)':'smile',
+        '(:':'smile',
+        ':-)':'smile',
+        '8)':'sunglasses',
+        ':|':'neutral_face',
+        ':-|':'neutral_face',
+        ':\\':'confused',
+        ':-\\':'confused',
+        ':\/':'confused',
+        ':-\/':'confused',
+        ':p':'stuck_out_tongue',
+        ':-p':'stuck_out_tongue',
+        ':P':'stuck_out_tongue',
+        ':-P':'stuck_out_tongue',
+        ':b':'stuck_out_tongue',
+        ':-b':'stuck_out_tongue',
+        ';p':'stuck_out_tongue_winking_eye',
+        ';-p':'stuck_out_tongue_winking_eye',
+        ';b':'stuck_out_tongue_winking_eye',
+        ';-b':'stuck_out_tongue_winking_eye',
+        ';P':'stuck_out_tongue_winking_eye',
+        ';-P':'stuck_out_tongue_winking_eye',
+        '):':'disappointed',
+        ':(':'disappointed',
+        ':-(':'disappointed',
+        '>:(':'angry',
+        '>:-(':'angry',
+        ':\'(':'cry',
+        'D:':'anguished',
+        ':o':'open_mouth',
+        ':-o':'open_mouth'
     };
 
     /******** Load jQuery if not present *********/
@@ -149,7 +149,11 @@
             };
 
             $.createButton = function() {
-                var button = $('<div id="prudio-button" style="display: none;' + (settings.buttonColor !== undefined ?  ' background-color: ' + settings.buttonColor : '') + '" title="Chat with us"><i class="' + (settings.icon !== undefined ?  settings.icon : 'icon-btn-help') + '"></i></div><div id="prudio-notification"></div>');
+                var button = $('<div id="prudio-button" style="display: none;' +
+                    (settings.buttonColor !== undefined ?  ' background-color: ' + settings.buttonColor : '') +
+                    '" title="Chat with us"><i class="' + (settings.icon !== undefined ?  settings.icon : 'icon-btn-help') +
+                    '"></i></div><div id="prudio-notification"></div>');
+
                 $('body').append(button);
             };
 
@@ -180,8 +184,7 @@
                 var start = value.indexOf(' ' + name + '=');
                 if (start === -1) {
                     value = null;
-                }
-                else {
+                } else {
                     start = value.indexOf('=', start) + 1;
                     var end = value.indexOf(';', start);
                     if (end === -1) {
@@ -226,14 +229,14 @@
                 if (screen.width) {
                     var width = (screen.width) ? screen.width : '';
                     var height = (screen.height) ? screen.height : '';
-                    screenSize += '' + width + ' x ' + height;
+                    screenSize += ['', width, ' x ', height].join('');
                 }
 
                 //browser
                 var nVer = navigator.appVersion;
                 var nAgt = navigator.userAgent;
                 var browser = navigator.appName;
-                var version = '' + parseFloat(navigator.appVersion);
+                var version = ['', parseFloat(navigator.appVersion)].join('');
                 var majorVersion = parseInt(navigator.appVersion, 10);
                 var nameOffset;
                 var verOffset;
@@ -247,37 +250,31 @@
                     if ((verOffset = nAgt.indexOf('Version')) !== -1) {
                         version = nAgt.substring(verOffset + 8);
                     }
-                }
-                // MSIE
-                else if ((verOffset = nAgt.indexOf('MSIE')) !== -1) {
+                } else if ((verOffset = nAgt.indexOf('MSIE')) !== -1) {
+                    // MSIE
                     browser = 'Microsoft Internet Explorer';
                     version = nAgt.substring(verOffset + 5);
-                }
-                // Chrome
-                else if ((verOffset = nAgt.indexOf('Chrome')) !== -1) {
+                } else if ((verOffset = nAgt.indexOf('Chrome')) !== -1) {
+                    // Chrome
                     browser = 'Chrome';
                     version = nAgt.substring(verOffset + 7);
-                }
-                // Safari
-                else if ((verOffset = nAgt.indexOf('Safari')) !== -1) {
+                } else if ((verOffset = nAgt.indexOf('Safari')) !== -1) {
+                    // Safari
                     browser = 'Safari';
                     version = nAgt.substring(verOffset + 7);
                     if ((verOffset = nAgt.indexOf('Version')) !== -1) {
                         version = nAgt.substring(verOffset + 8);
                     }
-                }
-                // Firefox
-                else if ((verOffset = nAgt.indexOf('Firefox')) !== -1) {
+                } else if ((verOffset = nAgt.indexOf('Firefox')) !== -1) {
+                    // Firefox
                     browser = 'Firefox';
                     version = nAgt.substring(verOffset + 8);
-                }
-                // MSIE 11+
-                else if (nAgt.indexOf('Trident/') !== -1) {
+                } else if (nAgt.indexOf('Trident/') !== -1) {
+                    // MSIE 11+
                     browser = 'Microsoft Internet Explorer';
                     version = nAgt.substring(nAgt.indexOf('rv:') + 3);
-                }
-                // Other browsers
-                else if ((nameOffset = nAgt.lastIndexOf(' ') + 1) < (verOffset = nAgt.lastIndexOf('/'))) {
+                } else if ((nameOffset = nAgt.lastIndexOf(' ') + 1) < (verOffset = nAgt.lastIndexOf('/'))) {
+                    // Other browsers
                     browser = nAgt.substring(nameOffset, verOffset);
                     version = nAgt.substring(verOffset + 1);
                     if (browser.toLowerCase() === browser.toUpperCase()) {
@@ -289,9 +286,9 @@
                 if ((ix = version.indexOf(' ')) !== -1) { version = version.substring(0, ix); }
                 if ((ix = version.indexOf(')')) !== -1) { version = version.substring(0, ix); }
 
-                majorVersion = parseInt('' + version, 10);
+                majorVersion = parseInt(['', version].join(''), 10);
                 if (isNaN(majorVersion)) {
-                    version = '' + parseFloat(navigator.appVersion);
+                    version = ['', parseFloat(navigator.appVersion)].join('');
                     majorVersion = parseInt(navigator.appVersion, 10);
                 }
 

@@ -662,7 +662,7 @@
                             var name  = $('#prudio-name-input').val();
                             var email = $('#prudio-email-input').val();
 
-                            if (name != '' && email != '') {//!isValid(email)) {
+                            if (name !== '' && email !== '') { //!isValid(email)) {
                                 settings.name = name;
                                 settings.email = email;
                                 $('#userInfoInput').remove();

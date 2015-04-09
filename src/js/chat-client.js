@@ -686,11 +686,11 @@
                 }
 
                 return message.trim();
-            }
+            };
 
             $.linkParser = function(message) {
                 return message.replace(/\<(.*?)\|(.*?)\>/, '<a target="_blank" href="$1">$2</a>')
-            }
+            };
 
             $.openSocket = function(settings) {
                 var channel     = null;
@@ -839,7 +839,7 @@
                 })
                 .fail(function(jqXHR, textStatus, errorThrown) {
                     $('<li class="error"></li>').text('Error uploading the file! Try again!').appendTo($('#prudio-window ul'));
-                })
+                });
             };
 
             $.handleFilesDragOver = function(event) {
@@ -905,8 +905,10 @@
                     $.setCookie('prudio-channel-name', '');
                     $.setCookie('prudio-signature',    '');
 
-                    // Disconnect the socket
-                    socket.disconnect();
+                    // Disconnect the socket (we can close without the token been opened)
+                    if (socket) {
+                        socket.disconnect();
+                    }
 
                     // Remove all messages from the window
                     $('#prudio-window ul li').remove();
@@ -1008,7 +1010,7 @@
                 }
 
                 // If there is no signature then is a new request, ask for user info.
-                if (null == $.getCookie('prudio-signature') || $.getCookie('prudio-signature') === '') {
+                if (null === $.getCookie('prudio-signature') || $.getCookie('prudio-signature') === '') {
                     $.checkUserInfo(settings);
                 } else if ($.getCookie('prudio-status') !== 'minimized') {
                     // If the window was minimized then just toggle it opened.

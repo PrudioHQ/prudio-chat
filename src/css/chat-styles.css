@@ -368,6 +368,7 @@
 
 .prudio-window h3 .minimize,
 .prudio-window h3 .close {
+	opacity: 0.2;
 	font-size: 1em;
 	font-weight: lighter;
 	float: right;
@@ -384,7 +385,9 @@
 	opacity: 1;
 }
 
-.prudio-window h3 .mute:hover, .prudio-window h3 .close:hover {
+.prudio-window h3 .mute:hover,
+.prudio-window h3 .close:hover,
+.prudio-window h3 .minimize:hover {
 	color: #455A64;
 	opacity: 1;
 }

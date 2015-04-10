@@ -1,4 +1,4 @@
-# Prudio Chat [![Codacy Badge](https://www.codacy.com/project/badge/465a9af1b11d44e390e29da236c52ac6)](https://www.codacy.com/public/cossou/prudio-chat) <a href="https://assembly.com/prudio/bounties"><img src="https://asm-badger.herokuapp.com/prudio/badges/tasks.svg" height="24px" alt="Open Tasks" /></a>
+# Prudio Chat [![Codacy Badge](https://www.codacy.com/project/badge/465a9af1b11d44e390e29da236c52ac6)](https://www.codacy.com/public/cossou/prudio-chat) <a href="https://assembly.com/prudio/bounties"><img src="https://asm-badger.herokuapp.com/prudio/badges/tasks.svg" height="24px" alt="Open Tasks" /></a> <img src="https://codeship.com/projects/e86f3300-c188-0132-3cad-3eb2295b72b3/status?branch=master" alt="Codeship" />
 
 ## Connect your website to your Slack team
 
@@ -42,7 +42,7 @@ Alternatively you can check the database [file](https://github.com/asm-products/
 * NPM
 
 ```
-$ git clone https://github.com/asm-products/prudio-chat.git 
+$ git clone https://github.com/asm-products/prudio-chat.git
 $ npm install
 $ grunt build
 ```
@@ -55,7 +55,7 @@ $ foreman start
 
 Open your browser at [localhost:5000/client-html](http://localhost:5000/client-html).
 
-# Widget 
+# Widget
 
 You can check the shipped example at [client-html/index.html](https://github.com/asm-products/prudio-chat/blob/master/client-html/index.html).
 
@@ -67,11 +67,11 @@ Or this quick example `index.html`:
 		<title>Prudio Test</title>
 		<!-- your CSS and JS -->
 	</head>
-	
+
 	<body>
 		<h1>Some content</h1>
 	</body>
-	
+
 	<!-- PRUDIO START HERE -->
 	<script src="/client.local.js?appid=xxx" async></script>
 	<script>

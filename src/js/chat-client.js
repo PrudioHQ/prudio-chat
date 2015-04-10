@@ -540,18 +540,67 @@
                 $.ajax({
                     url: baseURL + '/app/status',
                     method: 'POST',
-                    async: false,
                     data: {
                         appid: appid
                     },
                     error: function(xhr, ajaxOptions, thrownError) {
                         console.log('We got a problem checking the app status!', thrownError);
                         online = false;
+
+                        if ($('#prudio-window').hasClass('prudio-window-open')) {
+                            $('#prudio-window').toggleClass('prudio-window-open');
+                        }
+
+                        if (!settings.buttonSelector) {
+                            $(prudioButtonSelector).fadeOut();
+                        }
                     },
                     success: function(response) {
                         if (response.success !== 'undefined' && response.success) {
                             socketURL = response.socketURL;
-                            online = true;
+                            online = response.success;
+
+                            if (online) {
+
+                                // Remove style="display:none" from #prudio-window
+                                $('#prudio-window').removeAttr('style');
+
+                                switch ($.getCookie('prudio-status')) {
+                                    case 'open':
+                                        $.continueProgram(settings);
+                                        $('#prudio-window').toggleClass('prudio-window-open');
+                                        break;
+
+                                    case 'minimized':
+                                        $.continueProgram(settings);
+                                        if (!settings.buttonSelector) {
+                                            $(prudioButtonSelector).fadeIn();
+                                        }
+                                        break;
+
+                                    case 'closed':
+                                        if (!settings.buttonSelector) {
+                                            $(prudioButtonSelector).fadeIn();
+                                        }
+                                        break;
+
+                                    default:
+                                        if (!settings.buttonSelector) {
+                                            $(prudioButtonSelector).fadeIn();
+                                        }
+                                        break;
+                                }
+
+                            } else {
+
+                                if ($('#prudio-window').hasClass('prudio-window-open')) {
+                                    $('#prudio-window').toggleClass('prudio-window-open');
+                                }
+
+                                if (!settings.buttonSelector) {
+                                    $(prudioButtonSelector).fadeOut();
+                                }
+                            }
                         }
                     }
                 });
@@ -961,42 +1010,6 @@
 
             $(document).ready(function() {
                 $.checkStatus(settings.appid);
-
-                if (online) {
-
-                    // Remove style="display:none" from #prudio-window
-                    $('#prudio-window').removeAttr('style');
-
-                    switch ($.getCookie('prudio-status')) {
-                        case 'open':
-                            $.continueProgram(settings);
-                            $('#prudio-window').toggleClass('prudio-window-open');
-                            break;
-
-                        case 'minimized':
-                            $.continueProgram(settings);
-                            $(prudioButtonSelector).fadeIn();
-                            break;
-
-                        case 'closed':
-                            $(prudioButtonSelector).fadeIn();
-                            break;
-
-                        default:
-                            $(prudioButtonSelector).fadeIn();
-                            break;
-                    }
-
-                } else {
-
-                    if ($('#prudio-window').hasClass('prudio-window-open')) {
-                        $('#prudio-window').toggleClass('prudio-window-open');
-                    }
-
-                    if (!settings.buttonSelector) {
-                        $(prudioButtonSelector).fadeOut();
-                    }
-                }
             });
 
             $(document).on('click', prudioButtonSelector, function() {

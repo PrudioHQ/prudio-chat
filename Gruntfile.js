@@ -89,8 +89,16 @@ module.exports = function(grunt) {
                 files: ['src/**/*.js', 'src/**/*.css'],
                 tasks: ['uglify', 'replace', 'cssmin']
             }
+        },
+        keycdn: {
+            purgeZone: {
+                options: {
+                    apiKey: process.env.KEYCDN_API_KEY || 'wrong_api',
+                    zoneId: process.env.KEYCDN_ZONE_ID || '0',
+                    method: 'get'
+                }
+            }
         }
-
     });
 
     // Load the plugin that provides the "uglify" task.
@@ -101,9 +109,11 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-foreman');
     grunt.loadNpmTasks('grunt-text-replace');
     grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-keycdn');
+    grunt.loadNpmTasks('grunt-heroku-env');
 
     // Default task(s).
-    grunt.registerTask('build', ['uglify', 'replace', 'cssmin', 'concat', 'copy']);
+    grunt.registerTask('build', ['heroku-env', 'keycdn', 'uglify', 'replace', 'cssmin', 'concat', 'copy']);
     grunt.registerTask('server', ['foreman', 'watch']);
     grunt.registerTask('default', ['build', 'server']);
 

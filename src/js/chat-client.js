@@ -63,10 +63,10 @@
     };
 
     /******** Load jQuery if not present *********/
-    if (window.jQuery === undefined || window.jQuery.fn.jquery !== '2.1.1') {
+    if (window.jQuery === undefined || window.jQuery.fn.jquery.split('.').map(function(i) { return ('0' + i).slice(-2); }).join('.') >= '02.00.00') {
         var scriptTag = document.createElement('script');
         scriptTag.setAttribute('type', 'text/javascript');
-        scriptTag.setAttribute('src', '//code.jquery.com/jquery-2.1.1.min.js');
+        scriptTag.setAttribute('src', '//cdn.jsdelivr.net/jquery/2.1.3/jquery.min.js');
         if (scriptTag.readyState) {
             scriptTag.onreadystatechange = function() { // For old versions of IE
                 if (this.readyState === 'complete' || this.readyState === 'loaded') {

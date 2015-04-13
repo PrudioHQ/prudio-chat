@@ -116,7 +116,7 @@
 
             $.findJS = function() {
                 var elems = document.getElementsByTagName('script');
-                var re = /chat\.prud\.io\/client/;
+                var re = /static\.prud\.io\/client/;
 
                 for (var i = 0; i < elems.length; i++) {
                     if (elems[i].src.match(re)) {

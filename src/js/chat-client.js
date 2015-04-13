@@ -4,7 +4,7 @@
     var jQuery;
 
     var baseURL   = 'https://chat.prud.io';
-    var assetsURL = 'https://chat.prud.io';
+    var assetsURL = 'https://static.prud.io';
     var socketURL = '';
     var socket    = null;
     var online    = false;

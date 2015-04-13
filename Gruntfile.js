@@ -109,11 +109,11 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-foreman');
     grunt.loadNpmTasks('grunt-text-replace');
     grunt.loadNpmTasks('grunt-contrib-concat');
-    grunt.loadNpmTasks('grunt-keycdn');
     grunt.loadNpmTasks('grunt-heroku-env');
+    grunt.loadNpmTasks('grunt-keycdn');
 
     // Default task(s).
-    grunt.registerTask('build', ['heroku-env', 'keycdn', 'uglify', 'replace', 'cssmin', 'concat', 'copy']);
+    grunt.registerTask('build', ['keycdn', 'uglify', 'replace', 'cssmin', 'concat', 'copy']);
     grunt.registerTask('server', ['foreman', 'watch']);
     grunt.registerTask('default', ['build', 'server']);
 

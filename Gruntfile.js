@@ -112,10 +112,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-heroku-env');
     grunt.loadNpmTasks('grunt-keycdn');
 
-    console.log('Process KEY');
-    console.log(process.env.KEYCDN_API_KEY);
-    console.log(process.env.KEYCDN_ZONE_ID);
-
     // Default task(s).
     grunt.registerTask('build', ['keycdn', 'uglify', 'replace', 'cssmin', 'concat', 'copy']);
     grunt.registerTask('server', ['foreman', 'watch']);

@@ -302,27 +302,27 @@
 }
 
 #prudio-button .prd-icon-btn-bubble {
-	font-size: 21px;
-	top: 2px;
-	left: 2px;
+	font-size: 24px;
+	top: 11px;
+	left: 7px;
 }
 
 #prudio-button .prd-icon-btn-chat {
-	font-size: 22px;
-	top: 2.5px;
-	left: 4px;
+	font-size: 24px;
+	top: 12.5px;
+	left: 10px;
 }
 
 #prudio-button .prd-icon-btn-prudio {
-	font-size: 22px;
-	top: 2px;
-	left: -4px;
+	font-size: 24px;
+	top: 11px;
+	left: 2px;
 }
 
 #prudio-button .prd-icon-btn-chats {
-	font-size: 18px;
-	top: 4px;
-	left: 2px;
+	font-size: 19px;
+	top: 10px;
+	left: 6px;
 }
 
 #prudio-button .prd-icon-btn-help {

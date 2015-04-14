@@ -228,7 +228,7 @@
 	filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
 }
 
-[class^="icon-"]:before, [class*=" icon-"]:before {
+[class^="prd-icon-"]:before, [class*=" prd-icon-"]:before {
 	font-family: "prudio";
 	font-style: normal;
 	font-weight: normal;
@@ -237,7 +237,7 @@
 	display: inline-block;
 	text-decoration: inherit;
 	width: 17px;
-	margin-right: .2em;
+	/* margin-right: .2em; */
 	text-align: center;
 	/* opacity: .8; */
 
@@ -250,7 +250,7 @@
 
 	/* Animation center compensation - margins should be symmetric */
 	/* remove if not needed */
-	margin-left: .2em;
+	/* margin-left: .2em; */
 
 	/* you can be more comfortable with increased icons size */
 	/* font-size: 120%; */
@@ -259,23 +259,23 @@
 	/* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
 }
 
-.icon-minimize:before { content: '\5f'; } /* '_' */
-.icon-cancel:before { content: '\78'; } /* 'x' */
-.icon-cancel-outline:before { content: '\e800'; } /* '' */
-.icon-volume-off:before { content: '\e801'; } /* '' */
-.icon-volume-high:before { content: '\e802'; } /* '' */
-.icon-btn-bubble:before { content: '\e803'; } /* '' */
-.icon-flash-outline:before { content: '\e804'; } /* '' */
-.icon-typing:before { content: '\e805'; } /* '' */
-.icon-comment:before { content: '\e806'; } /* '' */
-.icon-btn-chat:before { content: '\e807'; } /* '' */
-.icon-forward-outline:before { content: '\e808'; } /* '' */
-.icon-btn-prudio:before { content: '\e809'; } /* '' */
-.icon-attach:before { content: '\e80a'; } /* '' */
-.icon-attach-outline:before { content: '\e80b'; } /* '' */
-.icon-upload:before { content: '\e80c'; } /* '' */
-.icon-btn-chats:before { content: '\e80d'; } /* '' */
-.icon-btn-help:before { content: '\e80e'; } /* '' */
+.prd-icon-minimize:before { content: '\5f'; } /* '_' */
+.prd-icon-cancel:before { content: '\78'; } /* 'x' */
+.prd-icon-cancel-outline:before { content: '\e800'; } /* '' */
+.prd-icon-volume-off:before { content: '\e801'; } /* '' */
+.prd-icon-volume-high:before { content: '\e802'; } /* '' */
+.prd-icon-btn-bubble:before { content: '\e803'; } /* '' */
+.prd-icon-flash-outline:before { content: '\e804'; } /* '' */
+.prd-icon-typing:before { content: '\e805'; } /* '' */
+.prd-icon-comment:before { content: '\e806'; } /* '' */
+.prd-icon-btn-chat:before { content: '\e807'; } /* '' */
+.prd-icon-forward-outline:before { content: '\e808'; } /* '' */
+.prd-icon-btn-prudio:before { content: '\e809'; } /* '' */
+.prd-icon-attach:before { content: '\e80a'; } /* '' */
+.prd-icon-attach-outline:before { content: '\e80b'; } /* '' */
+.prd-icon-upload:before { content: '\e80c'; } /* '' */
+.prd-icon-btn-chats:before { content: '\e80d'; } /* '' */
+.prd-icon-btn-help:before { content: '\e80e'; } /* '' */
 
 #prudio-button {
     background: rgba(0, 114, 176, 0.9);
@@ -300,31 +300,31 @@
 	text-shadow: 0 0 3px #666;
 }
 
-#prudio-button .icon-btn-bubble {
+#prudio-button .prd-icon-btn-bubble {
 	font-size: 21px;
 	top: 2px;
 	left: 2px;
 }
 
-#prudio-button .icon-btn-chat {
+#prudio-button .prd-icon-btn-chat {
 	font-size: 22px;
 	top: 2.5px;
 	left: 4px;
 }
 
-#prudio-button .icon-btn-prudio {
+#prudio-button .prd-icon-btn-prudio {
 	font-size: 22px;
 	top: 2px;
 	left: -4px;
 }
 
-#prudio-button .icon-btn-chats {
+#prudio-button .prd-icon-btn-chats {
 	font-size: 18px;
 	top: 4px;
 	left: 2px;
 }
 
-#prudio-button .icon-btn-help {
+#prudio-button .prd-icon-btn-help {
 	font-size: 21.6px;
 	top: 2px;
 	left: 3.2px;
@@ -612,11 +612,11 @@
     font-weight: normal;
 }
 
-.prudio-window .file .icon-plus {
+.prudio-window .file .prd-icon-plus {
 	cursor: pointer;
 }
 
-.prudio-window .file .icon-upload {
+.prudio-window .file .prd-icon-upload {
 	cursor: pointer;
 }
 
@@ -668,7 +668,7 @@
     outline: 0;
 }
 
-.prudio-window .reply .icon-attach {
+.prudio-window .reply .prd-icon-attach {
 	position: absolute;
 	right: 20px;
 	top: 15px;
@@ -676,7 +676,7 @@
 	color: #CCCCCC;
 }
 
-.prudio-window .reply .icon-attach:hover {
+.prudio-window .reply .prd-icon-attach:hover {
 	color: #333;
 }
 

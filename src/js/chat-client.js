@@ -152,7 +152,7 @@
                 var button = $('<div id="prudio-button" class="reset-styles" style="display: none;' +
                 (settings.buttonColor !== undefined ?  ' background-color: ' + settings.buttonColor : '') +
                 (settings.borderColor !== undefined ?  ' border-color: ' + settings.borderColor : '') +
-                    '" title="Chat with us"><i class="' + (settings.icon !== undefined ?  settings.icon : 'icon-btn-help') +
+                    '" title="Chat with us"><i class="' + (settings.icon !== undefined ?  settings.icon : 'prd-icon-btn-help') +
                     '"></i></div><div id="prudio-notification"></div>');
 
                 $('body').append(button);
@@ -757,7 +757,7 @@
                     postURL     = socketURL + '/chat/continue';
                 }
 
-                $('<li class="server connecting"></li>').html('<i class="icon-flash-outline"></i> Connecting to the server...').appendTo($('#prudio-window ul'));
+                $('<li class="server connecting"></li>').html('<i class="prd-icon-flash-outline"></i> Connecting to the server...').appendTo($('#prudio-window ul'));
 
                 $.ajax({
                     url: postURL,
@@ -855,7 +855,7 @@
 
                         socket.on('typingMessage', function() {
                             $('#prudio-window ul li.typing').remove();
-                            $('<li class="typing"></li>').html('<i class="icon-typing"></i> User is typing...').appendTo($('#prudio-window ul')).show().delay(7000).slideUp();
+                            $('<li class="typing"></li>').html('<i class="prd-icon-typing"></i> User is typing...').appendTo($('#prudio-window ul')).show().delay(7000).slideUp();
                             $.scrollChat('#prudio-window div.messages');
                         });
                     }
@@ -972,7 +972,7 @@
 
             $(document).on('click', '#prudio-window .mute', function() {
                 muted = !muted;
-                $('#prudio-window span.mute i').toggleClass('icon-volume-high').toggleClass('icon-volume-off');
+                $('#prudio-window span.mute i').toggleClass('prd-icon-volume-high').toggleClass('prd-icon-volume-off');
             });
 
             $(document).on('dragover', '#prudio-window div.drop-zone, #prudio-window div.drop-overlay', function(event) {
@@ -994,7 +994,7 @@
                 $('input[name=uploads]').val('');
             });
 
-            $(document).on('click', '#prudio-window span.icon-attach', function(event) {
+            $(document).on('click', '#prudio-window span.prd-icon-attach', function(event) {
                 $('input[name=uploads]').trigger('click');
             });
 
@@ -1039,10 +1039,10 @@
                 [
                     '<nav style="display:none" class="prudio-window prudio-window-vertical prudio-window-right reset-styles" id="prudio-window">',
                     '     <h3>',
-                    '       <span class="mute" title="Mute"><i class="icon-volume-high"></i></span>',
+                    '       <span class="mute" title="Mute"><i class="prd-icon-volume-high"></i></span>',
                             (settings.title || 'Support'),
-                    '       <span class="status close" title="Close conversation" data-status="closed"><i class="icon-cancel"></i></span>',
-                    '       <span class="status minimize" title="Minimize conversation" data-status="minimized"><i class="icon-minimize"></i></span>',
+                    '       <span class="status close" title="Close conversation" data-status="closed"><i class="prd-icon-cancel"></i></span>',
+                    '       <span class="status minimize" title="Minimize conversation" data-status="minimized"><i class="prd-icon-minimize"></i></span>',
                     '     </h3>',
                     '     <div class="messages drop-zone">',
                     '         <div class="drop-overlay hidden"></div>',
@@ -1052,7 +1052,7 @@
                     '            <div class="reply">',
                     '                <input type="file" name="uploads" class="hidden" multiple>',
                     '                <input type="text" name="message" placeholder="Just write..." autofocus="autofocus">',
-                    '                <span class="icon-attach" title="Attach a file"></span>',
+                    '                <span class="prd-icon-attach" title="Attach a file"></span>',
                     '            </div>',
                     '         </div>',
                     '     </div>',

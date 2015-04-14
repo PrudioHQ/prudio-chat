@@ -111,6 +111,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-keycdn');
 
+    console.log('zoneId: ', process.env.KEYCDN_ZONE_ID);
+
     // Default task(s).
     grunt.registerTask('build', ['uglify', 'replace', 'cssmin', 'concat', 'copy']);
     grunt.registerTask('server', ['foreman', 'watch']);

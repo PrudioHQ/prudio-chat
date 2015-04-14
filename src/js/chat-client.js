@@ -149,8 +149,9 @@
             };
 
             $.createButton = function() {
-                var button = $('<div id="prudio-button" style="display: none;' +
-                    (settings.buttonColor !== undefined ?  ' background-color: ' + settings.buttonColor : '') +
+                var button = $('<div id="prudio-button" class="reset-styles" style="display: none;' +
+                (settings.buttonColor !== undefined ?  ' background-color: ' + settings.buttonColor : '') +
+                (settings.borderColor !== undefined ?  ' border-color: ' + settings.borderColor : '') +
                     '" title="Chat with us"><i class="' + (settings.icon !== undefined ?  settings.icon : 'icon-btn-help') +
                     '"></i></div><div id="prudio-notification"></div>');
 
@@ -1036,7 +1037,7 @@
             // Add prudio chat window to the DOM
             $('body').append(
                 [
-                    '<nav style="display:none" class="prudio-window prudio-window-vertical prudio-window-right" id="prudio-window">',
+                    '<nav style="display:none" class="prudio-window prudio-window-vertical prudio-window-right reset-styles" id="prudio-window">',
                     '     <h3>',
                     '       <span class="mute" title="Mute"><i class="icon-volume-high"></i></span>',
                             (settings.title || 'Support'),

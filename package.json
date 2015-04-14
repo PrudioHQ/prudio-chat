@@ -21,7 +21,6 @@
     "grunt-contrib-uglify": "latest",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-express-server": "^0.4.19",
-    "grunt-heroku-env": "0.0.2",
     "grunt-keycdn": "^0.0.2",
     "grunt-text-replace": "^0.3.12",
     "mongoose": "^3.8.23",
@@ -44,7 +43,7 @@
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "bower install && grunt heroku-env build",
+    "postinstall": "bower install && grunt build",
     "jscs": "jscs *.js utils/*.js src/js/*.js models/*.js"
   },
   "repository": {

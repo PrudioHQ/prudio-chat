@@ -739,7 +739,7 @@
 }
 
 .prudio-window .user-info label {
-	color: #333333;
+	color: #2B3E50;
     padding-left: 15px;
 }
 
@@ -759,7 +759,7 @@
     line-height: 20px;
 }
 
-.prudio-window .user-info #prudio-submit-name{
+.prudio-window .user-info #prudio-submit-name {
     display: inline-block;
     padding: 10px 12px;
     font-size: 14px;
@@ -774,8 +774,8 @@
     border: 1px solid transparent;
     border-radius: 4px;
     color: #FFF;
-    background-color: #2B3E50;
-    border-color: #2B3E50;
+    background-color: rgba(0, 114, 176, 0.9);
+    border-color: rgba(0, 114, 176, 0.9);
     width: 100%;
 }
 

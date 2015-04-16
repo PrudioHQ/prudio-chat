@@ -663,6 +663,8 @@
     width: 100%;
     font-size: 14px;
     font-weight: normal;
+	padding: 0;
+	margin: 0;
 }
 
 .prudio-window .reply input:focus {

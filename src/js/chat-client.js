@@ -739,7 +739,14 @@
             };
 
             $.linkParser = function(message) {
-                return message.replace(/\<(.*?)\|(.*?)\>/, '<a target="_blank" href="$1">$2</a>')
+
+                message = message.replace(/\<\!([^\>]*)\>/g, '&lt;$1&gt;');
+                message = message.replace(/\<\@U([0-9A-Z]*)\|?(.*?)\>/g, '$2');
+                message = message.replace(/\<\#C([0-9A-Z]*)\|?(.*?)\>/g, '$2');
+                message = message.replace(/\<([^\|\>]+)\|(\S+)?\>/g, '<a target="_blank" href="$1">$2</a>');
+                message = message.replace(/\<([^\/][^\|\>\ ]+)\>/g, '<a target="_blank" href="$1">$1</a>');
+
+                return message;
             };
 
             $.openSocket = function(settings) {

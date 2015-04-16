@@ -738,12 +738,21 @@
                 return message.trim();
             };
 
+            // Check https://api.slack.com/docs/formatting#urls_and_escaping
             $.linkParser = function(message) {
-
+                // <!everyone> becomes &lt;everyone&gt;
                 message = message.replace(/\<\!([^\>]*)\>/g, '&lt;$1&gt;');
+
+                // <@U1234|name> becomes name (or empty if there is no name)
                 message = message.replace(/\<\@U([0-9A-Z]*)\|?(.*?)\>/g, '$2');
+
+                // <#C1234|channel> becomes channel (or empty if there is no channel)
                 message = message.replace(/\<\#C([0-9A-Z]*)\|?(.*?)\>/g, '$2');
+
+                // <https://www.prud.io|Prud.io> becomes <a target="_blank" href="https://www.prud.io">Prud.io</a>
                 message = message.replace(/\<([^\|\>]+)\|(\S+)?\>/g, '<a target="_blank" href="$1">$2</a>');
+
+                // <https://www.prud.io> becomes <a target="_blank" href="https://www.prud.io">https://www.prud.io</a>
                 message = message.replace(/\<([^\/][^\|\>\ ]+)\>/g, '<a target="_blank" href="$1">$1</a>');
 
                 return message;

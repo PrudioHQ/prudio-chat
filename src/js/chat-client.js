@@ -729,7 +729,6 @@
             };
 
             $.emojiMapper = function(message) {
-                message.replace(/\&/g, '&amp;').replace(/\</g, '&lt;').replace(/\>/g, '&gt;');
                 message = ' ' + message + ' ';
 
                 for (var emo in emoticons) {
@@ -807,6 +806,7 @@
                             socket = io.connect(socketURL + '/chat');
                         }
 
+                        // Send message from the chat
                         $('#prudio-window div.reply input[name=message]').bind('keypress', function(e) {
                             // if enter key
                             if (e.keyCode === ENTER_KEY_CODE && $(this).val() !== '') {
@@ -843,11 +843,12 @@
                         // On Slack message
                         socket.on('message', function(data) {
                             if (data.sender === 'Other') {
-                                var message = $.linkParser(data.message);
+                                var message = $.emojiMapper(data.message);
+                                message = $.linkParser(message);
 
                                 $('#prudio-window ul li.typing').remove();
 
-                                $('<li class="other"></li>').html(message).appendTo($('#prudio-window ul'));
+                                $('<li class="other"></li>').html(emoji(message, assetsURL + '/emojis')).appendTo($('#prudio-window ul'));
 
                                 $.scrollChat('#prudio-window div.messages');
 

@@ -14,6 +14,7 @@
 
     // https://github.com/iamcal/js-emoji/blob/master/emoji.js#L1201-L1248
     var emoticons = {
+        ':simple_smile:':'smile',
         '<3':'heart',
         ':o)':'monkey_face',
         ':*':'kiss',
@@ -740,6 +741,7 @@
 
             // Check https://api.slack.com/docs/formatting#urls_and_escaping
             $.linkParser = function(message) {
+
                 // <!everyone> becomes &lt;everyone&gt;
                 message = message.replace(/\<\!([^\>]*)\>/g, '&lt;$1&gt;');
 

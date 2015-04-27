@@ -64,7 +64,7 @@
     };
 
     /******** Load jQuery if not present *********/
-    if (window.jQuery === undefined || window.jQuery.fn.jquery.split('.').map(function(i) { return ('0' + i).slice(-2); }).join('.') >= '02.00.00') {
+    if (window.jQuery === undefined || window.jQuery.fn.jquery.split('.').map(function(i) { return ('0' + i).slice(-2); }).join('.') <= '02.00.00') {
         var scriptTag = document.createElement('script');
         scriptTag.setAttribute('type', 'text/javascript');
         scriptTag.setAttribute('src', '//cdn.jsdelivr.net/jquery/2.1.3/jquery.min.js');

@@ -20,7 +20,7 @@ var App     = require('./models/app');
 var Servers = require('./models/server');
 
 // App settings
-app.set('port', process.env.PORT     || Number(5000));
+app.set('port', process.env.PORT     || Number(4000));
 app.set('env',  process.env.NODE_ENV || 'development');
 
 // Development only

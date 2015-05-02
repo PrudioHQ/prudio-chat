@@ -149,12 +149,13 @@
                 return settings;
             };
 
-            $.createButton = function() {
+            $.createButton = function(settings) {
                 var button = $('<div id="prudio-button" class="reset-styles" style="display: none;' +
-                (settings.buttonColor !== undefined ?  ' background-color: ' + settings.buttonColor : '') +
-                (settings.borderColor !== undefined ?  ' border-color: ' + settings.borderColor : '') +
-                    '" title="Chat with us"><i class="' + (settings.icon !== undefined ?  settings.icon : 'prd-icon-btn-help') +
-                    '"></i></div><div id="prudio-notification"></div>');
+                (settings.buttonColor !== undefined ?  ' background-color: ' + settings.buttonColor + ';' : '') +
+                (settings.borderColor !== undefined ?  ' border-color: ' + settings.borderColor + ';' : '') +
+                    '" title="Chat with us"><i class="' + (settings.icon !== undefined ?  settings.icon : 'prd-icon-btn-help') + '"' +
+                    ' style="' + (settings.iconColor !== undefined ?  'color: ' + settings.iconColor + ';' : '') + '">' +
+                    '</i></div><div id="prudio-notification"></div>');
 
                 $('body').append(button);
             };

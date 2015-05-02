@@ -5,7 +5,8 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
         uglify: {
             options: {
-                banner: '/*! JS <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+                banner: '/*! JS <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n',
+                sourceMap: false
             },
             build: {
                 src:  ['bower_components/emoji-parser/main.min.js', 'src/js/chat-client.js'],

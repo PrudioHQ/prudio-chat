@@ -637,6 +637,15 @@
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00f9f9fa', endColorstr='#f2f9f9fa',GradientType=0 );
 }
 
+.prudio-window .powered-by-prudio {
+	text-align: center;
+}
+.prudio-window .powered-by-prudio a {
+	color: #CCCCCC;
+	font-size: 0.6em;
+	text-decoration: none;
+}
+
 .prudio-window .start-conversation {
 	box-sizing: border-box;
 	margin: 5px 15px 15px 15px;

@@ -1074,6 +1074,9 @@
                     '                <input type="text" name="message" placeholder="Just write..." autofocus="autofocus">',
                     '                <span class="prd-icon-attach" title="Attach a file"></span>',
                     '            </div>',
+                    '            <div class="powered-by-prudio">',
+                    '                <p><em><a target="_blank" href="http://prud.io">Powered by <i class="prd-icon-btn-prudio"></i> Prud.io</a></em></p>',
+                    '            </div>',
                     '         </div>',
                     '     </div>',
                     '</nav>'

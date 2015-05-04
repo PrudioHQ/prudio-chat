@@ -1,30 +1,27 @@
 // New Relic Monitor
 require('./utils/newrelic');
 
-// Express and SocketIO
+// Express
 var express = require('express');
 var app     = express();
 var server  = require('http').Server(app);
-var io      = require('socket.io')(server);
+var db      = require('./utils/connection');
 
 // Body parser & CORS
 var bodyParser = require('body-parser');
 var cors       = require('cors');
-var emoji      = require('emoji-parser');
+var rollbar    = require('rollbar');
+
+// Debug
+var DEBUG = app.get('DEBUG');
 
 // Models
-var models    = require('./models');
-
-// Slack logic
-var slack = require('./utils/slack');
+var App     = require('./models/app');
+var Servers = require('./models/server');
 
 // App settings
-app.set('port', process.env.PORT     || Number(8888));
+app.set('port', process.env.PORT     || Number(4000));
 app.set('env',  process.env.NODE_ENV || 'development');
-
-// Constants
-app.set('slack_channel_prefix', 'sp-');
-app.set('slack_api_url',        'https://slack.com/api');
 
 // Development only
 if ('development' === app.get('env')) {
@@ -32,11 +29,8 @@ if ('development' === app.get('env')) {
     app.use(errorhandler());
 }
 
-models.sequelize.sync().success(function() {
+db.once('open', function(callback) {
     var listening = server.listen(app.get('port'), function() {
-
-        // keep emoji-images in sync with the official repository
-        emoji.init().update();
 
         console.log('Express server listening on port ' + listening.address().port);
 
@@ -44,11 +38,17 @@ models.sequelize.sync().success(function() {
         if (process.env.DYNO) {
             console.log('I\'m running at ' + process.env.DYNO);
         }
+
+        // Hide the console.log() function in production
+        if ('production' === app.get('env')) {
+            console = console || {};
+            console.log = function() {};
+        }
     });
 });
 
 app.enable('trust proxy');
-app.use(bodyParser.urlencoded({ extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 
 // allow access to /build directories and notification
@@ -57,23 +57,35 @@ app.use('/', express.static(__dirname + '/build'));
 if ('development' === app.get('env')) {
     // HTML client
     app.use('/client-html',  express.static(__dirname + '/client-html'));
+} else if ('production' === app.get('env')) {
+    // Redirect all GET to HTTPS
+    app.get('*', function(req, res, next) {
+        if (req.headers['x-forwarded-proto'] !== 'https') {
+            res.redirect('https://chat.prud.io' + req.url);
+        } else {
+            next();
+        }
+    });
+
+    // Send 403 to all POSTs that are not over HTTPS
+    app.post('*', function(req, res, next) {
+        if (req.headers['x-forwarded-proto'] !== 'https') {
+            res.status(403).send('403.4 - SSL required.');
+        } else {
+            next();
+        }
+    });
 }
 
 // linking
-require('./utils/socket')(app, io, slack, models, emoji); // socketIO logic
-require('./utils/client')(app, io, slack, models); // sets up endpoints
-require('./utils/bot')(slack, models); // Sets bots up
+require('./utils/client')(app, App, Servers); // sets up endpoints
 
-// Catch errors
-app.use(function(err, req, res, next) {
-    console.error(err.stack);
-    res.status(500).send('Something broke!');
-});
+// Rollbar Error Handling
+app.use(rollbar.errorHandler(process.env.ROLLBAR_ACCESS_TOKEN));
 
 // On SIGTERM app
 process.on('SIGTERM', function() {
     console.log('Got a SIGTERM');
-    slack.disconnectAll();
     server.close.bind(server);
     process.exit(0);
 });
@@ -81,7 +93,6 @@ process.on('SIGTERM', function() {
 // On SIGINT app
 process.on('SIGINT', function() {
     console.log('Got a SIGINT');
-    slack.disconnectAll();
     server.close.bind(server);
     process.exit(0);
 });

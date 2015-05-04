@@ -5,10 +5,11 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
         uglify: {
             options: {
-                banner: '/*! JS <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+                banner: '/*! JS <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n',
+                sourceMap: false
             },
             build: {
-                src:  'src/js/chat-client.js',
+                src:  ['bower_components/emoji-parser/main.min.js', 'src/js/chat-client.js'],
                 dest: 'build/<%= pkg.exportName %>.js'
             }
         },
@@ -23,18 +24,39 @@ module.exports = function(grunt) {
             }
         },
         replace: {
-            example: {
+            local: {
                 src: ['build/<%= pkg.exportName %>.js'],      // source files array (supports minimatch)
                 dest: 'build/<%= pkg.exportName %>.local.js', // destination directory or file
                 replacements: [{
-                    from: 'https://prudio-chat.herokuapp.com:443', // string replacement
-                    to: 'http://localhost:5000'                // your server url with port (80 or 443)
+                    from: 'https://chat.prud.io', // string replacement
+                    to:   'http://localhost:4000' // your server url with port (80 or 443)
                 },
                 {
-                    from: '/chat\\\.prud\\\.io\\/client/', //
-                    to: '/client\\\.local/'
+                    from: '/static\\\.prud\\\.io\\/client/', //
+                    to:   '/client\\\.local/'
+                }]
+            },
+            development: {
+                src: ['src/js/chat-client.js'], // source files array (supports minimatch)
+                dest: 'build/<%= pkg.exportName %>.development.js', // destination directory or file
+                replacements: [{
+                    from: 'chat.prud.io', // string replacement
+                    to:   'prudio-chat-dev.herokuapp.com', // string replacement
+                },
+                {
+                    from: '/static\\\.prud\\\.io\\/client/', //
+                    to:   '/prudio-chat-dev\\\.herokuapp\\\.com\\/client/', //
                 }]
             }
+        },
+        concat: {
+            options: {
+                separator: '\n//CONCAT\n',
+            },
+            dist: {
+                src: ['bower_components/emoji-parser/main.js', 'build/<%= pkg.exportName %>.development.js'],
+                dest: 'build/<%= pkg.exportName %>.development.js',
+            },
         },
         copy: {
             main: {
@@ -56,20 +78,11 @@ module.exports = function(grunt) {
                     {
                         expand: true,
                         flatten: true,
-                        src: ['src/img/emojis/*'],
+                        src: ['bower_components/emoji-parser/emoji/*'],
                         dest: 'build/emojis/',
                         filter: 'isFile'
                     }
                 ]
-            }
-        },
-        express: {
-            development: {
-                options: {
-                    script: './app.js',
-                      hostname: '0.0.0.0',
-                      port: 5000
-                }
             }
         },
         watch: {
@@ -77,8 +90,16 @@ module.exports = function(grunt) {
                 files: ['src/**/*.js', 'src/**/*.css'],
                 tasks: ['uglify', 'replace', 'cssmin']
             }
+        },
+        keycdn: {
+            purgeZone: {
+                options: {
+                    apiKey: process.env.KEYCDN_API_KEY,
+                    zoneId: process.env.KEYCDN_ZONE_ID,
+                    method: 'get'
+                }
+            }
         }
-
     });
 
     // Load the plugin that provides the "uglify" task.
@@ -86,12 +107,15 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-express-server');
+    grunt.loadNpmTasks('grunt-foreman');
     grunt.loadNpmTasks('grunt-text-replace');
+    grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-keycdn');
 
     // Default task(s).
-    grunt.registerTask('build', ['uglify', 'replace', 'cssmin', 'copy']);
-    grunt.registerTask('server', ['express:development', 'watch']);
+    grunt.registerTask('build', ['uglify', 'replace', 'cssmin', 'concat', 'copy']);
+    grunt.registerTask('server', ['foreman', 'watch']);
+    grunt.registerTask('purge-cdn', ['keycdn']);
     grunt.registerTask('default', ['build', 'server']);
 
 };

@@ -1,0 +1,21 @@
+{
+  "name": "prudio-chat",
+  "version": "0.0.5",
+  "homepage": "https://github.com/asm-products/prudio-chat",
+  "authors": [
+    "Helder Duarte <cossou@gmail.com>"
+  ],
+  "main": "app.js",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "emoji-parser": "~0.1.1"
+  }
+}

@@ -19,7 +19,216 @@
 }
 */
 
-[class^="icon-"]:before, [class*=" icon-"]:before {
+/* RESET ALL STYLES */
+/* Has seen on: http://stackoverflow.com/questions/15901030/reset-remove-css-styles-for-element-only */
+
+.reset-styles {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size-adjust: none;
+	font-size: 100%;
+	font-style: normal;
+	letter-spacing: normal;
+	font-stretch: normal;
+	font-variant: normal;
+	font-weight: normal;
+	font: normal normal 100% "Helvetica Neue", Helvetica, Arial, sans-serif;
+	text-align: left;
+	text-align-last: start;
+	text-decoration: none;
+	text-emphasis: none;
+	text-height: auto;
+	text-indent: 0;
+	text-justify: auto;
+	text-outline: none;
+	text-shadow: none;
+	text-transform: none;
+	text-wrap: normal;
+	alignment-adjust: auto;
+	alignment-baseline: baseline;
+	-webkit-animation: none 0 ease 0 1 normal;
+	-moz-animation: none 0 ease 0 1 normal;
+	-ms-animation: none 0 ease 0 1 normal;
+	animation: none 0 ease 0 1 normal;
+	-webkit-animation-play-state: running;
+	-moz-play-state: running;
+	-ms-animation-play-state: running;
+	animation-play-state: running;
+	appearance: normal;
+	azimuth: center;
+	backface-visibility: visible;
+	background: none 0 0 auto repeat scroll padding-box transparent;
+	background-color: transparent;
+	background-image: none;
+	baseline-shift: baseline;
+	binding: none;
+	bleed: 6pt;
+	bookmark-label: content();
+	bookmark-level: none;
+	bookmark-state: open;
+	bookmark-target: none;
+	border: 0 none transparent;
+	border-radius: 0;
+	bottom: auto;
+	box-align: stretch;
+	box-decoration-break: slice;
+	box-direction: normal;
+	box-flex: 0;
+	box-flex-group: 1;
+	box-lines: single;
+	box-ordinal-group: 1;
+	box-orient: inline-axis;
+	box-pack: start;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+	-webkit-box-sizing: content-box;
+	-moz-box-sizing: content-box;
+	box-sizing: content-box;
+	break-after: auto;
+	break-before: auto;
+	break-inside: auto;
+	caption-side: top;
+	clear: none;
+	clip: auto;
+	color: inherit;
+	color-profile: auto;
+	-webkit-column-count: auto;
+	-webkit-column-fill: balance;
+	-webkit-column-gap: normal;
+	-webkit-column-rule: medium medium #1f1f1f;
+	-webkit-column-span: 1;
+	-webkit-column-width: auto;
+	-webkit-columns: auto auto;
+	-moz-column-count: auto;
+	-moz-column-fill: balance;
+	-moz-column-gap: normal;
+	-moz-column-rule: medium medium #1f1f1f;
+	-moz-column-span: 1;
+	-moz-column-width: auto;
+	-moz-columns: auto auto;
+	column-count: auto;
+	column-fill: balance;
+	column-gap: normal;
+	column-rule: medium medium #1f1f1f;
+	column-span: 1;
+	column-width: auto;
+	columns: auto auto;
+	content: normal;
+	counter-increment: none;
+	counter-reset: none;
+	crop: auto;
+	cursor: auto;
+	direction: ltr;
+	display: inline;
+	dominant-baseline: auto;
+	drop-initial-after-adjust: text-after-edge;
+	drop-initial-after-align: baseline;
+	drop-initial-before-adjust: text-before-edge;
+	drop-initial-before-align: caps-height;
+	drop-initial-size: auto;
+	drop-initial-value: initial;
+	elevation: level;
+	empty-cells: show;
+	fit: fill;
+	fit-position: 0% 0%;
+	float: none;
+	float-offset: 0 0;
+	grid-columns: none;
+	grid-rows: none;
+	hanging-punctuation: none;
+	height: auto;
+	hyphenate-after: auto;
+	hyphenate-before: auto;
+	hyphenate-character: auto;
+	hyphenate-lines: no-limit;
+	hyphenate-resource: none;
+	hyphens: manual;
+	icon: auto;
+	image-orientation: auto;
+	image-rendering: auto;
+	image-resolution: normal;
+	inline-box-align: last;
+	left: auto;
+	line-height: inherit;
+	line-stacking: inline-line-height exclude-ruby consider-shifts;
+	list-style: disc outside none;
+	margin: 0;
+	marks: none;
+	marquee-direction: forward;
+	marquee-loop: 1;
+	marquee-play-count: 1;
+	marquee-speed: normal;
+	marquee-style: scroll;
+	max-height: none;
+	max-width: none;
+	min-height: 0;
+	min-width: 0;
+	move-to: normal;
+	nav-down: auto;
+	nav-index: auto;
+	nav-left: auto;
+	nav-right: auto;
+	nav-up: auto;
+	opacity: 1;
+	orphans: 2;
+	outline: invert none medium;
+	outline-offset: 0;
+	overflow: visible;
+	overflow-style: auto;
+	padding: 0;
+	page: auto;
+	page-break-after: auto;
+	page-break-before: auto;
+	page-break-inside: auto;
+	page-policy: start;
+	perspective: none;
+	perspective-origin: 50% 50%;
+	position: static;
+	presentation-level: 0;
+	punctuation-trim: none;
+	quotes: none;
+	rendering-intent: auto;
+	resize: none;
+	right: auto;
+	rotation: 0;
+	rotation-point: 50% 50%;
+	ruby-align: auto;
+	ruby-overhang: none;
+	ruby-position: before;
+	ruby-span: none;
+	size: auto;
+	string-set: none;
+	table-layout: auto;
+	top: auto;
+	-webkit-transform: none;
+	-moz-transform: none;
+	transform: none;
+	-webkit-transform-origin: 50% 50%;
+	-moz-transform-origin: 50% 50%;
+	-o-transform-origin: 50% 50%;
+	transform-origin: 50% 50% 0;
+	transform-style: flat;
+	-webkit-transition: all 0 ease 0;
+	-moz-transition: all 0 ease 0;
+	-o-transition: all 0 ease 0;
+	transition: all 0 ease 0;
+	unicode-bidi: normal;
+	vertical-align: baseline;
+	white-space: normal;
+	white-space-collapse: collapse;
+	widows: 2;
+	width: auto;
+	word-break: normal;
+	word-spacing: normal;
+	word-wrap: normal;
+	z-index: auto;
+	text-align: start;
+	/* And disable MS gradients */
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(enabled=false)";
+	filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+}
+
+[class^="prd-icon-"]:before, [class*=" prd-icon-"]:before {
 	font-family: "prudio";
 	font-style: normal;
 	font-weight: normal;
@@ -27,8 +236,8 @@
 
 	display: inline-block;
 	text-decoration: inherit;
-	width: 1em;
-	margin-right: .2em;
+	width: 17px;
+	/* margin-right: .2em; */
 	text-align: center;
 	/* opacity: .8; */
 
@@ -37,11 +246,11 @@
 	text-transform: none;
 
 	/* fix buttons height, for twitter bootstrap */
-	line-height: 1em;
+	line-height: 17px;
 
 	/* Animation center compensation - margins should be symmetric */
 	/* remove if not needed */
-	margin-left: .2em;
+	/* margin-left: .2em; */
 
 	/* you can be more comfortable with increased icons size */
 	/* font-size: 120%; */
@@ -50,18 +259,23 @@
 	/* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
 }
 
-.icon-cancel:before { content: '\e800'; } /* '' */
-.icon-volume-off:before { content: '\e801'; } /* '' */
-.icon-volume-high:before { content: '\e802'; } /* '' */
-.icon-cancel-outline:before { content: '\e803'; } /* '' */
-.icon-flash-outline:before { content: '\e804'; } /* '' */
-.icon-chat:before { content: '\e805'; } /* '' */
-.icon-comment:before { content: '\e806'; } /* '' */
-.icon-forward-outline:before { content: '\e808'; } /* '' */
-.icon-prudio:before { content: '\e809'; } /* '' */
-.icon-attach:before { content: '\e80a'; } /* '' */
-.icon-attach-outline:before { content: '\e80b'; } /* '' */
-.icon-upload:before { content: '\e80c'; } /* '' */
+.prd-icon-minimize:before { content: '\5f'; } /* '_' */
+.prd-icon-cancel:before { content: '\78'; } /* 'x' */
+.prd-icon-cancel-outline:before { content: '\e800'; } /* '' */
+.prd-icon-volume-off:before { content: '\e801'; } /* '' */
+.prd-icon-volume-high:before { content: '\e802'; } /* '' */
+.prd-icon-btn-bubble:before { content: '\e803'; } /* '' */
+.prd-icon-flash-outline:before { content: '\e804'; } /* '' */
+.prd-icon-typing:before { content: '\e805'; } /* '' */
+.prd-icon-comment:before { content: '\e806'; } /* '' */
+.prd-icon-btn-chat:before { content: '\e807'; } /* '' */
+.prd-icon-forward-outline:before { content: '\e808'; } /* '' */
+.prd-icon-btn-prudio:before { content: '\e809'; } /* '' */
+.prd-icon-attach:before { content: '\e80a'; } /* '' */
+.prd-icon-attach-outline:before { content: '\e80b'; } /* '' */
+.prd-icon-upload:before { content: '\e80c'; } /* '' */
+.prd-icon-btn-chats:before { content: '\e80d'; } /* '' */
+.prd-icon-btn-help:before { content: '\e80e'; } /* '' */
 
 #prudio-button {
     background: rgba(0, 114, 176, 0.9);
@@ -82,24 +296,56 @@
 #prudio-button i {
 	color: white;
 	display: block;
-	font-size: 1.35em;
-	margin: 6px 0;
+	position: relative;
+	text-shadow: 0 0 3px #666;
+	line-height: 0;
+}
+
+#prudio-button .prd-icon-btn-bubble {
+	font-size: 24px;
+	top: 11px;
+	left: 7px;
+}
+
+#prudio-button .prd-icon-btn-chat {
+	font-size: 24px;
+	top: 12.5px;
+	left: 10px;
+}
+
+#prudio-button .prd-icon-btn-prudio {
+	font-size: 24px;
+	top: 11px;
+	left: 2px;
+}
+
+#prudio-button .prd-icon-btn-chats {
+	font-size: 19px;
+	top: 10px;
+	left: 6px;
+}
+
+#prudio-button .prd-icon-btn-help {
+	font-size: 21.6px;
+	top: 10px;
+	left: 9.5px;
 }
 
 /* General styles for all menus */
 .prudio-window {
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 17px;
 	background: #f9f9fa;
 	border-left: 1px solid #DADEE2;
 	position: fixed;
     z-index: 999;
     opacity: 0.99;
-    line-height: 1em;
+    line-height: 17px;
 }
 
 .prudio-window h3 {
 	color: #455A64;
-	font-size: 1em;
+	font-size: 16px;
 	padding: 20px;
 	margin: 0;
 	font-weight: bold;
@@ -108,31 +354,38 @@
 	border-bottom: 1px solid #DADEE2;
 }
 
-.prudio-window h3 span.close {
+.prudio-window h3 .minimize,
+.prudio-window h3 .close {
+	opacity: 0.2;
 	font-size: 1em;
 	font-weight: lighter;
 	float: right;
 	cursor: pointer;
+    margin-left:0.25em;
 }
 
-.prudio-window h3 span.mute {
+.prudio-window h3 .mute {
 	color: #eee;
-	font-size: 1em;
+	font-size: 16px;
 	font-weight: lighter;
 	float: left;
 	cursor: pointer;
+	opacity: 1;
 }
 
-.prudio-window h3 span.mute:hover {
+.prudio-window h3 .mute:hover,
+.prudio-window h3 .close:hover,
+.prudio-window h3 .minimize:hover {
 	color: #455A64;
+	opacity: 1;
 }
 
-.prudio-window div.messages {
-    height: 100%; 
+.prudio-window .messages {
+    height: 100%;
     overflow-y: scroll;
 }
 
-.prudio-window img.emoji {
+.prudio-window .emoji {
 	max-width: 20px;
 	max-height: 20px;
 	vertical-align: middle;
@@ -142,7 +395,7 @@
 	display: none;
 }
 
-.prudio-window div.drop-zone div.drop-overlay {
+.prudio-window .drop-zone .drop-overlay {
 	position: absolute;
 	background: rgba(216,216,217,.50);
 	width: 100%;
@@ -150,11 +403,11 @@
 	z-index: 10;
 }
 
-.prudio-window div.drop-zone div.drop-overlay:before {
+.prudio-window .drop-zone .drop-overlay:before {
 	position: absolute;
 	font-family: prudio;
 	color: #455A64;
-	font-size: 5em;
+	font-size: 90px;
 	top: 40%;
 	left: 40%;
 	content: "\e80c";
@@ -175,61 +428,70 @@
 	padding: 10px 15px;
 	margin: 10px;
 	color: #fff;
-	font-size: 0.9em;
+	font-size: 14px;
     opacity: 0.9;
     clear: both;
 }
 
-.prudio-window li.server {
+.prudio-window .server {
 	padding: 4px 15px;
 	text-align: center;
 	border: none;
 	color: #CCC;
-	font-size: 0.7em;
+	font-size: 11px;
 	font-weight: normal;
 	font-style: italic;
 }
 
-.prudio-window li.typing {
+.prudio-window .typing {
 	padding: 4px 15px;
 	text-align: center;
 	border: none;
 	color: #CCC;
-	font-size: 0.7em;
+	font-size: 11px;
 	font-weight: normal;
 	font-style: italic;
 }
 
-.prudio-window li.error {
+.prudio-window .error {
 	padding: 4px 15px;
 	text-align: center;
 	border: none;
 	color: #AE3C2E;
-	font-size: 0.7em;
+	font-size: 11px;
 	font-weight: normal;
 	font-style: italic;
 }
 
-.prudio-window li.time {
+.prudio-window .announcement {
+	border: 1px solid rgba(56, 44, 44, 0.07);
+	background: rgba(110, 110, 110, 0.05);
+	padding: 12px 13px;
+	margin: 0 20px;
+	color: #BBB;
+}
+
+.prudio-window .time {
 	margin: 0;
 	padding: 4px 15px;
 	text-align: right;
 	border: none;
 	color: #DDD;
-	font-size: 0.6em;
+	font-size: 10px;
 	font-weight: normal;
 }
 
-.prudio-window li.other {
+.prudio-window .other {
 	margin-right: 35px;
 	margin-left: 10px;
 	border: 1px solid #DADEE2;
 	background: #FFFFFF;
 	color: #60686E;
 	box-shadow: 1px 1px 1px 1px rgba(10, 10, 10, 0.02);
+	min-height: 16px;
 }
 
-.prudio-window li.other:after
+.prudio-window .other:after
 {
 	content: '';
 	position: absolute;
@@ -244,7 +506,7 @@
 	top: 50%;
 }
 
-.prudio-window li.other:before
+.prudio-window .other:before
 {
 	content: '';
 	position: absolute;
@@ -259,16 +521,17 @@
 	top: 50%;
 }
 
-.prudio-window li.self {
+.prudio-window .self {
 	margin-right: 10px;
 	margin-left: 35px;
 	background-color: #0072B0;
 	border-color: #0072B0;
 	color: #fff;
 	box-shadow: 1px 1px 1px 1px rgba(10, 10, 10, 0.05);
+	min-height: 16px;
 }
 
-.prudio-window li.self:after
+.prudio-window .self:after
 {
 	content: '';
 	position: absolute;
@@ -283,7 +546,7 @@
 	top: 50%;
 }
 
-.prudio-window li.self:before
+.prudio-window .self:before
 {
 	content: '';
 	position: absolute;
@@ -299,15 +562,15 @@
 }
 
 
-.prudio-window li.self:hover, .prudio-window li.other:hover {
+.prudio-window .self:hover, .prudio-window .other:hover {
 	box-shadow: 0 0 15px 5px rgba(10, 10, 10, .05);
 }
 
-.prudio-window li.self:active, .prudio-window li.other:active {
+.prudio-window .self:active, .prudio-window .other:active {
 	box-shadow: 0 0 15px 5px rgba(10, 10, 10, .15);
 }
 
-.prudio-window div.file-container {
+.prudio-window .file-container {
 	position: absolute;
 	height: 80px;
 	bottom: 0;
@@ -319,16 +582,18 @@
 	background: -ms-linear-gradient(top,  rgba(249,249,250,0) 0%,rgba(249,249,250,0.95) 20%,rgba(249,249,250,0.95) 100%);
 	background: linear-gradient(to bottom,  rgba(249,249,250,0) 0%,rgba(249,249,250,0.95) 20%,rgba(249,249,250,0.95) 100%);
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00f9f9fa', endColorstr='#f2f9f9fa',GradientType=0 );
+	-o-transition: all .2s ease-in-out;
 	-webkit-transition: all .2s ease-in-out;
     -moz-transition: all .2s ease-in-out;
     transition: all .2s ease-in-out;
 }
 
-.prudio-window div.file-container.open {
+.prudio-window .file-container, .prudio-window .open {
 	height: 130px;
 }
 
-.prudio-window div.file {
+.prudio-window .file {
+	box-sizing: border-box;
 	border: 1px solid #DADEE2;
 	border-radius: 4px;
 	margin: 15px;
@@ -338,25 +603,28 @@
 	clear: both;
 }
 
-.prudio-window div.file input {
+.prudio-window .file input {
+	box-sizing: border-box;
 	background-color: transparent;
     border: 0 solid;
     color: #60686E;
     width: 86%;
-    font-size: 0.8em;
+    font-size: 14px;
     font-weight: normal;
 }
 
-.prudio-window div.file span.icon-plus {
+.prudio-window .file .prd-icon-plus {
 	cursor: pointer;
 }
 
-.prudio-window div.file span.icon-upload {
+.prudio-window .file .prd-icon-upload {
 	cursor: pointer;
 }
 
-.prudio-window div.reply-container {
+.prudio-window .reply-container {
 	position: absolute;
+	float: left;
+	width: 100%;
 	height: 80px;
 	bottom: 0;
 	background: rgba(249,249,250,0.95);
@@ -369,35 +637,49 @@
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00f9f9fa', endColorstr='#f2f9f9fa',GradientType=0 );
 }
 
-.prudio-window div.reply {
-	border: 1px solid #DADEE2;
-	border-radius: 4px;
-	margin: 15px;
-	padding: 6px 10px;
-	background: #FFFFFF;
-	width: 315px;
+.prudio-window .start-conversation {
+	box-sizing: border-box;
+	margin: 5px 15px 15px 15px;
+	width: auto;
 	clear: both;
 }
 
-.prudio-window div.reply input {
-	background-color: transparent;
-    border: 0 solid;
-    color: #60686E;
-    width: 90%;
-    font-size: 0.8em;
-    font-weight: normal;
+.prudio-window .reply {
+	box-sizing: border-box;
+	border: 1px solid #DADEE2;
+	border-radius: 4px;
+	margin: 5px 15px 15px 15px;
+	padding: 6px 10px;
+	background: #FFFFFF;
+	width: auto;
+	clear: both;
 }
 
-.prudio-window div.reply input:focus {
+.prudio-window .reply input {
+	background-color: transparent;
+    box-sizing: border-box;
+    border: 0;
+    color: #60686E;
+    width: 100%;
+    font-size: 14px;
+    font-weight: normal;
+	padding: 0;
+	margin: 0;
+}
+
+.prudio-window .reply input:focus {
     outline: 0;
 }
 
-.prudio-window div.reply span.icon-attach {
+.prudio-window .reply .prd-icon-attach {
+	position: absolute;
+	right: 20px;
+	top: 15px;
 	cursor: pointer;
 	color: #CCCCCC;
 }
 
-.prudio-window div.reply span.icon-attach:hover {
+.prudio-window .reply .prd-icon-attach:hover {
 	color: #333;
 }
 
@@ -411,18 +693,16 @@
 }
 
 .prudio-window-vertical a {
-	border-bottom: 1px solid #258ecd;
-	padding: 1em;
+	color: #258ecd;
 }
 
 /* Vertical menu that slides from the left or right */
 
-
 .prudio-window-right {
-	right: -370px;
+	right: -100%;
 }
 
-.prudio-window-right.prudio-window-open {
+.prudio-window-open {
 	right: 0;
 }
 
@@ -442,30 +722,74 @@
 
 .prudio-window,
 .prudio-window-push {
+	-o-transition: all 0.3s ease;
 	-webkit-transition: all 0.3s ease;
 	-moz-transition: all 0.3s ease;
 	transition: all 0.3s ease;
 }
 
-/* Example media queries */
-
-@media screen and (max-width: 55.1875em){
-
-	.prudio-window-horizontal {
-		font-size: 75%;
-		height: 110px;
-	}
-
-	.prudio-window-top {
-		top: -110px;
-	}
-
-	.prudio-window-bottom {
-		bottom: -110px;
-	}
-
+.prudio-window .user-info {
+    position: absolute;
+    top: 58px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 15;
+	background: #f9f9fa;
+    font-size: 14px;
+    font-weight: normal;
 }
 
+.prudio-window .user-info label {
+	color: #2B3E50;
+    padding-left: 15px;
+}
+
+.prudio-window .user-info input {
+	color: #333333;
+    border: 1px;
+    border-color: #DADEE2;
+	margin: auto;
+}
+
+.prudio-window .user-info #prudio-empty-msg {
+    height: 50px;
+    padding-top: 15px;
+    padding-left: 15px;
+	background: #f9f9fa;
+    vertical-align: middle;
+    line-height: 20px;
+}
+
+.prudio-window .user-info #prudio-submit-name {
+    display: inline-block;
+    padding: 10px 12px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    -moz-user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: #FFF;
+    background-color: rgba(0, 114, 176, 0.9);
+    border-color: rgba(0, 114, 176, 0.9);
+    width: 100%;
+}
+
+/* Example media queries */
+
+@media only screen and (max-width: 550px) {
+	.prudio-window {
+		width: 100%;
+	}
+}
+
+/*
 @media screen and (max-height: 26.375em){
 
 	.prudio-window-vertical {
@@ -479,10 +803,11 @@
 	}
 
 	.prudio-window-right {
-		right: -190px;
+		right: 0;
 	}
 
 	.prudio-window-push-toright {
 		left: 190px;
 	}
 }
+*/

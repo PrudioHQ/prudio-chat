@@ -32,6 +32,10 @@ module.exports = function(grunt) {
                     to:   'http://localhost:4000' // your server url with port (80 or 443)
                 },
                 {
+                    from: 'https://static.prud.io', // string replacement
+                    to:   'http://localhost:4000' // your server url with port (80 or 443)
+                },
+                {
                     from: '/static\\\.prud\\\.io\\/client/', //
                     to:   '/client\\\.local/'
                 }]

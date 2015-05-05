@@ -1075,7 +1075,7 @@
                     '<span class="prd-icon-attach" title="Attach a file"></span>',
                     '</div>',
                     '<div class="powered-by-prudio">',
-                    '<p><em><a target="_blank" href="http://www.prud.io/?utm_source=' + settings.appid + '&utm_medium=widget&utm_campaign=powered_by">Powered by <i class="prd-icon-btn-prudio"></i> Prud.io</a></em></p>',
+                    '<a target="_blank" href="http://www.prud.io/?utm_source=' + settings.appid + '&utm_medium=widget&utm_campaign=powered_by&utm_content=' + document.URL + '">Powered by <i class="prd-icon-btn-prudio"></i> Prud.io</a>',
                     '</div>',
                     '</div>',
                     '</div>',

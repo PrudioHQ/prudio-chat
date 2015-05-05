@@ -299,6 +299,7 @@
 	position: relative;
 	text-shadow: 0 0 3px #666;
 	line-height: 0;
+	-webkit-font-smoothing: auto;
 }
 
 #prudio-button .prd-icon-btn-bubble {
@@ -344,6 +345,8 @@
 }
 
 .prudio-window h3 {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	line-height: normal;
 	color: #455A64;
 	font-size: 16px;
 	padding: 20px;
@@ -354,10 +357,12 @@
 	border-bottom: 1px solid #DADEE2;
 }
 
+.prudio-window h3 i {
+	font-size: 16px;
+}
 .prudio-window h3 .minimize,
 .prudio-window h3 .close {
 	opacity: 0.2;
-	font-size: 1em;
 	font-weight: lighter;
 	float: right;
 	cursor: pointer;
@@ -366,7 +371,6 @@
 
 .prudio-window h3 .mute {
 	color: #eee;
-	font-size: 16px;
 	font-weight: lighter;
 	float: left;
 	cursor: pointer;
@@ -422,17 +426,22 @@
 }
 
 .prudio-window li {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	position: relative;
 	border: 1px solid #afdefa;
 	border-radius: 4px;
 	padding: 10px 15px;
-	margin: 10px;
+	margin: 5px;
 	color: #fff;
 	font-size: 14px;
     opacity: 0.9;
     clear: both;
+	line-height: normal;
 }
 
+.prudio-window li i {
+	font-size: 12px;
+}
 .prudio-window .server {
 	padding: 4px 15px;
 	text-align: center;
@@ -482,8 +491,9 @@
 }
 
 .prudio-window .other {
+	float: left;
 	margin-right: 35px;
-	margin-left: 10px;
+	margin-left: 15px;
 	border: 1px solid #DADEE2;
 	background: #FFFFFF;
 	color: #60686E;
@@ -522,7 +532,8 @@
 }
 
 .prudio-window .self {
-	margin-right: 10px;
+	float: right;
+	margin-right: 15px;
 	margin-left: 35px;
 	background-color: #0072B0;
 	border-color: #0072B0;
@@ -640,13 +651,23 @@
 .prudio-window .powered-by-prudio {
 	text-align: center;
 }
+
+.prudio-window .powered-by-prudio i {
+	font-size: 11px;
+	line-height: normal;
+}
+
 .prudio-window .powered-by-prudio a {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 11px;
+	font-style: italic;
+	line-height: normal;
 	color: #DDDDDD;
-	font-size: 0.6em;
 	text-decoration: none;
 }
 
 .prudio-window .start-conversation {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	box-sizing: border-box;
 	margin: 5px 15px 15px 15px;
 	width: auto;
@@ -654,6 +675,8 @@
 }
 
 .prudio-window .reply {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	line-height: normal;
 	box-sizing: border-box;
 	border: 1px solid #DADEE2;
 	border-radius: 4px;
@@ -665,11 +688,14 @@
 }
 
 .prudio-window .reply input {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	line-height: normal;
 	background-color: transparent;
     box-sizing: border-box;
     border: 0;
     color: #60686E;
     width: 100%;
+	height: 20px;
     font-size: 14px;
     font-weight: normal;
 	padding: 0;
@@ -681,6 +707,7 @@
 }
 
 .prudio-window .reply .prd-icon-attach {
+	font-size: 16px;
 	position: absolute;
 	right: 20px;
 	top: 15px;
@@ -738,6 +765,8 @@
 }
 
 .prudio-window .user-info {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	line-height: normal;
     position: absolute;
     top: 58px;
     left: 0px;
@@ -751,7 +780,8 @@
 
 .prudio-window .user-info label {
 	color: #2B3E50;
-    padding-left: 15px;
+    padding: 0 15px;
+	margin: 0;
 }
 
 .prudio-window .user-info input {
@@ -762,6 +792,8 @@
 }
 
 .prudio-window .user-info #prudio-empty-msg {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	color: #2B3E50;
     height: 50px;
     padding-top: 15px;
     padding-left: 15px;

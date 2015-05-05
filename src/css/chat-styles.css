@@ -349,7 +349,8 @@
 	line-height: normal;
 	color: #455A64;
 	font-size: 16px;
-	padding: 20px;
+	padding: 20px 20px 0 20px;
+	height: 58px;
 	margin: 0;
 	font-weight: bold;
 	text-align: center;
@@ -357,24 +358,20 @@
 	border-bottom: 1px solid #DADEE2;
 }
 
-.prudio-window h3 i {
-	font-size: 16px;
-}
 .prudio-window h3 .minimize,
-.prudio-window h3 .close {
-	opacity: 0.2;
+.prudio-window h3 .close,
+.prudio-window h3 .mute {
+	text-shadow: none;
+	font-size: 16px;
+	color: #eee;
 	font-weight: lighter;
 	float: right;
 	cursor: pointer;
-    margin-left:0.25em;
+	opacity: 1;
 }
 
 .prudio-window h3 .mute {
-	color: #eee;
-	font-weight: lighter;
 	float: left;
-	cursor: pointer;
-	opacity: 1;
 }
 
 .prudio-window h3 .mute:hover,
@@ -779,6 +776,9 @@
 }
 
 .prudio-window .user-info label {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	line-height: normal;
+	text-transform: none;
 	color: #2B3E50;
     padding: 0 15px;
 	margin: 0;
@@ -803,6 +803,7 @@
 }
 
 .prudio-window .user-info #prudio-submit-name {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     display: inline-block;
     padding: 10px 12px;
     font-size: 14px;

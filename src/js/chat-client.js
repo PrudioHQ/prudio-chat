@@ -10,7 +10,9 @@
     var online    = false;
     var muted     = false;
     var emoji     = window.emojiParser;
+
     var ENTER_KEY_CODE = 13;
+    var DEFAULT_LANG   = {};
 
     // https://github.com/iamcal/js-emoji/blob/master/emoji.js#L1201-L1248
     var emoticons = {
@@ -153,7 +155,7 @@
                 var button = $('<div id="prudio-button" class="reset-styles" style="display: none;' +
                 (settings.buttonColor !== undefined ?  ' background-color: ' + settings.buttonColor + ';' : '') +
                 (settings.borderColor !== undefined ?  ' border-color: ' + settings.borderColor + ';' : '') +
-                    '" title="Chat with us"><i class="' + (settings.icon !== undefined ?  settings.icon : 'prd-icon-btn-help') + '"' +
+                    '" title="' + DEFAULT_LANG.CHAT_WITH_US + '"><i class="' + (settings.icon !== undefined ?  settings.icon : 'prd-icon-btn-help') + '"' +
                     ' style="' + (settings.iconColor !== undefined ?  'color: ' + settings.iconColor + ';' : '') + '">' +
                     '</i></div><div id="prudio-notification"></div>');
 
@@ -522,7 +524,7 @@
                 if (!('Notification' in window) || $.titleAlert.hasFocus) {
                     return;
                 } else if (Notification.permission === 'granted') {
-                    var notification = new Notification('New message', options);
+                    var notification = new Notification(DEFAULT_LANG.NEW_MESSAGE, options);
                 } else if (Notification.permission !== 'denied') {
                     Notification.requestPermission(function(permission) {
                         if (!('permission' in Notification)) {
@@ -530,7 +532,7 @@
                         }
 
                         if (permission === 'granted') {
-                            var notification = new Notification('New message', options);
+                            var notification = new Notification(DEFAULT_LANG.NEW_MESSAGE, options);
                         }
                     });
                 }
@@ -562,8 +564,15 @@
                         if (response.success !== 'undefined' && response.success) {
                             socketURL = response.socketURL;
                             online = response.success;
+                            DEFAULT_LANG = response.language;
 
                             if (online) {
+
+                                $.createWindow();
+
+                                if (!settings.buttonSelector) {
+                                    $.createButton(settings);
+                                }
 
                                 // Remove style="display:none" from #prudio-window
                                 $('#prudio-window').removeAttr('style');
@@ -626,7 +635,7 @@
                     success: function(response) {
                         if (response.success !== 'undefined' && response.success && response.onlineUsers !== 'undefined') {
                             if (response.onlineUsers <= 0) {
-                                $('<li class="server announcement"></li>').text('Currently there are no users online to help you. Leave a message and we will get back to you ASAP! Sorry!').appendTo($('#prudio-window ul'));
+                                $('<li class="server announcement"></li>').text(DEFAULT_LANG.NO_USERS_ONLINE).appendTo($('#prudio-window ul'));
                                 $.scrollChat('#prudio-window div.messages');
                             }
                         }
@@ -663,7 +672,7 @@
                                 }
                             }
 
-                            $('<li class="server"></li>').text('Conversation history').appendTo($('#prudio-window ul'));
+                            $('<li class="server"></li>').text(DEFAULT_LANG.CONVERSATION_HISTORY).appendTo($('#prudio-window ul'));
 
                             $.scrollChat('#prudio-window div.messages');
                         }
@@ -679,14 +688,14 @@
                     $.retriveHistory(settings.appid, channel, signature);
                 }
 
-                $('#prudio-window div.reply input[name=message]').attr('type', 'text').attr('placeholder', 'Just write...').blur().focus();
+                $('#prudio-window div.reply input[name=message]').attr('type', 'text').attr('placeholder', DEFAULT_LANG.JUST_WRITE).blur().focus();
 
                 $.getScript(socketURL + '/socket.io/socket.io.js')
                     .done(function() {
                         $.openSocket(settings);
                     })
                     .fail(function() {
-                        $('<li class="error"></li>').text('We got a problem connecting to the server!').appendTo($('#prudio-window ul'));
+                        $('<li class="error"></li>').text(DEFAULT_LANG.PROBLEM_CONNECTING_TO_SERVER).appendTo($('#prudio-window ul'));
                     });
             };
 
@@ -701,9 +710,9 @@
                         var userInfoInput = $('<div id="userInfoInput" class="user-info"><div id="prudio-empty-msg"></div></div>');
                         var userInfoForm  = $('<form id="userInfoForm"></form>');
 
-                        userInfoForm.append('<label>Name:<br/></label><div class="reply"><input id="prudio-name-input" type="text"/></div>');
-                        userInfoForm.append('<label>Email:<br/></label><div class="reply"><input id="prudio-email-input" type="text"/></div>');
-                        userInfoForm.append('<div class="start-conversation"><input type="button" id="prudio-submit-name" value="Start Conversation"/></div>');
+                        userInfoForm.append('<label>' + DEFAULT_LANG.NAME + '<br/></label><div class="reply"><input id="prudio-name-input" type="text"/></div>');
+                        userInfoForm.append('<label>' + DEFAULT_LANG.EMAIL + '<br/></label><div class="reply"><input id="prudio-email-input" type="text"/></div>');
+                        userInfoForm.append('<div class="start-conversation"><input type="button" id="prudio-submit-name" value="' + DEFAULT_LANG.START_CONVERSATION + '"/></div>');
 
                         //Added it to The DOM
                         userInfoInput.append(userInfoForm);
@@ -720,7 +729,7 @@
                                 $('#userInfoInput').remove();
                                 return $.continueProgram(settings);
                             } else {
-                                $('#prudio-empty-msg').html('<span>Please fill the fields with valid name and email.</span>');
+                                $('#prudio-empty-msg').append('<span>').text(DEFAULT_LANG.ERROR_FILL_ALL_FIELDS);
                             }
                         });
                     }
@@ -775,7 +784,7 @@
                     postURL     = socketURL + '/chat/continue';
                 }
 
-                $('<li class="server connecting"></li>').html('<i class="prd-icon-flash-outline"></i> Connecting to the server...').appendTo($('#prudio-window ul'));
+                $('<li class="server connecting"></li>').html('<i class="prd-icon-flash-outline"></i> ' + DEFAULT_LANG.CONNECTING_TO_SERVER).appendTo($('#prudio-window ul'));
 
                 $.ajax({
                     url: postURL,
@@ -789,7 +798,7 @@
                         userInfo:    JSON.stringify(userInfo)
                     },
                     error: function(xhr, ajaxOptions, thrownError) {
-                        $('<li class="error"></li>').text('We got a problem connecting to the server!').appendTo($('#prudio-window ul'));
+                        $('<li class="error"></li>').text(DEFAULT_LANG.PROBLEM_CONNECTING_TO_SERVER).appendTo($('#prudio-window ul'));
                     },
                     success: function(data) {
 
@@ -853,7 +862,7 @@
 
                                 $.scrollChat('#prudio-window div.messages');
 
-                                $.titleAlert('New message', { stopOnMouseMove:true, stopOnFocus:true, requireBlur: true});
+                                $.titleAlert(DEFAULT_LANG.NEW_MESSAGE, { stopOnMouseMove:true, stopOnFocus:true, requireBlur: true });
 
                                 $.browserNotification(data.message);
 
@@ -875,7 +884,7 @@
 
                         socket.on('typingMessage', function() {
                             $('#prudio-window ul li.typing').remove();
-                            $('<li class="typing"></li>').html('<i class="prd-icon-typing"></i> User is typing...').appendTo($('#prudio-window ul')).show().delay(7000).slideUp();
+                            $('<li class="typing"></li>').html('<i class="prd-icon-typing"></i> ' + DEFAULT_LANG.USER_IS_TYPING).appendTo($('#prudio-window ul')).show().delay(7000).slideUp();
                             $.scrollChat('#prudio-window div.messages');
                         });
                     }
@@ -902,13 +911,13 @@
                 })
                 .done(function(data, textStatus, jqXHR) {
                     if (typeof data.error === 'undefined') {
-                        $('<li class="server"></li>').text('Uploading file').appendTo($('#prudio-window ul'));
+                        $('<li class="server"></li>').text(DEFAULT_LANG.UPLOADING_FILE).appendTo($('#prudio-window ul'));
                     } else {
-                        $('<li class="error"></li>').text('Error uploading the file!').appendTo($('#prudio-window ul'));
+                        $('<li class="error"></li>').text(DEFAULT_LANG.ERROR_UPLOADING_FILE).appendTo($('#prudio-window ul'));
                     }
                 })
                 .fail(function(jqXHR, textStatus, errorThrown) {
-                    $('<li class="error"></li>').text('Error uploading the file! Try again!').appendTo($('#prudio-window ul'));
+                    $('<li class="error"></li>').text(DEFAULT_LANG.ERROR_UPLOADING_FILE).appendTo($('#prudio-window ul'));
                 });
             };
 
@@ -953,13 +962,40 @@
 
             };
 
+            $.createWindow = function() {
+                // Add prudio chat window to the DOM
+                $('body').append(
+                    [
+                        '<nav style="display:none" class="prudio-window prudio-window-vertical prudio-window-right reset-styles" id="prudio-window">',
+                        '<h3>',
+                        '<span class="mute" title="' + DEFAULT_LANG.MUTE + '"><i class="prd-icon-volume-high"></i></span>',
+                         (settings.title || DEFAULT_LANG.TITLE),
+                        '<span class="status close" title="' + DEFAULT_LANG.CLOSE + '" data-status="closed"><i class="prd-icon-cancel"></i></span>',
+                        '<span class="status minimize" title="' + DEFAULT_LANG.MINIMIZE + '" data-status="minimized"><i class="prd-icon-minimize"></i></span>',
+                        '</h3>',
+                        '<div class="messages drop-zone">',
+                        '<div class="drop-overlay hidden"></div>',
+                        '<ul>',
+                        '</ul>',
+                        '<div class="reply-container">',
+                        '<div class="reply">',
+                        '<input type="file" name="uploads" class="hidden" multiple>',
+                        '<input type="text" name="message" placeholder="' + DEFAULT_LANG.JUST_WRITE + '" autofocus="autofocus">',
+                        '<span class="prd-icon-attach" title="' + DEFAULT_LANG.ATTACH_FILE + '"></span>',
+                        '</div>',
+                        '<div class="powered-by-prudio">',
+                        '<a target="_blank" href="http://www.prud.io/?utm_source=' + settings.appid + '&utm_medium=widget&utm_campaign=powered_by&utm_content=' + document.URL + '">' + DEFAULT_LANG.POWERED_BY + '</a>',
+                        '</div>',
+                        '</div>',
+                        '</div>',
+                        '</nav>'
+                    ].join('')
+                );
+            };
+
             $.loadCSS(assetsURL + '/client.css');
 
             var settings  = $.getSettings();
-
-            if (!settings.buttonSelector) {
-                $.createButton(settings);
-            }
 
             var prudioButtonSelector = settings.buttonSelector || '#prudio-button';
 
@@ -1019,13 +1055,13 @@
             });
 
             $(window).on('offline', function() {
-                $('<li class="error offline"></li>').text('Looks like internet is gone!').appendTo($('#prudio-window ul'));
+                $('<li class="error offline"></li>').text(DEFAULT_LANG.USER_OFFLINE).appendTo($('#prudio-window ul'));
                 $('#prudio-window div.reply input[name=message]').prop('disabled', true);
             });
 
             $(window).on('online', function() {
                 $('#prudio-window ul li.offline').remove();
-                $('<li class="server"></li>').text('We are back!').appendTo($('#prudio-window ul')).show().delay(5000).slideUp();
+                $('<li class="server"></li>').text(DEFAULT_LANG.USER_ONLINE).appendTo($('#prudio-window ul')).show().delay(5000).slideUp();
                 $('#prudio-window div.reply input[name=message]').prop('disabled', false);
             });
 
@@ -1053,35 +1089,6 @@
 
                 $('#prudio-window').toggleClass('prudio-window-open');
             });
-
-            // Add prudio chat window to the DOM
-            $('body').append(
-                [
-                    '<nav style="display:none" class="prudio-window prudio-window-vertical prudio-window-right reset-styles" id="prudio-window">',
-                    '<h3>',
-                    '<span class="mute" title="Mute"><i class="prd-icon-volume-high"></i></span>',
-                     (settings.title || 'Support'),
-                    '<span class="status close" title="Close conversation" data-status="closed"><i class="prd-icon-cancel"></i></span>',
-                    '<span class="status minimize" title="Minimize conversation" data-status="minimized"><i class="prd-icon-minimize"></i></span>',
-                    '</h3>',
-                    '<div class="messages drop-zone">',
-                    '<div class="drop-overlay hidden"></div>',
-                    '<ul>',
-                    '</ul>',
-                    '<div class="reply-container">',
-                    '<div class="reply">',
-                    '<input type="file" name="uploads" class="hidden" multiple>',
-                    '<input type="text" name="message" placeholder="Just write..." autofocus="autofocus">',
-                    '<span class="prd-icon-attach" title="Attach a file"></span>',
-                    '</div>',
-                    '<div class="powered-by-prudio">',
-                    '<a target="_blank" href="http://www.prud.io/?utm_source=' + settings.appid + '&utm_medium=widget&utm_campaign=powered_by&utm_content=' + document.URL + '">Powered by <i class="prd-icon-btn-prudio"></i> Prud.io</a>',
-                    '</div>',
-                    '</div>',
-                    '</div>',
-                    '</nav>'
-                ].join('')
-            );
         });
     }
 })(); // We call our anonymous function immediately

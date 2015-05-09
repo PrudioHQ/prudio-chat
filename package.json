@@ -23,6 +23,7 @@
     "grunt-express-server": "^0.4.19",
     "grunt-keycdn": "^0.0.3",
     "grunt-text-replace": "^0.3.12",
+    "locale": "0.0.20",
     "mongoose": "^3.8.23",
     "newrelic": "^1.12.1",
     "request": "latest",

@@ -1,6 +1,6 @@
 var request    = require('request'); // github.com/mikeal/request
 
-module.exports = function(app, App, Servers) {
+module.exports = function(app, App, Servers, locale, localization) {
 
     var application = null;
 
@@ -45,13 +45,15 @@ module.exports = function(app, App, Servers) {
     */
     app.post('/app/status', isAuthorized, function(req, res, next) {
         var appid = req.param('appid');
+        var lang = req.locale;
+
         App.findOne({ appId: appid, active: true }, function(err, application) {
             if (err) {
                 console.error(err);
                 return res.status(500).json({ success: false, message: 'Error' });
             }
 
-            return res.status(200).json({ success: true, active: true, socketURL: application.socketURL });
+            return res.status(200).json({ success: true, active: true, socketURL: application.socketURL, language: localization[lang] });
         });
     });
 

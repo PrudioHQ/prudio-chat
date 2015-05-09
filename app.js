@@ -12,6 +12,11 @@ var bodyParser = require('body-parser');
 var cors       = require('cors');
 var rollbar    = require('rollbar');
 
+// Localization
+var localization = require('./utils/localization').localization;
+var locale       = require('locale');
+var supported    = Object.keys(localization);
+
 // Debug
 var DEBUG = app.get('DEBUG');
 
@@ -50,6 +55,7 @@ db.once('open', function(callback) {
 app.enable('trust proxy');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
+app.use(locale(supported));
 
 // allow access to /build directories and notification
 app.use('/', express.static(__dirname + '/build'));
@@ -78,7 +84,7 @@ if ('development' === app.get('env')) {
 }
 
 // linking
-require('./utils/client')(app, App, Servers); // sets up endpoints
+require('./utils/client')(app, App, Servers, locale, localization); // sets up endpoints
 
 // Rollbar Error Handling
 app.use(rollbar.errorHandler(process.env.ROLLBAR_ACCESS_TOKEN));

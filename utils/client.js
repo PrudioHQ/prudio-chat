@@ -45,7 +45,7 @@ module.exports = function(app, App, Servers, locale, localization) {
     */
     app.post('/app/status', isAuthorized, function(req, res, next) {
         var appid = req.param('appid');
-        var lang = req.locale;
+        var lang  = req.locale;
 
         App.findOne({ appId: appid, active: true }, function(err, application) {
             if (err) {
@@ -53,7 +53,7 @@ module.exports = function(app, App, Servers, locale, localization) {
                 return res.status(500).json({ success: false, message: 'Error' });
             }
 
-            return res.status(200).json({ success: true, active: true, socketURL: application.socketURL, language: localization[lang] });
+            return res.status(200).json({ success: true, active: true, socketURL: application.socketURL, language: lang, localization: localization[lang] });
         });
     });
 

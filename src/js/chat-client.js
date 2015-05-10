@@ -564,7 +564,12 @@
                         if (response.success !== 'undefined' && response.success) {
                             socketURL = response.socketURL;
                             online = response.success;
-                            DEFAULT_LANG = response.language;
+
+                            DEFAULT_LANG = response.localization;
+
+                            if (settings.language !== 'undefined' && settings.localization.hasOwnProperty(settings.language)) {
+                                DEFAULT_LANG = settings.localization[settings.language];
+                            }
 
                             if (online) {
 

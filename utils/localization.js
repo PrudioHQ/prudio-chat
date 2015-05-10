@@ -48,5 +48,30 @@ exports.localization = {
         MINIMIZE: 'Minimizar conversa',
         TITLE: 'Suporte',
         POWERED_BY: 'Desenvolvido por <i class="prd-icon-btn-prudio"></i> Prud.io'
+    },
+    de: {
+        CHAT_WITH_US: 'Chatten Sie mit uns',
+        NAME: 'Name',
+        EMAIL: 'E-Mail',
+        START_CONVERSATION: 'Starten Sie einen Chat',
+        NEW_MESSAGE: 'Neue Nachricht',
+        NO_USERS_ONLINE: 'Zur Zeit ist niemand online um Ihnen zu helfen. Hinterlassen Sie eine Nachricht und wir melden uns sobald wie möglich bei Ihnen.',
+        CONVERSATION_HISTORY: 'Nachrichtenverlauf',
+        JUST_WRITE: 'Hier schreiben...',
+        PROBLEM_CONNECTING_TO_SERVER: 'Die Verbindung zum Server ist fehlgeschlagen.',
+        ERROR_FILL_ALL_FIELDS: 'Bitte füllen Sie die Felder mit einem Namen und einer gültigen E-Mail Adresse aus.',
+        CONNECTING_TO_SERVER: 'Verbinde zum Server...',
+        SERVER_OFFLINE: 'Server ist offline.',
+        USER_IS_TYPING: 'Benutzer schreibt...',
+        UPLOADING_FILE: 'Datei wird hochgeladen',
+        ERROR_UPLOADING_FILE: 'Das Hochladen ist fehlgeschlagen',
+        ATTACH_FILE: 'Datei hochladen',
+        USER_OFFLINE: 'Keine Internetverbindung',
+        USER_ONLINE: 'Internetverbindung wieder vorhanden',
+        MUTE: 'Chat stummschalten',
+        CLOSE: 'Chat schliessen',
+        MINIMIZE: 'Chat minimieren',
+        TITLE: 'Support',
+        POWERED_BY: '<i class="prd-icon-btn-prudio"></i> Prud.io'
     }
 };

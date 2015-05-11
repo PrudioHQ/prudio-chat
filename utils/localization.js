@@ -124,4 +124,29 @@ exports.localization = {
         TITLE: 'Soutien',
         POWERED_BY: 'Propulsé par <i class="prd-icon-btn-prudio"></i> Prud.io'
     },
+    tr: {
+        CHAT_WITH_US: 'Bizimle Konuşun',
+        NAME: 'Ad',
+        EMAIL: 'E-posta',
+        START_CONVERSATION: 'Görüşme başlat',
+        NEW_MESSAGE: 'Yeni mesaj',
+        NO_USERS_ONLINE: 'Şu anda size yardımcı olabilecek çevrimiçi kullanıcı mevcut değil. Lütfen bir mesaj bırakın, size en kısa zamanda dönüş yapacağız. Üzgünüz.',
+        CONVERSATION_HISTORY: 'Görüşme Tarihçesi',
+        JUST_WRITE: 'Buraya yazın...',
+        PROBLEM_CONNECTING_TO_SERVER: 'Sunucuya bağlanırken bir sorun oluştu!',
+        ERROR_FILL_ALL_FIELDS: 'Lütfen tüm alanları geçerli bir isim ve e-posta ile doldurun.',
+        CONNECTING_TO_SERVER: 'Sunucuya bağlanılıyor...',
+        SERVER_OFFLINE: 'Sunucu şu anda çevrimdışı!',
+        USER_IS_TYPING: 'Kullanıcı yazıyor...',
+        UPLOADING_FILE: 'Dosya sunucuya yükleniyor',
+        ERROR_UPLOADING_FILE: 'Sunucuya dosya yüklenirken hata oluştu!',
+        ATTACH_FILE: 'Dosya Ekle',
+        USER_OFFLINE: 'Görünüşe göre internet gitti!',
+        USER_ONLINE: 'Geri geldik!',
+        MUTE: 'Görüşmeyi sessize al',
+        CLOSE: 'Görüşmeyi kapat',
+        MINIMIZE: 'Görüşmeyi aşağıya indir',
+        TITLE: 'Destek',
+        POWERED_BY: '<i class="prd-icon-btn-prudio"></i> Prud.io ile çalışmaktadır.'
+    }
 };

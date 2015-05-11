@@ -99,6 +99,31 @@ exports.localization = {
         TITLE: 'Soporte',
         POWERED_BY: 'Desarrollado por <i class="prd-icon-btn-prudio"></i> Prud.io'
     },
+    fr: {
+        CHAT_WITH_US: 'Chattez avec nous',
+        NAME: 'Nom',
+        EMAIL: 'E-mail',
+        START_CONVERSATION: 'Démarrez une conversation',
+        NEW_MESSAGE: 'Nouveau message',
+        NO_USERS_ONLINE: 'Désolé! Actuellement aucun membre en ligne pour vous aider. laissez un message et nous reviendrons vers vous dès que possible!',
+        CONVERSATION_HISTORY: 'L\'historique des conversations',
+        JUST_WRITE: 'Écrivez ici ...',
+        PROBLEM_CONNECTING_TO_SERVER: 'Problème de connexion au serveur!',
+        ERROR_FILL_ALL_FIELDS: 'S\'il vous plaît remplir les champs avec un nom et une adresse email valide.',
+        CONNECTING_TO_SERVER: 'Connexion au serveur...',
+        SERVER_OFFLINE: 'Server est hors ligne!',
+        USER_IS_TYPING: 'l\'utilisateur est en train de taper...',
+        UPLOADING_FILE: 'Envoi de fichier',
+        ERROR_UPLOADING_FILE: 'Une erreur est survenue durant l\'envoi du fichier!',
+        ATTACH_FILE: 'Joindre un fichier',
+        USER_OFFLINE: 'Pas de connexion internet',
+        USER_ONLINE: 'Nous sommes de retour!',
+        MUTE: 'Mettre en sourdine',
+        CLOSE: 'Fermer la conversation',
+        MINIMIZE: 'Réduire la conversation',
+        TITLE: 'Soutien',
+        POWERED_BY: 'Propulsé par <i class="prd-icon-btn-prudio"></i> Prud.io'
+    },
     tr: {
         CHAT_WITH_US: 'Bizimle Konuşun',
         NAME: 'Ad',
@@ -125,4 +150,3 @@ exports.localization = {
         POWERED_BY: '<i class="prd-icon-btn-prudio"></i> Prud.io ile çalışmaktadır.'
     }
 };
-

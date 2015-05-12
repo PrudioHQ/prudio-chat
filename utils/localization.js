@@ -173,5 +173,5 @@ exports.localization = {
         MINIMIZE: 'Minimizează conversația',
         TITLE: 'Asistență',
         POWERED_BY: 'Dezvoltat de <i class="prd-icon-btn-prudio"></i> Prud.io'
-    }	
+    }
 };

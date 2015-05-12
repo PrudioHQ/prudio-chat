@@ -148,5 +148,30 @@ exports.localization = {
         MINIMIZE: 'Görüşmeyi aşağıya indir',
         TITLE: 'Destek',
         POWERED_BY: '<i class="prd-icon-btn-prudio"></i> Prud.io ile çalışmaktadır.'
-    }
+    },
+    ro: {
+        CHAT_WITH_US: 'Discută cu noi',
+        NAME: 'Nume',
+        EMAIL: 'E-mail',
+        START_CONVERSATION: 'Pornește conversație',
+        NEW_MESSAGE: 'Mesaj Nou',
+        NO_USERS_ONLINE: 'Momentan nu este online nici un utilizator care să te ajute. Lasă un mesaj și te vom contacta în curând!',
+        CONVERSATION_HISTORY: 'Istoric Conversații',
+        JUST_WRITE: 'Scrie aici...',
+        PROBLEM_CONNECTING_TO_SERVER: 'A apărut o eroare de conectare la server!',
+        ERROR_FILL_ALL_FIELDS: 'Completati câmpurile cu name și email valide.',
+        CONNECTING_TO_SERVER: 'Se conectează la server...',
+        SERVER_OFFLINE: 'Serverul nu este disponibil!',
+        USER_IS_TYPING: 'Utilizatorul scrie...',
+        UPLOADING_FILE: 'Încărcare fișier',
+        ERROR_UPLOADING_FILE: 'Eroare de încărcare a fișierului!',
+        ATTACH_FILE: ' Atașază un fișier',
+        USER_OFFLINE: 'Conexiune la Internet indisponibilă!',
+        USER_ONLINE: 'Ne-am întors!',
+        MUTE: 'Fără Sonor',
+        CLOSE: 'Închide conversația',
+        MINIMIZE: 'Minimizează conversația',
+        TITLE: 'Asistență',
+        POWERED_BY: 'Dezvoltat de <i class="prd-icon-btn-prudio"></i> Prud.io'
+    }	
 };

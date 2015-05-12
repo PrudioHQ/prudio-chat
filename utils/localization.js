@@ -30,7 +30,7 @@ exports.localization = {
         EMAIL: 'E-mail',
         START_CONVERSATION: 'Iniciar conversa',
         NEW_MESSAGE: 'Nova mensagem',
-        NO_USERS_ONLINE: 'Desculpe! Neste momento não existem utilizadores online para ajuda-lo. Deixe uma mensagem e tentaremos entrar em contacto o mais rápido possivel!',
+        NO_USERS_ONLINE: 'Desculpe! Neste momento não existem utilizadores online para ajudá-lo. Deixe uma mensagem e tentaremos entrar em contacto o mais rápido possível!',
         CONVERSATION_HISTORY: 'Histórico da conversa',
         JUST_WRITE: 'Escreva aqui...',
         PROBLEM_CONNECTING_TO_SERVER: 'Ocorreu um problema ao efectuar a ligação ao servidor!',

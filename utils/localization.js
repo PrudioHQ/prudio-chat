@@ -1,5 +1,5 @@
 exports.localization = {
-    en: {
+    'en': {
         CHAT_WITH_US: 'Chat with us',
         NAME: 'Name',
         EMAIL: 'E-mail',
@@ -24,13 +24,13 @@ exports.localization = {
         TITLE: 'Support',
         POWERED_BY: 'Powered by <i class="prd-icon-btn-prudio"></i> Prud.io'
     },
-    pt: {
+    'pt': {
         CHAT_WITH_US: 'Fale connosco',
         NAME: 'Nome',
         EMAIL: 'E-mail',
         START_CONVERSATION: 'Iniciar conversa',
         NEW_MESSAGE: 'Nova mensagem',
-        NO_USERS_ONLINE: 'Desculpe! Neste momento não existem utilizadores online para ajuda-lo. Deixe uma mensagem e tentaremos entrar em contacto o mais rápido possivel!',
+        NO_USERS_ONLINE: 'Desculpe! Neste momento não existem utilizadores online para ajudá-lo. Deixe uma mensagem e tentaremos entrar em contacto o mais rápido possível!',
         CONVERSATION_HISTORY: 'Histórico da conversa',
         JUST_WRITE: 'Escreva aqui...',
         PROBLEM_CONNECTING_TO_SERVER: 'Ocorreu um problema ao efectuar a ligação ao servidor!',
@@ -49,7 +49,7 @@ exports.localization = {
         TITLE: 'Suporte',
         POWERED_BY: 'Desenvolvido por <i class="prd-icon-btn-prudio"></i> Prud.io'
     },
-    de: {
+    'de': {
         CHAT_WITH_US: 'Chatten Sie mit uns',
         NAME: 'Name',
         EMAIL: 'E-Mail',
@@ -74,7 +74,7 @@ exports.localization = {
         TITLE: 'Support',
         POWERED_BY: '<i class="prd-icon-btn-prudio"></i> Prud.io'
     },
-    es: {
+    'es': {
         CHAT_WITH_US: 'Habla con nosotros',
         NAME: 'Nombre',
         EMAIL: 'E-mail',
@@ -99,7 +99,7 @@ exports.localization = {
         TITLE: 'Soporte',
         POWERED_BY: 'Desarrollado por <i class="prd-icon-btn-prudio"></i> Prud.io'
     },
-    fr: {
+    'fr': {
         CHAT_WITH_US: 'Chattez avec nous',
         NAME: 'Nom',
         EMAIL: 'E-mail',
@@ -124,7 +124,7 @@ exports.localization = {
         TITLE: 'Soutien',
         POWERED_BY: 'Propulsé par <i class="prd-icon-btn-prudio"></i> Prud.io'
     },
-    tr: {
+    'tr': {
         CHAT_WITH_US: 'Bizimle Konuşun',
         NAME: 'Ad',
         EMAIL: 'E-posta',
@@ -149,7 +149,7 @@ exports.localization = {
         TITLE: 'Destek',
         POWERED_BY: '<i class="prd-icon-btn-prudio"></i> Prud.io ile çalışmaktadır.'
     },
-    ro: {
+    'ro': {
         CHAT_WITH_US: 'Discută cu noi',
         NAME: 'Nume',
         EMAIL: 'E-mail',
@@ -173,5 +173,30 @@ exports.localization = {
         MINIMIZE: 'Minimizează conversația',
         TITLE: 'Asistență',
         POWERED_BY: 'Dezvoltat de <i class="prd-icon-btn-prudio"></i> Prud.io'
+    },
+    'pt_BR': {
+        CHAT_WITH_US: 'Fale conosco',
+        NAME: 'Nome',
+        EMAIL: 'E-mail',
+        START_CONVERSATION: 'Iniciar conversa',
+        NEW_MESSAGE: 'Nova mensagem',
+        NO_USERS_ONLINE: 'Desculpe! Neste momento não existem usuários online para ajudá-lo. Deixe uma mensagem e tentaremos entrar em contato o mais rápido possível!',
+        CONVERSATION_HISTORY: 'Histórico da conversa',
+        JUST_WRITE: 'Escreva aqui...',
+        PROBLEM_CONNECTING_TO_SERVER: 'Ocorreu um problema ao efetuar a conexão com o servidor!',
+        ERROR_FILL_ALL_FIELDS: 'Por favor preencha os campos com nome e e-mail válidos.',
+        CONNECTING_TO_SERVER: 'Conectando ao servidor...',
+        SERVER_OFFLINE: 'Servidor está fora do ar!',
+        USER_IS_TYPING: 'O usuário está escrevendo...',
+        UPLOADING_FILE: 'Anexando o arquivo',
+        ERROR_UPLOADING_FILE: 'Erro ao anexar o arquivo!',
+        ATTACH_FILE: 'Anexar um arquivo',
+        USER_OFFLINE: 'Parece que a internet caiu!',
+        USER_ONLINE: 'Estamos de volta!',
+        MUTE: 'Silenciar conversa',
+        CLOSE: 'Fechar conversa',
+        MINIMIZE: 'Minimizar conversa',
+        TITLE: 'Suporte',
+        POWERED_BY: 'Desenvolvido por <i class="prd-icon-btn-prudio"></i> Prud.io'
     }
 };

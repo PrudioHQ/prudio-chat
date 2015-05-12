@@ -567,7 +567,7 @@
 
                             DEFAULT_LANG = response.localization;
 
-                            if (settings.language !== 'undefined' && settings.localization.hasOwnProperty(settings.language)) {
+                            if (settings.language !== 'undefined' && settings.localization && settings.localization.hasOwnProperty(settings.language)) {
                                 $.extend(DEFAULT_LANG, settings.localization[settings.language]);
                             }
 

@@ -24,7 +24,7 @@ exports.localization = {
         TITLE: 'Support',
         POWERED_BY: 'Powered by <i class="prd-icon-btn-prudio"></i> Prud.io'
     },
-    'pt': {
+    'pt_PT': {
         CHAT_WITH_US: 'Fale connosco',
         NAME: 'Nome',
         EMAIL: 'E-mail',

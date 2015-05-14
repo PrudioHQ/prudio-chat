@@ -198,5 +198,30 @@ exports.localization = {
         MINIMIZE: 'Minimizar conversa',
         TITLE: 'Suporte',
         POWERED_BY: 'Desenvolvido por <i class="prd-icon-btn-prudio"></i> Prud.io'
+    },
+    'nl': {
+        CHAT_WITH_US: 'Chat met ons',
+        NAME: 'Naam',
+        EMAIL: 'E-mail',
+        START_CONVERSATION: 'Begin een gesprek',
+        NEW_MESSAGE: 'Nieuw bericht',
+        NO_USERS_ONLINE: 'Momenteel zijn er geen gebruikers online om u te helpen. Laat een bericht achter en wij zullen zo snel mogelijk contact met u op! Sorry!',
+        CONVERSATION_HISTORY: 'Gespreksgeschiedenis',
+        JUST_WRITE: 'Alleen schrijven...',
+        PROBLEM_CONNECTING_TO_SERVER: 'We hebben een probleem met de verbinding met de server!',
+        ERROR_FILL_ALL_FIELDS: 'Vul de velden met geldige naam en e-mail.',
+        CONNECTING_TO_SERVER: 'Verbinden met de server...',
+        SERVER_OFFLINE: 'Server is nu offline!',
+        USER_IS_TYPING: 'Gebruiker is het typen ...',
+        UPLOADING_FILE: 'Uploaden bestand',
+        ERROR_UPLOADING_FILE: 'Fout uploaden van het bestand!',
+        ATTACH_FILE: 'Bevestig een bestand',
+        USER_OFFLINE: 'Het lijkt erop dat internet is weg!',
+        USER_ONLINE: 'We zijn terug!',
+        MUTE: 'Mute gesprek',
+        CLOSE: 'Sluiten gesprek',
+        MINIMIZE: 'Minimaliseren gesprek',
+        TITLE: 'Ondersteuning',
+        POWERED_BY: 'Aangedreven door <i class="prd-icon-btn-prudio"></i> Prud.io'
     }
 };

@@ -223,5 +223,30 @@ exports.localization = {
         MINIMIZE: 'Minimaliseren gesprek',
         TITLE: 'Ondersteuning',
         POWERED_BY: 'Aangedreven door <i class="prd-icon-btn-prudio"></i> Prud.io'
+    },
+    'it': {
+        CHAT_WITH_US: 'Chatta con noi',
+        NAME: 'Nome',
+        EMAIL: 'E-mail',
+        START_CONVERSATION: 'Inizia la conversazione',
+        NEW_MESSAGE: 'Nuovo messaggio',
+        NO_USERS_ONLINE: 'Al momento non ci son utenti in linea per poterti aiutare. Lascia un messaggio e saremo da te il prima possibile! Ci scusiamo per il disagio!',
+        CONVERSATION_HISTORY: 'Cronologia conversazione',
+        JUST_WRITE: 'Scrivi...',
+        PROBLEM_CONNECTING_TO_SERVER: 'C\'è stato un problema durante la connessione al server!',
+        ERROR_FILL_ALL_FIELDS: 'Completa i campi usando nome ed email validi.',
+        CONNECTING_TO_SERVER: 'Connessione al server...',
+        SERVER_OFFLINE: 'Il server non è disponibile!',
+        USER_IS_TYPING: 'L\'utente sta scrivendo...',
+        UPLOADING_FILE: 'Caricamento file',
+        ERROR_UPLOADING_FILE: 'Errore durante il caricamento del file!',
+        ATTACH_FILE: 'Allega un file',
+        USER_OFFLINE: 'Sembra che iternet sia sparito!',
+        USER_ONLINE: 'Siamo tornati!',
+        MUTE: 'Muta la conversazione',
+        CLOSE: 'Chiudi la conversazione',
+        MINIMIZE: 'Minimizza la conversazione',
+        TITLE: 'Supporto',
+        POWERED_BY: 'Creato da <i class="prd-icon-btn-prudio"></i> Prud.io'
     }
 };

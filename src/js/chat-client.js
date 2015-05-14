@@ -724,7 +724,7 @@
                         $('.messages').append(userInfoInput);
 
                         // Check if all if is there
-                        $('#userInfoInput').on('submit', function() {
+                        userInfoForm.on('submit', function() {
                             var name  = $('#prudio-name-input').val();
                             var email = $('#prudio-email-input').val();
 

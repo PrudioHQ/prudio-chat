@@ -717,14 +717,14 @@
 
                         userInfoForm.append('<label>' + DEFAULT_LANG.NAME + '<br/></label><div class="reply"><input id="prudio-name-input" type="text"/></div>');
                         userInfoForm.append('<label>' + DEFAULT_LANG.EMAIL + '<br/></label><div class="reply"><input id="prudio-email-input" type="text"/></div>');
-                        userInfoForm.append('<div class="start-conversation"><input type="button" id="prudio-submit-name" value="' + DEFAULT_LANG.START_CONVERSATION + '"/></div>');
+                        userInfoForm.append('<div class="start-conversation"><input type="submit" id="prudio-submit-name" value="' + DEFAULT_LANG.START_CONVERSATION + '"/></div>');
 
                         //Added it to The DOM
                         userInfoInput.append(userInfoForm);
                         $('.messages').append(userInfoInput);
 
                         // Check if all if is there
-                        $('#prudio-submit-name').on('click', function() {
+                        userInfoForm.on('submit', function() {
                             var name  = $('#prudio-name-input').val();
                             var email = $('#prudio-email-input').val();
 
@@ -732,10 +732,11 @@
                                 settings.name = name;
                                 settings.email = email;
                                 $('#userInfoInput').remove();
-                                return $.continueProgram(settings);
+                                $.continueProgram(settings);
                             } else {
                                 $('#prudio-empty-msg').append('<span>').text(DEFAULT_LANG.ERROR_FILL_ALL_FIELDS);
                             }
+                            return false;
                         });
                     }
                 } else {

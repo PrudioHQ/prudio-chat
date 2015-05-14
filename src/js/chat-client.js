@@ -736,6 +736,7 @@
                             } else {
                                 $('#prudio-empty-msg').append('<span>').text(DEFAULT_LANG.ERROR_FILL_ALL_FIELDS);
                             }
+                            return false;
                         });
                     }
                 } else {

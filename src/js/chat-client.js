@@ -732,7 +732,7 @@
                                 settings.name = name;
                                 settings.email = email;
                                 $('#userInfoInput').remove();
-                                return $.continueProgram(settings);
+                                $.continueProgram(settings);
                             } else {
                                 $('#prudio-empty-msg').append('<span>').text(DEFAULT_LANG.ERROR_FILL_ALL_FIELDS);
                             }

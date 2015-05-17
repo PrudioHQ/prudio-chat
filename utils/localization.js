@@ -248,5 +248,30 @@ exports.localization = {
         MINIMIZE: 'Minimizza la conversazione',
         TITLE: 'Supporto',
         POWERED_BY: 'Creato da <i class="prd-icon-btn-prudio"></i> Prud.io'
+    },
+    'pl': {
+        CHAT_WITH_US: 'Porozmawiaj z nami',
+        NAME: 'Imię',
+        EMAIL: 'E-mail',
+        START_CONVERSATION: 'Rozpocznij rozmowę',
+        NEW_MESSAGE: 'Nowa wiadomość',
+        NO_USERS_ONLINE: 'Aktualnie nie ma nikogo kto mógłby z Tobą porozmawiać. Zostaw wiadomość a skontaktujemy się z Tobą tak szybko jak to możliwe.',
+        CONVERSATION_HISTORY: 'Historia rozmowy',
+        JUST_WRITE: 'Napisz...',
+        PROBLEM_CONNECTING_TO_SERVER: 'Napotkaliśmy problem łącząc się z serwerem!',
+        ERROR_FILL_ALL_FIELDS: 'Prosimy wypełnić pola poprawnym imieniem i e-mailem.',
+        CONNECTING_TO_SERVER: 'Łączenie z serwerem...',
+        SERVER_OFFLINE: 'Serwer jest aktualnie offline!',
+        USER_IS_TYPING: 'Użytkownik pisze...',
+        UPLOADING_FILE: 'Przesyłanie pliku',
+        ERROR_UPLOADING_FILE: 'Wystąpił błąd podczas przesyłania pliku!',
+        ATTACH_FILE: 'Dołącz plik',
+        USER_OFFLINE: 'Wygląda na to, że użytkownik stracił połączenie z internetem.',
+        USER_ONLINE: 'Jesteśmy z powrotem!',
+        MUTE: 'Wycisz rozmowę',
+        CLOSE: 'Zakończ rozmowę',
+        MINIMIZE: 'Zminimializuj rozmowę',
+        TITLE: 'Support',
+        POWERED_BY: 'Napędzane przez <i class="prd-icon-btn-prudio"></i> Prud.io'
     }
 };

@@ -274,7 +274,7 @@ exports.localization = {
         TITLE: 'Support',
         POWERED_BY: 'Napędzane przez <i class="prd-icon-btn-prudio"></i> Prud.io'
     },
-	'ru': {
+    'ru': {
         CHAT_WITH_US: 'Поговорите с нами',
         NAME: 'Имя',
         EMAIL: 'E-mail',

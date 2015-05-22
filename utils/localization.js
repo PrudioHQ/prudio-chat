@@ -273,5 +273,30 @@ exports.localization = {
         MINIMIZE: 'Zminimializuj rozmowę',
         TITLE: 'Support',
         POWERED_BY: 'Napędzane przez <i class="prd-icon-btn-prudio"></i> Prud.io'
+    },
+	'ru': {
+        CHAT_WITH_US: 'Поговорите с нами',
+        NAME: 'Имя',
+        EMAIL: 'E-mail',
+        START_CONVERSATION: 'Начать разговор',
+        NEW_MESSAGE: 'Новое сообщение',
+        NO_USERS_ONLINE: 'В данный момент на связи нет операторов, которые бы помогли Вам. Оставьте, пожалуйста, сообщение и мы свяжемся с Вами при первой же возможности! Примите наши извинения!',
+        CONVERSATION_HISTORY: 'История разговоров',
+        JUST_WRITE: 'Напишите сообщение...',
+        PROBLEM_CONNECTING_TO_SERVER: 'Возникла проблема при соединении с сервером!',
+        ERROR_FILL_ALL_FIELDS: 'Пожалуйста, заполните поля, указав Ваше имя и электронную почту.',
+        CONNECTING_TO_SERVER: 'Соединяемся с сервером...',
+        SERVER_OFFLINE: 'Сервер в данный момент оффлайн!',
+        USER_IS_TYPING: 'Пользователь набирает сообщение...',
+        UPLOADING_FILE: 'Файл загружается',
+        ERROR_UPLOADING_FILE: 'Возникла ошибка при загрузке файла!',
+        ATTACH_FILE: 'Прикрепить файл',
+        USER_OFFLINE: 'Похоже, интернет пропал!',
+        USER_ONLINE: 'Мы снова на связи!',
+        MUTE: 'Отключить звук',
+        CLOSE: 'Закрыть разговор',
+        MINIMIZE: 'Свернуть разговор',
+        TITLE: 'Поддержка',
+        POWERED_BY: 'Чат работает на <i class="prd-icon-btn-prudio"></i> Prud.io'
     }
 };

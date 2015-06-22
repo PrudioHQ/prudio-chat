@@ -525,6 +525,10 @@
                     return;
                 } else if (Notification.permission === 'granted') {
                     var notification = new Notification(DEFAULT_LANG.NEW_MESSAGE, options);
+                    notification.onclick = function(x) {
+                        window.focus();
+                        this.cancel();
+                    };
                 } else if (Notification.permission !== 'denied') {
                     Notification.requestPermission(function(permission) {
                         if (!('permission' in Notification)) {
@@ -533,6 +537,10 @@
 
                         if (permission === 'granted') {
                             var notification = new Notification(DEFAULT_LANG.NEW_MESSAGE, options);
+                            notification.onclick = function(x) {
+                                window.focus();
+                                this.cancel();
+                            };
                         }
                     });
                 }
@@ -640,8 +648,8 @@
                     success: function(response) {
                         if (response.success !== 'undefined' && response.success && response.onlineUsers !== 'undefined') {
                             if (response.onlineUsers <= 0) {
-                                $('<li class="server announcement"></li>').text(DEFAULT_LANG.NO_USERS_ONLINE).appendTo($('#prudio-window ul'));
-                                $.scrollChat('#prudio-window div.messages');
+                                $('<li class="prudio-server prudio-announcement"></li>').text(DEFAULT_LANG.NO_USERS_ONLINE).appendTo($('#prudio-window ul'));
+                                $.scrollChat('#prudio-window div.prudio-messages');
                             }
                         }
                     }
@@ -663,7 +671,7 @@
                         signature:   signature
                     },
                     error: function(xhr, ajaxOptions, thrownError) {
-                        //$('<li class="error"></li>').text("We got a problem retriving the history!").appendTo($('#prudio-window ul'));
+                        //$('<li class="prudio-error"></li>').text("We got a problem retriving the history!").appendTo($('#prudio-window ul'));
                         console.log('We got a problem retriving the history!', thrownError);
                     },
                     success: function(data) {
@@ -673,13 +681,13 @@
                                     var message = data.messages[i];
                                     message.text = $.emojiMapper(message.text);
                                     message.text = $.linkParser(message.text);
-                                    $('<li class="' + message.sender + '"></li>').html(emoji(message.text, assetsURL + '/emojis')).appendTo($('#prudio-window ul'));
+                                    $('<li class="prudio-' + message.sender + '"></li>').html(emoji(message.text, assetsURL + '/emojis')).appendTo($('#prudio-window ul'));
                                 }
                             }
 
-                            $('<li class="server"></li>').text(DEFAULT_LANG.CONVERSATION_HISTORY).appendTo($('#prudio-window ul'));
+                            $('<li class="prudio-server"></li>').text(DEFAULT_LANG.CONVERSATION_HISTORY).appendTo($('#prudio-window ul'));
 
-                            $.scrollChat('#prudio-window div.messages');
+                            $.scrollChat('#prudio-window div.prudio-messages');
                         }
                     }
                 });
@@ -693,14 +701,14 @@
                     $.retriveHistory(settings.appid, channel, signature);
                 }
 
-                $('#prudio-window div.reply input[name=message]').attr('type', 'text').attr('placeholder', DEFAULT_LANG.JUST_WRITE).blur().focus();
+                $('#prudio-window div.prudio-reply input[name=message]').attr('type', 'text').attr('placeholder', DEFAULT_LANG.JUST_WRITE).blur().focus();
 
                 $.getScript(socketURL + '/socket.io/socket.io.js')
                     .done(function() {
                         $.openSocket(settings);
                     })
                     .fail(function() {
-                        $('<li class="error"></li>').text(DEFAULT_LANG.PROBLEM_CONNECTING_TO_SERVER).appendTo($('#prudio-window ul'));
+                        $('<li class="prudio-error"></li>').text(DEFAULT_LANG.PROBLEM_CONNECTING_TO_SERVER).appendTo($('#prudio-window ul'));
                     });
             };
 
@@ -712,19 +720,19 @@
                     //Ask for name and email
                     if ($('#userInfoInput').length === 0) {
 
-                        var userInfoInput = $('<div id="userInfoInput" class="user-info"><div id="prudio-empty-msg"></div></div>');
+                        var userInfoInput = $('<div id="userInfoInput" class="prudio-user-info"><div id="prudio-empty-msg"></div></div>');
                         var userInfoForm  = $('<form id="userInfoForm"></form>');
 
-                        userInfoForm.append('<label>' + DEFAULT_LANG.NAME + '<br/></label><div class="reply"><input id="prudio-name-input" type="text"/></div>');
-                        userInfoForm.append('<label>' + DEFAULT_LANG.EMAIL + '<br/></label><div class="reply"><input id="prudio-email-input" type="text"/></div>');
-                        userInfoForm.append('<div class="start-conversation"><input type="button" id="prudio-submit-name" value="' + DEFAULT_LANG.START_CONVERSATION + '"/></div>');
+                        userInfoForm.append('<label>' + DEFAULT_LANG.NAME + '<br/></label><div class="prudio-reply"><input id="prudio-name-input" type="text"/></div>');
+                        userInfoForm.append('<label>' + DEFAULT_LANG.EMAIL + '<br/></label><div class="prudio-reply"><input id="prudio-email-input" type="text"/></div>');
+                        userInfoForm.append('<div class="prudio-start-conversation"><input type="submit" id="prudio-submit-name" value="' + DEFAULT_LANG.START_CONVERSATION + '"/></div>');
 
                         //Added it to The DOM
                         userInfoInput.append(userInfoForm);
-                        $('.messages').append(userInfoInput);
+                        $('.prudio-messages').append(userInfoInput);
 
                         // Check if all if is there
-                        $('#prudio-submit-name').on('click', function() {
+                        userInfoForm.on('submit', function() {
                             var name  = $('#prudio-name-input').val();
                             var email = $('#prudio-email-input').val();
 
@@ -732,10 +740,11 @@
                                 settings.name = name;
                                 settings.email = email;
                                 $('#userInfoInput').remove();
-                                return $.continueProgram(settings);
+                                $.continueProgram(settings);
                             } else {
                                 $('#prudio-empty-msg').append('<span>').text(DEFAULT_LANG.ERROR_FILL_ALL_FIELDS);
                             }
+                            return false;
                         });
                     }
                 } else {
@@ -789,7 +798,7 @@
                     postURL     = socketURL + '/chat/continue';
                 }
 
-                $('<li class="server connecting"></li>').html('<i class="prd-icon-flash-outline"></i> ' + DEFAULT_LANG.CONNECTING_TO_SERVER).appendTo($('#prudio-window ul'));
+                $('<li class="prudio-server connecting"></li>').html('<i class="prd-icon-flash-outline"></i> ' + DEFAULT_LANG.CONNECTING_TO_SERVER).appendTo($('#prudio-window ul'));
 
                 $.ajax({
                     url: postURL,
@@ -803,7 +812,7 @@
                         userInfo:    JSON.stringify(userInfo)
                     },
                     error: function(xhr, ajaxOptions, thrownError) {
-                        $('<li class="error"></li>').text(DEFAULT_LANG.PROBLEM_CONNECTING_TO_SERVER).appendTo($('#prudio-window ul'));
+                        $('<li class="prudio-error"></li>').text(DEFAULT_LANG.PROBLEM_CONNECTING_TO_SERVER).appendTo($('#prudio-window ul'));
                     },
                     success: function(data) {
 
@@ -822,7 +831,7 @@
                         }
 
                         // Send message from the chat
-                        $('#prudio-window div.reply input[name=message]').bind('keypress', function(e) {
+                        $('#prudio-window div.prudio-reply input[name=message]').bind('keypress', function(e) {
                             // if enter key
                             if (e.keyCode === ENTER_KEY_CODE && $(this).val() !== '') {
                                 var message = $(this).val();
@@ -834,9 +843,9 @@
                                     message: message
                                 });
 
-                                $('<li class="self"></li>').html(emoji(message, assetsURL + '/emojis')).appendTo($('#prudio-window ul'));
+                                $('<li class="prudio-self"></li>').html(emoji(message, assetsURL + '/emojis')).appendTo($('#prudio-window ul'));
 
-                                $.scrollChat('#prudio-window div.messages');
+                                $.scrollChat('#prudio-window div.prudio-messages');
 
                                 $(this).val(''); // clear message field after sending
                             }
@@ -861,11 +870,11 @@
                                 var message = $.emojiMapper(data.message);
                                 message = $.linkParser(message);
 
-                                $('#prudio-window ul li.typing').remove();
+                                $('#prudio-window ul li.prudio-typing').remove();
 
-                                $('<li class="other"></li>').html(emoji(message, assetsURL + '/emojis')).appendTo($('#prudio-window ul'));
+                                $('<li class="prudio-other"></li>').html(emoji(message, assetsURL + '/emojis')).appendTo($('#prudio-window ul'));
 
-                                $.scrollChat('#prudio-window div.messages');
+                                $.scrollChat('#prudio-window div.prudio-messages');
 
                                 $.titleAlert(DEFAULT_LANG.NEW_MESSAGE, { stopOnMouseMove:true, stopOnFocus:true, requireBlur: true });
 
@@ -876,21 +885,21 @@
                         });
 
                         socket.on('disconnect', function() {
-                            $('<li class="error"></li>').text('Server is now offline!').appendTo($('#prudio-window ul'));
-                            $.scrollChat('#prudio-window div.messages');
-                            $('#prudio-window div.reply input[name=message]').prop('disabled', true);
+                            $('<li class="prudio-error"></li>').text(DEFAULT_LANG.SERVER_OFFLINE).appendTo($('#prudio-window ul'));
+                            $.scrollChat('#prudio-window div.prudio-messages');
+                            $('#prudio-window div.prudio-reply input[name=message]').prop('disabled', true);
                         });
 
                         socket.on('serverMessage', function(data) {
-                            $('<li class="server"></li>').text(data.message).appendTo($('#prudio-window ul'));
-                            $.scrollChat('#prudio-window div.messages');
-                            $('#prudio-window div.reply input[name=message]').prop('disabled', false);
+                            $('<li class="prudio-server"></li>').text(data.message).appendTo($('#prudio-window ul'));
+                            $.scrollChat('#prudio-window div.prudio-messages');
+                            $('#prudio-window div.prudio-reply input[name=message]').prop('disabled', false);
                         });
 
                         socket.on('typingMessage', function() {
-                            $('#prudio-window ul li.typing').remove();
-                            $('<li class="typing"></li>').html('<i class="prd-icon-typing"></i> ' + DEFAULT_LANG.USER_IS_TYPING).appendTo($('#prudio-window ul')).show().delay(7000).slideUp();
-                            $.scrollChat('#prudio-window div.messages');
+                            $('#prudio-window ul li.prudio-typing').remove();
+                            $('<li class="prudio-typing"></li>').html('<i class="prd-icon-typing"></i> ' + DEFAULT_LANG.USER_IS_TYPING).appendTo($('#prudio-window ul')).show().delay(7000).slideUp();
+                            $.scrollChat('#prudio-window div.prudio-messages');
                         });
                     }
                 });
@@ -916,13 +925,13 @@
                 })
                 .done(function(data, textStatus, jqXHR) {
                     if (typeof data.error === 'undefined') {
-                        $('<li class="server"></li>').text(DEFAULT_LANG.UPLOADING_FILE).appendTo($('#prudio-window ul'));
+                        $('<li class="prudio-server"></li>').text(DEFAULT_LANG.UPLOADING_FILE).appendTo($('#prudio-window ul'));
                     } else {
-                        $('<li class="error"></li>').text(DEFAULT_LANG.ERROR_UPLOADING_FILE).appendTo($('#prudio-window ul'));
+                        $('<li class="prudio-error"></li>').text(DEFAULT_LANG.ERROR_UPLOADING_FILE).appendTo($('#prudio-window ul'));
                     }
                 })
                 .fail(function(jqXHR, textStatus, errorThrown) {
-                    $('<li class="error"></li>').text(DEFAULT_LANG.ERROR_UPLOADING_FILE).appendTo($('#prudio-window ul'));
+                    $('<li class="prudio-error"></li>').text(DEFAULT_LANG.ERROR_UPLOADING_FILE).appendTo($('#prudio-window ul'));
                 });
             };
 
@@ -973,18 +982,18 @@
                     [
                         '<nav style="display:none" class="prudio-window prudio-window-vertical prudio-window-right reset-styles" id="prudio-window">',
                         '<h3>',
-                        '<span class="mute" title="' + DEFAULT_LANG.MUTE + '"><i class="prd-icon-volume-high"></i></span>',
+                        '<span class="prudio-mute" title="' + DEFAULT_LANG.MUTE + '"><i class="prd-icon-volume-high"></i></span>',
                          (settings.title || DEFAULT_LANG.TITLE),
-                        '<span class="status close" title="' + DEFAULT_LANG.CLOSE + '" data-status="closed"><i class="prd-icon-cancel"></i></span>',
-                        '<span class="status minimize" title="' + DEFAULT_LANG.MINIMIZE + '" data-status="minimized"><i class="prd-icon-minimize"></i></span>',
+                        '<span class="status prudio-close" title="' + DEFAULT_LANG.CLOSE + '" data-status="closed"><i class="prd-icon-cancel"></i></span>',
+                        '<span class="status prudio-minimize" title="' + DEFAULT_LANG.MINIMIZE + '" data-status="minimized"><i class="prd-icon-minimize"></i></span>',
                         '</h3>',
-                        '<div class="messages drop-zone">',
-                        '<div class="drop-overlay hidden"></div>',
+                        '<div class="prudio-messages prudio-drop-zone">',
+                        '<div class="prudio-drop-overlay prudio-hidden"></div>',
                         '<ul>',
                         '</ul>',
-                        '<div class="reply-container">',
-                        '<div class="reply">',
-                        '<input type="file" name="uploads" class="hidden" multiple>',
+                        '<div class="prudio-reply-container">',
+                        '<div class="prudio-reply">',
+                        '<input type="file" name="uploads" class="prudio-hidden" multiple>',
                         '<input type="text" name="message" placeholder="' + DEFAULT_LANG.JUST_WRITE + '" autofocus="autofocus">',
                         '<span class="prd-icon-attach" title="' + DEFAULT_LANG.ATTACH_FILE + '"></span>',
                         '</div>',
@@ -1031,23 +1040,23 @@
                 }
             });
 
-            $(document).on('click', '#prudio-window .mute', function() {
+            $(document).on('click', '#prudio-window .prudio-mute', function() {
                 muted = !muted;
-                $('#prudio-window span.mute i').toggleClass('prd-icon-volume-high').toggleClass('prd-icon-volume-off');
+                $('#prudio-window span.prudio-mute i').toggleClass('prd-icon-volume-high').toggleClass('prd-icon-volume-off');
             });
 
-            $(document).on('dragover', '#prudio-window div.drop-zone, #prudio-window div.drop-overlay', function(event) {
+            $(document).on('dragover', '#prudio-window div.prudio-drop-zone, #prudio-window div.prudio-drop-overlay', function(event) {
                 $.handleFilesDragOver(event);
-                $('.drop-overlay').removeClass('hidden');
+                $('.prudio-drop-overlay').removeClass('prudio-hidden');
             });
 
-            $(document).on('dragleave', '#prudio-window div.drop-overlay', function(event) {
-                $('.drop-overlay').addClass('hidden');
+            $(document).on('dragleave', '#prudio-window div.prudio-drop-overlay', function(event) {
+                $('.prudio-drop-overlay').addClass('prudio-hidden');
             });
 
-            $(document).on('drop', '#prudio-window div.drop-overlay', function(event) {
+            $(document).on('drop', '#prudio-window div.prudio-drop-overlay', function(event) {
                 $.handleFileSelect(event);
-                $('.drop-overlay').addClass('hidden');
+                $('.prudio-drop-overlay').addClass('prudio-hidden');
             });
 
             $(document).on('change', 'input[name=uploads]', function(event) {
@@ -1060,14 +1069,14 @@
             });
 
             $(window).on('offline', function() {
-                $('<li class="error offline"></li>').text(DEFAULT_LANG.USER_OFFLINE).appendTo($('#prudio-window ul'));
-                $('#prudio-window div.reply input[name=message]').prop('disabled', true);
+                $('<li class="prudio-error offline"></li>').text(DEFAULT_LANG.USER_OFFLINE).appendTo($('#prudio-window ul'));
+                $('#prudio-window div.prudio-reply input[name=message]').prop('disabled', true);
             });
 
             $(window).on('online', function() {
                 $('#prudio-window ul li.offline').remove();
-                $('<li class="server"></li>').text(DEFAULT_LANG.USER_ONLINE).appendTo($('#prudio-window ul')).show().delay(5000).slideUp();
-                $('#prudio-window div.reply input[name=message]').prop('disabled', false);
+                $('<li class="prudio-server"></li>').text(DEFAULT_LANG.USER_ONLINE).appendTo($('#prudio-window ul')).show().delay(5000).slideUp();
+                $('#prudio-window div.prudio-reply input[name=message]').prop('disabled', false);
             });
 
             $(document).ready(function() {

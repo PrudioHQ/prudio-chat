@@ -10,7 +10,7 @@ var db      = require('./utils/connection');
 // Body parser & CORS
 var bodyParser = require('body-parser');
 var cors       = require('cors');
-var rollbar    = require('rollbar');
+var raygun     = require('raygun');
 
 // Localization
 var localization = require('./utils/localization').localization;
@@ -86,8 +86,9 @@ if ('development' === app.get('env')) {
 // linking
 require('./utils/client')(app, App, Servers, locale, localization); // sets up endpoints
 
-// Rollbar Error Handling
-app.use(rollbar.errorHandler(process.env.ROLLBAR_ACCESS_TOKEN));
+// Raygun Error Handling
+var raygunClient = new raygun.Client().init({ apiKey: process.env.RAYGUN_APIKEY });
+app.use(raygunClient.expressHandler);
 
 // On SIGTERM app
 process.on('SIGTERM', function() {

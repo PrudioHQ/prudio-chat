@@ -8,11 +8,11 @@ exports.config = {
   /**
    * Array of application names.
    */
-  app_name : ['Oghma'],
+  app_name : ['prudio-chat'],
   /**
    * Your New Relic license key.
    */
-  license_key : '9697fb5257d8d6c3174b6c91d943629d2221fa52',
+  license_key : process.env.NEW_RELIC_LICENSE_KEY,
   logging : {
     /**
      * Level at which to log. 'trace' is most useful to New Relic when diagnosing

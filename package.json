@@ -26,8 +26,8 @@
     "locale": "0.0.20",
     "mongoose": "^3.8.23",
     "newrelic": "^1.12.1",
-    "request": "latest",
-    "rollbar": "^0.4.5"
+    "raygun": "^0.6.2",
+    "request": "latest"
   },
   "author": "Hélder Duarte",
   "main": "app.js",

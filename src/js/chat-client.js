@@ -157,7 +157,7 @@
                 (settings.borderColor !== undefined ?  ' border-color: ' + settings.borderColor + ';' : '') +
                     '" title="' + DEFAULT_LANG.CHAT_WITH_US + '"><i class="' + (settings.icon !== undefined ?  settings.icon : 'prd-icon-btn-help') + '"' +
                     ' style="' + (settings.iconColor !== undefined ?  'color: ' + settings.iconColor + ';' : '') + '">' +
-                    '</i></div><div id="prudio-notification"></div>');
+                    '</i></div>');
 
                 $('body').append(button);
             };
@@ -981,6 +981,7 @@
                 $('body').append(
                     [
                         '<nav style="display:none" class="prudio-window prudio-window-vertical prudio-window-right reset-styles" id="prudio-window">',
+                        '<div id="prudio-notification"></div>',
                         '<h3>',
                         '<span class="prudio-mute" title="' + DEFAULT_LANG.MUTE + '"><i class="prd-icon-volume-high"></i></span>',
                          (settings.title || DEFAULT_LANG.TITLE),

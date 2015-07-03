@@ -362,7 +362,12 @@
                     break;
 
                 case 'Android':
-                    osVersion = /Android ([\.\_\d]+)/.exec(nAgt)[1];
+                    // Problem with FF for Android 4 (nAgt = 'Mozilla/5.0 (Android; Mobile; rv:30.0) Gecko/38.0 Firefox/38.0')
+                    try {
+                        osVersion = /Android ([\.\_\d]+)/.exec(nAgt)[1];
+                    } catch (e) {
+                        osVersion = '4';
+                    }
                     break;
 
                 case 'iOS':

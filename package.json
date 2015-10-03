@@ -24,7 +24,7 @@
     "grunt-keycdn": "^0.0.3",
     "grunt-text-replace": "^0.3.12",
     "locale": "0.0.20",
-    "mongoose": "^3.8.35",
+    "mongoose": "^4.1",
     "newrelic": "^1.12.1",
     "raygun": "^0.6.2",
     "request": "latest"

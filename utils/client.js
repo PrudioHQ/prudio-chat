@@ -36,14 +36,14 @@ module.exports = function(app, App, Servers, locale, localization) {
         });
     }
 
-    app.get('/', function(req, res, next) {
+    app.get('/', function(req, res) {
         return res.status(200).json({ success: true, message: 'Welcome, nothing here' });
     });
 
     /*
     * Check the status before showing the icon
     */
-    app.post('/app/status', isAuthorized, function(req, res, next) {
+    app.post('/app/status', isAuthorized, function(req, res) {
         var appid = req.param('appid');
         var lang  = req.locale;
 

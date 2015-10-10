@@ -530,7 +530,7 @@
                     return;
                 } else if (Notification.permission === 'granted') {
                     var notification = new Notification(DEFAULT_LANG.NEW_MESSAGE, options);
-                    notification.onclick = function(x) {
+                    notification.onclick = function() {
                         window.focus();
                         this.cancel();
                     };
@@ -816,7 +816,7 @@
                         settings:    JSON.stringify(settings),
                         userInfo:    JSON.stringify(userInfo)
                     },
-                    error: function(xhr, ajaxOptions, thrownError) {
+                    error: function(xhr, ajaxOptions) {
                         $('<li class="prudio-error"></li>').text(DEFAULT_LANG.PROBLEM_CONNECTING_TO_SERVER).appendTo($('#prudio-window ul'));
                     },
                     success: function(data) {
@@ -928,14 +928,14 @@
                     processData: false, // Don't process the files
                     contentType: false // Set content type to false as jQuery will tell the server its a query string request
                 })
-                .done(function(data, textStatus, jqXHR) {
+                .done(function(data, textStatus) {
                     if (typeof data.error === 'undefined') {
                         $('<li class="prudio-server"></li>').text(DEFAULT_LANG.UPLOADING_FILE).appendTo($('#prudio-window ul'));
                     } else {
                         $('<li class="prudio-error"></li>').text(DEFAULT_LANG.ERROR_UPLOADING_FILE).appendTo($('#prudio-window ul'));
                     }
                 })
-                .fail(function(jqXHR, textStatus, errorThrown) {
+                .fail(function(jqXHR, textStatus) {
                     $('<li class="prudio-error"></li>').text(DEFAULT_LANG.ERROR_UPLOADING_FILE).appendTo($('#prudio-window ul'));
                 });
             };
@@ -1056,7 +1056,7 @@
                 $('.prudio-drop-overlay').removeClass('prudio-hidden');
             });
 
-            $(document).on('dragleave', '#prudio-window div.prudio-drop-overlay', function(event) {
+            $(document).on('dragleave', '#prudio-window div.prudio-drop-overlay', function() {
                 $('.prudio-drop-overlay').addClass('prudio-hidden');
             });
 
@@ -1065,12 +1065,12 @@
                 $('.prudio-drop-overlay').addClass('prudio-hidden');
             });
 
-            $(document).on('change', 'input[name=uploads]', function(event) {
+            $(document).on('change', 'input[name=uploads]', function() {
                 $.handleFormFileSelect($('input[name=uploads]')[0]);
                 $('input[name=uploads]').val('');
             });
 
-            $(document).on('click', '#prudio-window span.prd-icon-attach', function(event) {
+            $(document).on('click', '#prudio-window span.prd-icon-attach', function() {
                 $('input[name=uploads]').trigger('click');
             });
 

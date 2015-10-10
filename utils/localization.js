@@ -323,5 +323,30 @@ exports.localization = {
         MINIMIZE: 'Свернуть разговор',
         TITLE: 'Поддержка',
         POWERED_BY: 'Чат работает на <i class="prd-icon-btn-prudio"></i> Prud.io'
+    },
+    'fa_IR': {
+        CHAT_WITH_US: 'با ما صحبت کنید',
+        NAME: 'نام',
+        EMAIL: 'ایمیل',
+        START_CONVERSATION: 'شروع صحبت',
+        NEW_MESSAGE: 'پیغام جدید',
+        NO_USERS_ONLINE: 'با عرض پوزش، الان کسی آنلاین نیست تا به شما کمک کند. پیغام خودتون بگذارید. در اولین فرصت جواب میدیم.',
+        CONVERSATION_HISTORY: 'صحبت‌های قبلی',
+        JUST_WRITE: 'فقط بنویس...',
+        PROBLEM_CONNECTING_TO_SERVER: 'مشکلی در تماس با سرور به وجود آمده!',
+        ERROR_FILL_ALL_FIELDS: 'لطفا فیلدها را با اسم و ایمیل معتبر پر کنید',
+        CONNECTING_TO_SERVER: 'اتصال به سرور',
+        SERVER_OFFLINE: 'سرور آفلاین هست',
+        USER_IS_TYPING: 'کاربر تایپ میکند...',
+        UPLOADING_FILE: 'Uploading file',
+        ERROR_UPLOADING_FILE: 'خطا در آپلود فایل!',
+        ATTACH_FILE: 'فایل ضمیمه کنید',
+        USER_OFFLINE: 'گویا اینترنت قطع شده!',
+        USER_ONLINE: 'ما برگشتیم!',
+        MUTE: 'ساکت کردن مکالمه',
+        CLOSE: 'بستن مکالمه',
+        MINIMIZE: 'کوچک کردن پنجره مکالمه',
+        TITLE: 'پشتیبانی',
+        POWERED_BY: 'نیرو گرفته از <i class="prd-icon-btn-prudio"></i> Prud.io'
     }
 };

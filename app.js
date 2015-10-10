@@ -34,7 +34,7 @@ if ('development' === app.get('env')) {
     app.use(errorhandler());
 }
 
-db.once('open', function(callback) {
+db.once('open', function() {
     var listening = server.listen(app.get('port'), function() {
 
         console.log('Express server listening on port ' + listening.address().port);

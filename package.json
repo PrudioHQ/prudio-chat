@@ -21,7 +21,7 @@
     "grunt-contrib-uglify": "latest",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-express-server": "^0.5.1",
-    "grunt-keycdn": "^0.0.3",
+    "grunt-keycdn": "^0.0.4",
     "grunt-text-replace": "^0.4.0",
     "locale": "0.0.20",
     "mongoose": "^4.1.11",

@@ -1074,6 +1074,10 @@
                 $('input[name=uploads]').trigger('click');
             });
 
+            $(document).on('click', '#prudio-window ul', function() {
+                $('input[name=message]').focus();
+            });
+
             $(window).on('offline', function() {
                 $('<li class="prudio-error offline"></li>').text(DEFAULT_LANG.USER_OFFLINE).appendTo($('#prudio-window ul'));
                 $('#prudio-window div.prudio-reply input[name=message]').prop('disabled', true);

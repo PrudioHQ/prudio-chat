@@ -4,7 +4,7 @@
   "exportName": "client",
   "description": "Slack Instant Messaging Widget",
   "engines": {
-    "node": "0.10.x",
+    "node": "4.x",
     "npm": "2.x"
   },
   "dependencies": {
@@ -24,10 +24,12 @@
     "grunt-keycdn": "^0.0.3",
     "grunt-text-replace": "^0.3.12",
     "locale": "0.0.20",
-    "mongoose": "^4.1",
+    "pg": "^4.4.3",
+    "pg-hstore": "^2.3.2",
     "newrelic": "^1.12.1",
     "raygun": "^0.6.2",
-    "request": "latest"
+    "request": "latest",
+    "sequelize": "^3.14.1"
   },
   "author": "Hélder Duarte",
   "main": "app.js",
@@ -49,7 +51,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:asm-products/prudio-chat.git"
+    "url": "git@github.com:PrudioHQ/prudio-chat.git"
   },
   "keywords": [
     "slack",
@@ -60,7 +62,7 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/asm-products/prudio-chat"
+    "url": "https://github.com/PrudioHQ/prudio-chat"
   },
   "homepage": "http://prud.io/"
 }

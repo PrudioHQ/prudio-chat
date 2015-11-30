@@ -5,7 +5,9 @@ require('./utils/newrelic');
 var express = require('express');
 var app     = express();
 var server  = require('http').Server(app);
-var db      = require('./utils/connection');
+
+var Sequelize = require('sequelize');
+var sequelize = new Sequelize(process.env.DB_URL); //'postgres://user:pass@example.com:5432/dbname'
 
 // Body parser & CORS
 var bodyParser = require('body-parser');
@@ -21,8 +23,8 @@ var supported    = Object.keys(localization);
 var DEBUG = app.get('DEBUG');
 
 // Models
-var App     = require('./models/app');
-var Servers = require('./models/server');
+var App = sequelize.import(__dirname + '/models/app');
+var Servers = sequelize.import(__dirname + '/models/server');
 
 // App settings
 app.set('port', process.env.PORT     || Number(4000));
@@ -34,7 +36,8 @@ if ('development' === app.get('env')) {
     app.use(errorhandler());
 }
 
-db.once('open', function() {
+// Connection to SQL
+sequelize.authenticate().then(function(callback) {
     var listening = server.listen(app.get('port'), function() {
 
         console.log('Express server listening on port ' + listening.address().port);

@@ -8,17 +8,14 @@ module.exports = function(app, App, Servers, locale, localization) {
 
         var appid = req.param('appid');
 
-        if (appid === null) {
+        if (appid === null || appid === undefined) {
             return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
 
-        App.findOne({ appId: appid }, function(err, app) {
-            if (err) {
-                console.error(err);
-                return res.status(500).json({ success: false, message: 'Error' });
-            }
+        App.findOne({ where: { appId: appid }})
+        .then(function(app) {
 
-            if (app === null) {
+            if (app === null || app === undefined) {
                 return res.status(401).json({ success: false, message: 'Unauthorized' });
             }
 
@@ -33,6 +30,10 @@ module.exports = function(app, App, Servers, locale, localization) {
             application = app;
 
             return next();
+        }).catch(function(err) {
+            console.log(err);
+
+            return res.status(401).json({ success: false, message: 'Unauthorized' });
         });
     }
 
@@ -47,20 +48,13 @@ module.exports = function(app, App, Servers, locale, localization) {
         var appid = req.param('appid');
         var lang  = req.locale;
 
-        App.findOne({ appId: appid, active: true }, function(err, application) {
-            if (err) {
-                console.error(err);
-                return res.status(500).json({ success: false, message: 'Error' });
-            }
-
-            return res.status(200).json({ success: true, active: true, socketURL: application.socketURL, language: lang, localization: localization[lang] });
-        });
+        return res.status(200).json({ success: true, active: true, socketURL: application.socketURL, language: lang, localization: localization[lang] });
     });
 
     /*
     * Ping all servers
     */
-    app.head('/servers/ping', function(req, res, next) {
+    app.head('/servers/ping', function(req, res) {
         Servers.find({ active: true }, function(err, servers) {
             for (var i in servers) {
                 var server = servers[i];

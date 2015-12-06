@@ -26,7 +26,7 @@
     "locale": "0.0.20",
     "mongoose": "^4.1.11",
     "newrelic": "^1.12.1",
-    "raygun": "^0.7.1",
+    "raygun": "^0.8.2",
     "request": "latest"
   },
   "author": "Hélder Duarte",

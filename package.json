@@ -8,7 +8,7 @@
     "npm": "2.x"
   },
   "dependencies": {
-    "body-parser": "1.14.1",
+    "body-parser": "1.14.2",
     "bower": "^1.6.3",
     "cors": "2.7.1",
     "errorhandler": "1.4.2",

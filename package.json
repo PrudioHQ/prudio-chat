@@ -12,7 +12,7 @@
     "bower": "^1.6.3",
     "cors": "2.7.1",
     "errorhandler": "1.4.2",
-    "express": "4.13.3",
+    "express": "4.13.4",
     "grunt": "latest",
     "grunt-cli": "latest",
     "grunt-contrib-concat": "^0.5.1",
